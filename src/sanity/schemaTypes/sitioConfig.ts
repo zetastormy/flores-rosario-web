@@ -14,19 +14,19 @@ export const sitioConfig = {
       name: 'subtitulo',
       title: 'Subtítulo / Eslogan',
       type: 'string',
-      initialValue: 'Floristería artesanal & botánica',
+      initialValue: 'Floristería artesanal, botánica & jardinería',
     },
     {
       name: 'telefonoWhatsApp',
       title: 'Número de WhatsApp (con código de país)',
       type: 'string',
-      description: 'Ejemplo: 5493411234567',
+      description: 'Ejemplo: 56912345678',
     },
     {
       name: 'mensajeWhatsAppDefault',
       title: 'Mensaje predeterminado de WhatsApp',
       type: 'string',
-      initialValue: '¡Hola! Quisiera consultar por un pedido de flores.',
+      initialValue: '¡Hola! Quisiera consultar por arreglos florales o materiales de jardinería.',
     },
     {
       name: 'instagramUrl',
@@ -37,11 +37,13 @@ export const sitioConfig = {
       name: 'direccion',
       title: 'Dirección física / Local',
       type: 'string',
+      initialValue: 'Calbuco, Región de Los Lagos, Chile',
     },
     {
       name: 'horariosAtencion',
       title: 'Horarios de atención',
       type: 'string',
+      initialValue: 'Lunes a Sábados: 9:00 a 19:00 hrs',
     },
     {
       name: 'bannerAviso',

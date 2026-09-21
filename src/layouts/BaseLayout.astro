@@ -9,7 +9,7 @@ interface Props {
 
 const {
   title = 'Flores del Rosario — Floristería Artesanal & Botánica',
-  description = 'Ramos frescos, flores de estación y diseños botánicos pensados con amor y dedicación en Rosario.',
+  description = 'Ramos frescos, flores de estación, arreglos y materiales de jardinería elaborados con dedicación en Calbuco, Chile.',
   ogImage = '/assets/logo/flores_rosario_og.jpeg',
 } = Astro.props;
 
@@ -55,7 +55,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
           </svg>
           <div class="names">
             <span class="n1">Flores del Rosario</span>
-            <span class="n2">FLORISTERÍA & BOTÁNICA</span>
+            <span class="n2">FLORISTERÍA & BOTÁNICA · CALBUCO</span>
           </div>
         </a>
 
@@ -69,7 +69,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
 
         <div class="header-actions">
           <a
-            href="https://wa.me/5493411234567"
+            href="https://wa.me/56912345678"
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-whatsapp header-wa-btn"
@@ -94,27 +94,28 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
         <div class="footer-brand">
           <h3 class="footer-title">Flores del Rosario</h3>
           <p class="footer-desc">
-            Floristería artesanal, ramos personalizados y botánica viva en Rosario, Santa Fe.
+            Floristería artesanal, arreglos florales, plantas y materiales de jardinería en Calbuco, Región de Los Lagos, Chile.
           </p>
         </div>
         <div class="footer-links">
           <h4>Navegación</h4>
           <ul>
             <li><a href="/">Inicio</a></li>
-            <li><a href="/productos">Catálogo de Ramos</a></li>
+            <li><a href="/productos">Catálogo & Jardinería</a></li>
             <li><a href="/blog">Consejos Florales</a></li>
           </ul>
         </div>
         <div class="footer-contact">
           <h4>Contacto</h4>
-          <p>Rosario, Santa Fe, Argentina</p>
-          <p>Lunes a Sábados: 9:00 a 19:00 hs</p>
+          <p>Calbuco, Región de Los Lagos, Chile</p>
+          <p>Lunes a Sábados: 9:00 a 19:00 hrs</p>
         </div>
       </div>
       <div class="container footer-bottom">
         <p>&copy; {new Date().getFullYear()} Flores del Rosario. Todos los derechos reservados.</p>
-        <p class="footer-tagline">Flores frescas con amor y dedicación</p>
+        <p class="footer-tagline">Flores y botánica desde Calbuco para el sur de Chile</p>
       </div>
+
     </footer>
 
     <style>

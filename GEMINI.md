@@ -6,7 +6,7 @@ Este documento establece las reglas arquitectónicas, estándares de desarrollo,
 
 ## 1. Visión y Stack Tecnológico
 
-- **Propósito**: Sitio web estático de alta calidad estética y rendimiento optimizado para una floristería artesanal y botánica en Rosario, Argentina.
+- **Propósito**: Sitio web estático de alta calidad estética y rendimiento optimizado para una floristería artesanal y botánica en Calbuco, Chile.
 - **Generador de Sitios Estáticos (SSG)**: [Astro](https://astro.build/) (versión 7+ en modo `output: 'static'`).
 - **CMS Headless**: [Sanity CMS](https://www.sanity.io/) integrado vía `@sanity/astro`, `@sanity/client` y `@sanity/image-url`.
 - **Plataforma de Despliegue**: [Cloudflare Pages](https://pages.cloudflare.com/) (sirviendo el directorio pre-compilado `./dist`).

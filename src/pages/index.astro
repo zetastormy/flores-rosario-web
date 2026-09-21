@@ -1,72 +1,73 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Categorías de ejemplo reflejando el diseño base
+// Categorías de ejemplo reflejando el diseño base y catálogo de jardinería
 const categorias = [
   { id: 'todos', label: 'Todos', active: true },
-  { id: 'ramos', label: 'Ramos' },
+  { id: 'ramos', label: 'Ramos & Arreglos' },
+  { id: 'jardineria', label: 'Jardinería' },
+  { id: 'plantas', label: 'Plantas' },
   { id: 'floreros', label: 'Floreros' },
   { id: 'condolencias', label: 'Condolencias' },
-  { id: 'eventos', label: 'Eventos' },
 ];
 
 const productosDestacados = [
   {
-    nombre: 'Ramo Primavera Silvestre',
+    nombre: 'Ramo Silvestre Austral',
     precio: '$18.500',
     unidad: 'por ramo',
     etiqueta: 'Más vendido',
     tipoEtiqueta: '',
     tone: 'tone-a',
-    descripcion: 'Mix de flores de estación con eucalipto fresco y papel kraft artesanal.',
+    descripcion: 'Mix de flores de estación con follaje nativo del sur y papel kraft artesanal.',
   },
   {
-    nombre: 'Florero Lilas & Lavanda',
+    nombre: 'Florero Lilas & Hortensias',
     precio: '$24.000',
     unidad: 'con florero de vidrio',
     etiqueta: 'Temporada',
     tipoEtiqueta: 'lilac',
     tone: 'tone-b',
-    descripcion: 'Arreglo aromático con tonos violetas y follaje silvestre.',
+    descripcion: 'Arreglo floral fresco con tonos lilas, lavanda y toques botánicos locales.',
   },
   {
-    nombre: 'Bouquet Sol de Mayo',
-    precio: '$21.000',
-    unidad: 'por ramo',
-    etiqueta: 'Edición limitada',
-    tipoEtiqueta: '',
+    nombre: 'Kit Jardinería Botánica',
+    precio: '$22.500',
+    unidad: 'herramientas + sustrato',
+    etiqueta: 'Jardinería',
+    tipoEtiqueta: 'leaf',
     tone: 'tone-c',
-    descripcion: 'Girasoles seleccionados, solidagos y toques dorados.',
+    descripcion: 'Sustrato enriquecido, pala artesanal, fertilizante orgánico y guía de cultivo.',
   },
   {
-    nombre: 'Eucalipto & Verdes Vivos',
+    nombre: 'Follaje Verde & Eucalipto',
     precio: '$14.000',
     unidad: 'ramo botánico',
     etiqueta: 'Botánico',
     tipoEtiqueta: 'leaf',
     tone: 'tone-d',
-    descripcion: 'Follajes perennes y ramas de eucalipto cinerea aromático.',
+    descripcion: 'Follajes perennes y ramas aromáticas para aromatizar y decorar interiores.',
   },
 ];
 ---
 
 <BaseLayout
-  title="Flores del Rosario — Floristería Artesanal & Botánica"
-  description="Flores frescas, ramos de autor y botánica seleccionada en Rosario. Envíos en el día y pedidos personalizados por WhatsApp."
+  title="Flores del Rosario — Floristería Artesanal & Botánica en Calbuco"
+  description="Arreglos florales, flores frescas y materiales de jardinería elaborados en Calbuco, Chile. Envíos locales y pedidos personalizados por WhatsApp."
 >
   <!-- Hero Section (Mobile First) -->
   <section class="hero-section">
     <div class="container hero-layout">
       <div class="hero-content">
-        <span class="eyebrow">Floristería artesanal & botánica</span>
-        <h1 class="hero-title">Flores frescas con alma de barrio</h1>
+        <span class="eyebrow">Floristería artesanal & botánica · Calbuco</span>
+        <h1 class="hero-title">Flores frescas y jardinería con identidad local</h1>
         <p class="hero-lead">
-          Diseños botánicos pensados con amor y dedicación. Arreglos para celebrar, acompañar y transformar cada rincón.
+          Arreglos florales, plantas y materiales de jardinería elaborados y seleccionados en Calbuco. Creaciones para celebrar, embellecer tus rincones y conectar con la naturaleza del sur.
         </p>
         <div class="hero-cta">
           <a href="#catalogo" class="btn btn-primary" id="btn-hero-catalogo">Ver catálogo</a>
           <a
-            href="https://wa.me/5493411234567?text=%C2%A1Hola!%20Quisiera%20consultar%20por%20un%20ramo%20de%20flores."
+            href="https://wa.me/56912345678?text=%C2%A1Hola!%20Quisiera%20consultar%20por%20un%20arreglo%20o%20materiales%20de%20jardiner%C3%ADa."
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-ghost"
@@ -79,7 +80,7 @@ const productosDestacados = [
       <div class="hero-visual">
         <div class="hero-card tone-a">
           <div class="hero-card-inner">
-            <span class="card-caption">Ramos preparados en el día</span>
+            <span class="card-caption">Arreglos y flores frescas en Calbuco</span>
           </div>
         </div>
       </div>
@@ -110,8 +111,8 @@ const productosDestacados = [
   <section class="products-section" id="catalogo">
     <div class="container">
       <div class="section-header">
-        <span class="section-kicker">Catálogo de estación</span>
-        <h2 class="section-title">Nuestros Ramos Más Queridos</h2>
+        <span class="section-kicker">Catálogo & Jardinería</span>
+        <h2 class="section-title">Destacados de la Temporada</h2>
       </div>
 
       <div class="products-grid">
@@ -130,7 +131,7 @@ const productosDestacados = [
                     <span class="unit">{item.unidad}</span>
                   </div>
                   <a
-                    href={`https://wa.me/5493411234567?text=%C2%A1Hola!%20Quiero%20pedir%20el%20${encodeURIComponent(item.nombre)}`}
+                    href={`https://wa.me/56912345678?text=%C2%A1Hola!%20Quiero%20pedir%20el%20${encodeURIComponent(item.nombre)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="btn-mini-wa"
@@ -157,19 +158,19 @@ const productosDestacados = [
       </div>
       <div class="about-content">
         <span class="section-kicker">Nuestra Historia</span>
-        <h2 class="section-title">Flores elegidas una por una</h2>
+        <h2 class="section-title">Elaborado con amor en Calbuco</h2>
         <p class="about-text">
-          Nacimos en el corazón de Rosario con la convicción de devolverle a las flores su rol protagónico en lo cotidiano.
-          Trabajamos con productores regionales seleccionando flores frescas cada mañana para asegurar la máxima durabilidad y fragancia.
+          Nacimos en Calbuco, entre islas y canales del sur de Chile, con la convicción de acercar la botánica viva y los arreglos florales de calidad a nuestra comunidad.
+          Seleccionamos flores frescas, cultivamos variedades adaptadas a nuestro clima y proveemos materiales de jardinería durables para quienes disfrutan de cultivar la tierra.
         </p>
         <div class="about-features">
           <div class="feature-item">
-            <strong>Envíos en el día</strong>
-            <span>En Rosario y alrededores</span>
+            <strong>Envíos locales</strong>
+            <span>En Calbuco y sectores cercanos</span>
           </div>
           <div class="feature-item">
-            <strong>Atención personalizada</strong>
-            <span>Asesoramiento floral a medida</span>
+            <strong>Atención cercana</strong>
+            <span>Asesoría botánica y floral por WhatsApp</span>
           </div>
         </div>
       </div>
@@ -178,7 +179,7 @@ const productosDestacados = [
 
   <!-- Floating Action Button WhatsApp (Mobile) -->
   <a
-    href="https://wa.me/5493411234567"
+    href="https://wa.me/56912345678"
     target="_blank"
     rel="noopener noreferrer"
     class="whatsapp-fab"

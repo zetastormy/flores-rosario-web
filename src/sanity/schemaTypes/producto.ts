@@ -21,13 +21,13 @@ export const producto = {
     },
     {
       name: 'precio',
-      title: 'Precio (ARS / Moneda local)',
+      title: 'Precio (CLP / Pesos Chilenos)',
       type: 'number',
       validation: (Rule: any) => Rule.required().min(0),
     },
     {
       name: 'unidad',
-      title: 'Detalle de Unidad (ej: por ramo, con florero)',
+      title: 'Detalle de Unidad (ej: por ramo, con florero, por saco, unidad)',
       type: 'string',
     },
     {

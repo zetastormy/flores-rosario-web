@@ -1,0 +1,688 @@
+---
+import { getSitioConfig, getCategorias } from '../lib/sanity.queries';
+
+interface Props {
+  currentPath?: string;
+  bannerAviso?: string;
+}
+
+const { currentPath = '/', bannerAviso } = Astro.props;
+
+const sitioConfig = await getSitioConfig();
+const categorias = await getCategorias();
+const noticeText = bannerAviso || sitioConfig.bannerAviso;
+---
+
+<!-- Banner Superior Opcional (Personalizable en Sanity) -->
+{
+  noticeText && (
+    <aside class="top-announcement" aria-label="Aviso destacado">
+      <div class="container announcement-inner">
+        <span>{noticeText}</span>
+      </div>
+    </aside>
+  )
+}
+
+<!-- Cabecera Principal -->
+<header class="site-header" id="site-header">
+  <div class="container header-container">
+    <!-- Brandmark (Logo & Nombre) -->
+    <a href="/" class="brandmark" aria-label="Ir al inicio de Flores del Rosario">
+      <img
+        src="/assets/logo/flores_rosario.svg"
+        alt="Isotipo Flores del Rosario"
+        class="sprig"
+        width="34"
+        height="34"
+      />
+      <div class="names">
+        <span class="n1">{sitioConfig.nombreNegocio}</span>
+        <span class="n2">{sitioConfig.subtitulo}</span>
+      </div>
+    </a>
+
+    <!-- Navegación de Escritorio con Mega Menú -->
+    <nav class="desktop-nav" aria-label="Navegación de escritorio">
+      <a href="/" class={`dlink ${currentPath === '/' ? 'active' : ''}`}>Inicio</a>
+
+      <div class="mega-trigger-wrap" id="mega-trigger-wrap">
+        <a
+          href="/productos"
+          class={`dlink with-dropdown ${currentPath.startsWith('/productos') ? 'active' : ''}`}
+          id="btn-desktop-products"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Productos
+          <svg class="chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </a>
+
+        <!-- Mega Menú Desplegable -->
+        <div class="desktop-megamenu" id="desktop-megamenu" role="region" aria-label="Submenú de productos">
+          <div class="mega-grid">
+            <div class="mega-categories">
+              <span class="mega-kicker">Categorías</span>
+              <ul class="mega-links-list">
+                {
+                  categorias.map((cat) => (
+                    <li>
+                      <a href={`/productos?categoria=${cat.slug.current}`} class="mega-cat-link">
+                        {cat.nombre}
+                      </a>
+                    </li>
+                  ))
+                }
+                <li>
+                  <a href="/productos" class="mega-cat-link all-products">
+                    Ver todos los productos &rarr;
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="mega-promo">
+              <div class="promo-box tone-c">
+                <span class="promo-badge">Calbuco, Chile</span>
+                <h4>Flores & Jardinería Artesanal</h4>
+                <p>Envíos en el día y preparación especial para cada ocasión.</p>
+                <a href="/productos" class="btn btn-primary btn-sm">Explorar catálogo</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="/blog" class={`dlink ${currentPath.startsWith('/blog') ? 'active' : ''}`}>Blog</a>
+      <a href="/#historia" class="dlink">Nuestra Historia</a>
+    </nav>
+
+    <!-- Acciones en Cabecera -->
+    <div class="header-right">
+      <!-- Enlaces Redes Sociales (Desktop) -->
+      <div class="desktop-social">
+        {
+          sitioConfig.instagramUrl && (
+            <a
+              href={sitioConfig.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="icon-btn"
+              aria-label="Instagram"
+            >
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+                <circle cx="12" cy="12" r="4"></circle>
+                <circle cx="17" cy="7" r="1.15" fill="currentColor"></circle>
+              </svg>
+            </a>
+          )
+        }
+      </div>
+
+      <!-- Botón Pedido WhatsApp -->
+      <a
+        href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(sitioConfig.mensajeWhatsAppDefault)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-whatsapp header-wa-cta"
+        id="header-wa-cta"
+        aria-label="Pedir por WhatsApp"
+      >
+        <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
+        </svg>
+        <span class="wa-label">Escríbenos</span>
+      </a>
+
+      <!-- Botón Menú Móvil Hamburguesa -->
+      <button
+        type="button"
+        class="icon-btn mobile-menu-toggle"
+        id="btn-open-mobile-menu"
+        aria-label="Abrir menú de navegación"
+        aria-controls="mobile-menu-overlay"
+        aria-expanded="false"
+      >
+        <svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Menú Móvil a Pantalla Completa (Overlay) -->
+<div class="mobile-nav-overlay" id="mobile-menu-overlay" aria-hidden="true">
+  <div class="overlay-inner container">
+    <div class="overlay-topbar">
+      <div class="brandmark brandmark-light">
+        <img
+          src="/assets/logo/flores_rosario.svg"
+          alt="Flores del Rosario"
+          class="sprig"
+          width="32"
+          height="32"
+        />
+        <div class="names">
+          <span class="n1">{sitioConfig.nombreNegocio}</span>
+          <span class="n2">{sitioConfig.subtitulo}</span>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="icon-btn close-btn"
+        id="btn-close-mobile-menu"
+        aria-label="Cerrar menú de navegación"
+      >
+        <svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M6 6l12 12M18 6 6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="overlay-nav" aria-label="Menú móvil">
+      <ul>
+        <li>
+          <a href="/" class="overlay-link">
+            <span class="num">01</span>
+            <span class="txt">Inicio</span>
+          </a>
+        </li>
+        <li>
+          <a href="/productos" class="overlay-link">
+            <span class="num">02</span>
+            <span class="txt">Catálogo & Jardinería</span>
+          </a>
+        </li>
+        <li>
+          <a href="/blog" class="overlay-link">
+            <span class="num">03</span>
+            <span class="txt">Blog & Consejos</span>
+          </a>
+        </li>
+        <li>
+          <a href="/#historia" class="overlay-link">
+            <span class="num">04</span>
+            <span class="txt">Nuestra Historia</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="overlay-footer">
+      <div class="overlay-contact-info">
+        <p class="address">{sitioConfig.direccion}</p>
+        <p class="hours">{sitioConfig.horariosAtencion}</p>
+      </div>
+
+      <div class="overlay-socials">
+        {
+          sitioConfig.instagramUrl && (
+            <a href={sitioConfig.instagramUrl} target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Instagram">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+                <circle cx="12" cy="12" r="4"></circle>
+                <circle cx="17" cy="7" r="1.15" fill="currentColor"></circle>
+              </svg>
+            </a>
+          )
+        }
+        {
+          sitioConfig.facebookUrl && (
+            <a href={sitioConfig.facebookUrl} target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Facebook">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="8.6"></circle>
+                <path d="M13.3 9.6h1.5V7.4h-1.6c-1.7 0-2.6 1-2.6 2.6v1.3H9v2.2h1.6v5.5h2.3v-5.5h1.7l.3-2.2h-2V10c0-.3.15-.4.4-.4Z" fill="currentColor" stroke="none"></path>
+              </svg>
+            </a>
+          )
+        }
+        <a
+          href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(sitioConfig.mensajeWhatsAppDefault)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="icon-btn wa-social"
+          aria-label="WhatsApp"
+        >
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ==========================================================================
+     Top Announcement Bar
+     ========================================================================== */
+  .top-announcement {
+    background-color: var(--forest);
+    color: var(--cream-soft);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-align: center;
+    padding: 0.45rem 1rem;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid rgba(248, 223, 200, 0.15);
+  }
+
+  /* ==========================================================================
+     Site Header (Sticky)
+     ========================================================================== */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    background-color: var(--paper);
+    border-bottom: 1px solid var(--line);
+    transition: background-color var(--transition-fast);
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    position: relative;
+  }
+
+  .brandmark {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .brandmark .sprig {
+    flex-shrink: 0;
+  }
+
+  .brandmark .names {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .brandmark .n1 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.08rem;
+    color: var(--forest);
+  }
+
+  .brandmark .n2 {
+    font-size: 0.64rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  /* ==========================================================================
+     Desktop Navigation & Mega Menu
+     ========================================================================== */
+  .desktop-nav {
+    display: none;
+    align-items: center;
+    gap: 2.2rem;
+  }
+
+  .dlink {
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: var(--forest);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    position: relative;
+    transition: color var(--transition-fast);
+  }
+
+  .dlink:hover,
+  .dlink.active {
+    color: var(--leaf);
+  }
+
+  .dlink.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--gold);
+    border-radius: var(--radius-full);
+  }
+
+  .mega-trigger-wrap {
+    position: relative;
+  }
+
+  .mega-trigger-wrap .chevron {
+    transition: transform var(--transition-fast);
+  }
+
+  .desktop-megamenu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: min(640px, 90vw);
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 1.8rem 2rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--transition-normal), transform var(--transition-normal), visibility var(--transition-normal);
+    z-index: 100;
+  }
+
+  .mega-trigger-wrap:hover .desktop-megamenu,
+  .mega-trigger-wrap:focus-within .desktop-megamenu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .mega-trigger-wrap:hover .chevron {
+    transform: rotate(180deg);
+  }
+
+  .mega-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .mega-kicker {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--gold);
+    font-size: 0.88rem;
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  .mega-links-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .mega-cat-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
+  }
+
+  .mega-cat-link:hover {
+    color: var(--forest);
+    transform: translateX(3px);
+  }
+
+  .mega-cat-link.all-products {
+    font-weight: 700;
+    color: var(--forest);
+    margin-top: 0.6rem;
+  }
+
+  .promo-box {
+    padding: 1.2rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .promo-box.tone-c {
+    background: linear-gradient(155deg, #f9edd2 0%, #f3e3c4 55%, #e6cb91 100%);
+  }
+
+  .promo-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #7a5a1e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .promo-box h4 {
+    font-size: 1.05rem;
+    color: var(--forest);
+    line-height: 1.2;
+  }
+
+  .promo-box p {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 0.95rem;
+    font-size: 0.8rem;
+    align-self: flex-start;
+    margin-top: 0.3rem;
+  }
+
+  /* ==========================================================================
+     Header Right Actions
+     ========================================================================== */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .desktop-social {
+    display: none;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .header-wa-cta {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.82rem;
+  }
+
+  .wa-label {
+    display: none;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+  }
+
+  @media (min-width: 768px) {
+    .wa-label {
+      display: inline;
+    }
+    .header-wa-cta {
+      padding: 0.65rem 1.15rem;
+      font-size: 0.88rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .desktop-nav {
+      display: flex;
+    }
+    .desktop-social {
+      display: flex;
+    }
+    .mobile-menu-toggle {
+      display: none;
+    }
+  }
+
+  /* ==========================================================================
+     Mobile Nav Overlay (Full Screen)
+     ========================================================================== */
+  .mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background-color: var(--forest);
+    color: var(--cream);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .mobile-nav-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .overlay-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 1.4rem;
+    padding-bottom: 2rem;
+  }
+
+  .overlay-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.8rem;
+  }
+
+  .brandmark-light .n1 {
+    color: var(--cream);
+  }
+
+  .brandmark-light .n2 {
+    color: var(--lilac-soft);
+  }
+
+  .close-btn {
+    background: rgba(248, 223, 200, 0.16);
+    color: var(--cream);
+  }
+
+  .close-btn:hover {
+    background: rgba(248, 223, 200, 0.3);
+  }
+
+  .overlay-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
+
+  .overlay-link {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    font-weight: 500;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .overlay-link:hover {
+    color: var(--gold);
+    transform: translateX(6px);
+  }
+
+  .overlay-link .num {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .overlay-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(248, 223, 200, 0.18);
+  }
+
+  .overlay-contact-info {
+    font-size: 0.85rem;
+    color: var(--lilac-soft);
+    line-height: 1.6;
+    margin-bottom: 1.4rem;
+  }
+
+  .overlay-socials {
+    display: flex;
+    gap: 0.8rem;
+  }
+
+  .overlay-socials .icon-btn {
+    background: rgba(248, 223, 200, 0.14);
+    color: var(--cream);
+  }
+
+  .overlay-socials .icon-btn:hover {
+    background: var(--cream);
+    color: var(--forest);
+  }
+</style>
+
+<script>
+  function setupNavigation() {
+    const openBtn = document.getElementById('btn-open-mobile-menu');
+    const closeBtn = document.getElementById('btn-close-mobile-menu');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const overlayLinks = overlay?.querySelectorAll('.overlay-link');
+
+    function openMenu() {
+      overlay?.classList.add('is-active');
+      overlay?.setAttribute('aria-hidden', 'false');
+      openBtn?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      overlay?.classList.remove('is-active');
+      overlay?.setAttribute('aria-hidden', 'true');
+      openBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    openBtn?.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+
+    overlayLinks?.forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Escuchar Escape para cerrar menú
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList.contains('is-active')) {
+        closeMenu();
+      }
+    });
+  }
+
+  setupNavigation();
+  document.addEventListener('astro:after-swap', setupNavigation);
+</script>

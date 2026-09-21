@@ -159,3 +159,20 @@ En la carpeta `docs/` se encuentran los activos de referencia que deben respetar
   - `PUBLIC_SANITY_PROJECT_ID`: ID del proyecto en Sanity.
   - `PUBLIC_SANITY_DATASET`: Dataset (típicamente `production`).
   - `PUBLIC_SANITY_API_VERSION`: Versión de la API de Sanity (ej: `2026-09-21`).
+
+---
+
+## 8. Gestión de Contenido Dinámico con Sanity CMS (Content-First & Resiliencia)
+
+- **Principio de Personalización Total**:
+  - Todo elemento textual, visual o comercial susceptible de cambio debe estar modelado en Sanity CMS (textos de bienvenida, titulares del hero, subtítulos, sección de historia, fotografías, catálogo de productos, precios en CLP, categorías, insumos de jardinería, publicaciones de blog, números de WhatsApp, horarios y avisos).
+  - Ningún texto corporativo o de producto debe quedar "hardcodeado" sin su correspondiente campo en Sanity.
+- **Arquitectura de Resiliencia (Sistema de Fallbacks)**:
+  - Las consultas GROQ deben estructurarse mediante capas de acceso a datos (`src/lib/sanity.queries.ts`) que provean valores de respaldo predeterminados coherentes extraídos de `docs/`.
+  - Esto garantiza que `astro build` siempre compile con éxito en Cloudflare Pages o entornos locales, independientemente del estado de sincronización del CMS.
+- **Modelos de Contenido Establecidos**:
+  1. `sitioConfig` (Singleton): Configuración global, WhatsApp, redes, horarios, dirección física en Calbuco y banners informativos.
+  2. `paginaInicio` (Singleton): Titulares del hero, bajadas de texto, botones CTA, historia del negocio y destacados.
+  3. `producto`: Flores, arreglos y materiales de jardinería con precios en CLP, unidad, etiqueta, galería, descripción y disponibilidad.
+  4. `categoria`: Categorización de productos (ej: Ramos, Floreros, Jardinería, Plantas, Condolencias).
+  5. `articulo`: Publicaciones de blog botánico con contenido en Portable Text, imagen de portada y fecha.

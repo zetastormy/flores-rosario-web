@@ -1,0 +1,4 @@
+# Cloudflare Pages Redirects
+# Format: /source /target [status]
+# Example:
+# /tienda /productos 301

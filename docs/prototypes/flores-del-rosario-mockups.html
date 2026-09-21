@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flores del Rosario — Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+/* ============================= TOKENS ============================= */
+:root{
+  --cream:#F8DFC8;
+  --cream-soft:#FBEADC;
+  --paper:#FFFBF5;
+  --forest:#1B4D3E;
+  --forest-light:#2E6350;
+  --leaf:#4F7A5B;
+  --leaf-soft:#DCE7DE;
+  --lilac:#B79BC7;
+  --lilac-soft:#EFE6F2;
+  --gold:#D6A94A;
+  --gold-soft:#F3E3C4;
+  --ink:#26302B;
+  --ink-soft:#5B6660;
+  --line: rgba(27,77,62,0.16);
+  --shadow: 0 18px 40px -18px rgba(27,77,62,0.35);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--cream-soft);color:var(--ink);font-family:'Work Sans', sans-serif;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,.display{font-family:'Fraunces', serif;color:var(--forest);margin:0;letter-spacing:-0.01em;}
+p{margin:0;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+a{color:inherit;text-decoration:none;}
+img,svg{display:block;}
+.icon{width:20px;height:20px;flex:none;}
+.italic-accent{font-family:'Fraunces', serif;font-style:italic;font-weight:400;}
+
+/* ============================= PAGE CHROME ============================= */
+.workspace-header{padding:2.2rem 1.5rem 1.4rem;text-align:center;border-bottom:1px solid var(--line);background:linear-gradient(180deg, var(--cream) 0%, var(--cream-soft) 100%);}
+.workspace-header .kicker{font-family:'Fraunces', serif;font-style:italic;color:var(--gold);font-size:0.95rem;margin-bottom:0.3rem;display:block;}
+.workspace-header h1{font-size:clamp(1.6rem, 4vw, 2.2rem);font-weight:600;}
+.workspace-header p.sub{margin-top:0.6rem;color:var(--ink-soft);font-size:0.95rem;max-width:38rem;margin-left:auto;margin-right:auto;}
+
+.tabbar{position:sticky;top:0;z-index:40;display:flex;gap:0.5rem;overflow-x:auto;padding:0.9rem 1.2rem;background:var(--paper);border-bottom:1px solid var(--line);scrollbar-width:none;}
+.tabbar::-webkit-scrollbar{display:none;}
+.tab-btn{flex:none;padding:0.6rem 1.05rem;border-radius:999px;font-size:0.88rem;font-weight:600;color:var(--forest);background:var(--leaf-soft);white-space:nowrap;transition:background .2s ease, color .2s ease, transform .15s ease;}
+.tab-btn:hover{transform:translateY(-1px);}
+.tab-btn.active{background:var(--forest);color:var(--cream);}
+
+.stage{padding:2.4rem 1.2rem 5rem;display:flex;justify-content:center;}
+.frame-wrap{display:none;width:100%;max-width:1240px;flex-direction:column;align-items:center;}
+.frame-wrap.active{display:flex;}
+
+.frame-toolbar{width:100%;max-width:390px;display:flex;align-items:center;justify-content:space-between;gap:0.8rem;margin-bottom:1rem;flex-wrap:wrap;transition:max-width .2s ease;}
+.frame-wrap.desktop-active .frame-toolbar{max-width:min(1200px, 94vw);}
+.download-btn{display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.95rem;border-radius:999px;background:var(--forest);color:var(--cream);font-size:0.82rem;font-weight:600;transition:background .2s ease;flex:none;}
+.download-btn:hover{background:var(--forest-light);}
+.download-btn svg{width:15px;height:15px;}
+.download-btn.is-busy{opacity:0.65;pointer-events:none;}
+
+.device-toggle{display:flex;background:var(--leaf-soft);border-radius:999px;padding:0.22rem;gap:0.2rem;}
+.device-btn{padding:0.42rem 0.95rem;border-radius:999px;font-size:0.8rem;font-weight:700;color:var(--ink-soft);}
+.device-btn.active{background:var(--forest);color:var(--cream);}
+.device-view{display:none;width:100%;}
+.device-view.active{display:flex;flex-direction:column;align-items:center;}
+
+/* ============================= PHONE SHELL ============================= */
+.phone-shell{width:min(390px, 90vw);aspect-ratio:390/818;background:#0e1210;border-radius:2.6rem;padding:0.55rem;box-shadow:var(--shadow);}
+.phone-notch-row{height:26px;display:flex;align-items:center;justify-content:center;}
+.phone-notch{width:38%;height:18px;background:#0e1210;border-radius:0 0 14px 14px;}
+.phone-screen{height:calc(100% - 26px);border-radius:2rem;overflow-y:auto;overflow-x:hidden;background:var(--paper);scrollbar-width:none;position:relative;}
+.phone-screen::-webkit-scrollbar{display:none;}
+
+/* ============================= BROWSER SHELL (desktop) ============================= */
+.browser-shell{width:min(1200px,94vw);background:#EDE3D3;border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
+.browser-topbar{height:40px;display:flex;align-items:center;gap:8px;padding:0 14px;}
+.browser-dot{width:9px;height:9px;border-radius:999px;background:#C9BFAE;}
+.browser-address{margin:0 auto;background:var(--paper);border-radius:999px;padding:0.3rem 1.4rem;font-size:0.78rem;color:var(--ink-soft);display:flex;align-items:center;gap:0.4rem;}
+.browser-address svg{width:12px;height:12px;}
+.browser-screen{background:var(--paper);max-height:min(74vh,660px);overflow-y:auto;scrollbar-width:none;}
+.browser-screen::-webkit-scrollbar{display:none;}
+
+.page{position:relative;background:var(--paper);min-height:100%;}
+.dpage{min-height:100%;background:var(--paper);}
+
+/* ============================= SHARED MOBILE PARTS ============================= */
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:0.55rem 1.1rem 0.2rem;font-size:0.72rem;font-weight:600;color:var(--ink);}
+.statusbar .dots{display:flex;gap:3px;align-items:center;}
+.statusbar .bar{width:3px;background:var(--ink);border-radius:1px;}
+.statusbar .bar:nth-child(1){height:5px;}
+.statusbar .bar:nth-child(2){height:7px;}
+.statusbar .bar:nth-child(3){height:9px;}
+.statusbar .battery{width:20px;height:10px;border:1.2px solid var(--ink);border-radius:2px;position:relative;margin-left:4px;}
+.statusbar .battery::after{content:"";position:absolute;right:-3px;top:2.5px;width:2px;height:5px;background:var(--ink);border-radius:1px;}
+.statusbar .battery::before{content:"";position:absolute;inset:1.4px;background:var(--ink);border-radius:1px;width:70%;}
+
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1.1rem 0.9rem;}
+.brandmark{display:flex;align-items:center;gap:0.55rem;}
+.brandmark .sprig{width:26px;height:26px;color:var(--forest);}
+.brandmark .names{display:flex;flex-direction:column;line-height:1.1;}
+.brandmark .names .n1{font-family:'Fraunces',serif;font-weight:600;font-size:0.98rem;color:var(--forest);}
+.brandmark .names .n2{font-size:0.62rem;letter-spacing:0.04em;color:var(--ink-soft);}
+.icon-btn{width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--leaf-soft);color:var(--forest);flex:none;}
+.icon-btn.on-photo{background:rgba(255,251,245,0.85);}
+.nav-actions{display:flex;gap:0.5rem;}
+
+.nav-overlay{position:absolute;inset:0;background:var(--forest);color:var(--cream);z-index:30;padding:1.4rem 1.4rem;display:flex;flex-direction:column;}
+.nav-overlay .ov-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.2rem;}
+.nav-overlay .ov-top .icon-btn{background:rgba(248,223,200,0.16);color:var(--cream);}
+.nav-overlay ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.35rem;}
+.nav-overlay li a{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:500;color:var(--cream);display:flex;align-items:center;gap:0.6rem;}
+.nav-overlay li a .num{font-size:0.85rem;color:var(--gold);font-family:'Work Sans',sans-serif;font-weight:600;}
+.nav-overlay .ov-social{margin-top:auto;display:flex;gap:0.7rem;padding-top:1.5rem;border-top:1px solid rgba(248,223,200,0.2);}
+.nav-overlay .ov-social .icon-btn{background:rgba(248,223,200,0.14);color:var(--cream);}
+.nav-overlay .ov-contact{margin-top:1rem;font-size:0.82rem;color:var(--lilac-soft);line-height:1.6;}
+
+.ph-photo{position:relative;overflow:hidden;display:flex;align-items:flex-end;color:var(--paper);}
+.ph-photo .ph-caption{position:relative;z-index:2;font-size:0.68rem;font-style:italic;font-family:'Fraunces',serif;padding:0.55rem 0.7rem;background:linear-gradient(0deg, rgba(0,0,0,0.32), transparent);width:100%;}
+.tone-a{background:linear-gradient(155deg, #7FA487 0%, #4F7A5B 55%, #2E5142 100%);}
+.tone-b{background:linear-gradient(155deg, #C9AED9 0%, #B79BC7 55%, #8B6D9D 100%);}
+.tone-c{background:linear-gradient(155deg, #E9C57A 0%, #D6A94A 55%, #A9793B 100%);}
+.tone-d{background:linear-gradient(155deg, #6D9481 0%, #3F6B54 55%, #1B4D3E 100%);}
+
+.section{padding:2.1rem 1.1rem;}
+.section-heading{margin-bottom:1.1rem;}
+.section-heading .eyebrow-mark{display:flex;align-items:center;gap:0.4rem;font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:0.92rem;margin-bottom:0.15rem;}
+.section-heading .eyebrow-mark svg{width:14px;height:14px;}
+.section-heading h2{font-size:1.5rem;font-weight:600;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.85rem 1.4rem;border-radius:999px;font-weight:600;font-size:0.9rem;transition:transform .15s ease, background .2s ease;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--forest);color:var(--cream);}
+.btn-primary:hover{background:var(--forest-light);}
+.btn-ghost{background:transparent;color:var(--forest);border:1.3px solid var(--forest);}
+.btn-whatsapp{background:#25D366;color:#0B2B1A;}
+.btn-block{width:100%;}
+.btn svg{width:17px;height:17px;}
+
+.chiprow{display:flex;gap:0.5rem;overflow-x:auto;padding:0.2rem 1.1rem 0.4rem;scrollbar-width:none;}
+.chiprow::-webkit-scrollbar{display:none;}
+.chip{flex:none;padding:0.5rem 1rem;border-radius:999px;font-size:0.83rem;font-weight:600;background:var(--paper);border:1.3px solid var(--line);color:var(--ink-soft);}
+.chip.active{background:var(--lilac);color:var(--forest);border-color:var(--lilac);}
+
+.tag{display:inline-block;padding:0.28rem 0.7rem;border-radius:999px;font-size:0.68rem;font-weight:700;letter-spacing:0.01em;background:var(--gold-soft);color:#7A5A1E;}
+.tag.lilac{background:var(--lilac-soft);color:#5B4467;}
+.tag.leaf{background:var(--leaf-soft);color:var(--forest);}
+
+.footer{background:var(--forest);color:var(--cream-soft);padding:2.4rem 1.3rem 2.2rem;}
+.footer h3{color:var(--cream);font-size:1.25rem;margin-bottom:0.6rem;}
+.footer p{font-size:0.85rem;color:#CFE0D6;line-height:1.6;}
+.footer .foot-social{display:flex;gap:0.6rem;margin:1.3rem 0 1.5rem;}
+.footer .foot-social .icon-btn{background:rgba(248,223,200,0.14);color:var(--cream-soft);}
+.footer .foot-links{display:flex;flex-wrap:wrap;gap:0.5rem 1.1rem;font-size:0.8rem;color:#CFE0D6;margin-bottom:1.3rem;}
+.footer .foot-bottom{border-top:1px solid rgba(248,223,200,0.18);padding-top:1rem;font-size:0.72rem;color:#9BB5A6;display:flex;justify-content:space-between;}
+
+.fab-wrap{position:absolute;right:1.1rem;z-index:20;display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;}
+.fab{width:54px;height:54px;border-radius:999px;background:#25D366;color:#0B2B1A;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 22px -6px rgba(11,43,26,0.55);}
+.fab svg{width:26px;height:26px;}
+.fab-note{font-size:0.62rem;background:var(--forest);color:var(--cream);padding:0.2rem 0.55rem;border-radius:999px;}
+
+.hero-photo{height:min(52vw,225px);}
+.hero-copy{padding:1.6rem 1.15rem 0.4rem;}
+.hero-copy h1{font-size:1.85rem;line-height:1.12;font-weight:600;}
+.hero-copy .lede{margin-top:0.7rem;color:var(--ink-soft);font-size:0.94rem;line-height:1.55;}
+.hero-cta{display:flex;gap:0.6rem;margin-top:1.2rem;flex-wrap:wrap;}
+
+.history-wrap{display:flex;gap:1rem;align-items:flex-start;}
+.history-photo{width:38%;flex:none;aspect-ratio:3/4;border-radius:58% 42% 46% 54%/54% 48% 52% 46%;}
+.history-text p{font-size:0.86rem;color:var(--ink-soft);line-height:1.62;margin-bottom:0.6rem;}
+
+.hscroll{display:flex;gap:0.9rem;overflow-x:auto;padding:0.2rem 1.1rem 0.6rem;scrollbar-width:none;}
+.hscroll::-webkit-scrollbar{display:none;}
+.pcard-sm{flex:none;width:150px;}
+.pcard-sm .ph-photo{height:150px;border-radius:1.1rem 1.1rem 0.4rem 0.4rem;}
+.pcard-sm .pinfo{padding:0.55rem 0.15rem 0;}
+.pcard-sm h3{font-size:0.92rem;font-weight:600;line-height:1.25;}
+.pcard-sm .price{font-size:0.85rem;color:var(--forest);font-weight:700;margin-top:0.2rem;}
+
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;padding:0.3rem 1.1rem 1rem;}
+.pcard{background:var(--paper);border-radius:1.1rem;overflow:hidden;border:1px solid var(--line);}
+.pcard .ph-photo{height:118px;}
+.pcard .pbody{padding:0.7rem 0.75rem 0.85rem;}
+.pcard .ptag{margin-bottom:0.4rem;}
+.pcard h3{font-size:0.88rem;font-weight:600;line-height:1.25;min-height:2.2em;}
+.pcard .price{margin-top:0.35rem;font-weight:700;color:var(--forest);font-size:0.92rem;}
+.pcard .pfoot{display:flex;align-items:center;justify-content:flex-end;margin-top:0.6rem;}
+.pcard .mini-wa{width:32px;height:32px;border-radius:999px;background:#25D366;color:#0B2B1A;display:flex;align-items:center;justify-content:center;}
+.pcard .mini-wa svg{width:16px;height:16px;}
+.search-row{padding:0.3rem 1.1rem 0.9rem;}
+.search-box{display:flex;align-items:center;gap:0.6rem;background:var(--paper);border:1.3px solid var(--line);border-radius:999px;padding:0.65rem 1rem;color:var(--ink-soft);font-size:0.86rem;}
+.search-box svg{width:16px;height:16px;flex:none;}
+
+.pd-photo{height:min(70vw,300px);border-radius:0 0 2.2rem 2.2rem;}
+.pd-body{padding:1.3rem 1.15rem 0.4rem;}
+.pd-body h1{font-size:1.5rem;line-height:1.2;margin-top:0.5rem;}
+.pd-price-row{display:flex;align-items:baseline;gap:0.6rem;margin-top:0.45rem;}
+.pd-price{font-size:1.35rem;font-weight:700;color:var(--forest);}
+.pd-unit{font-size:0.78rem;color:var(--ink-soft);}
+.pd-desc{margin-top:0.9rem;font-size:0.88rem;color:var(--ink-soft);line-height:1.65;}
+.pd-sticky-cta{padding:1.3rem 1.15rem;}
+.related-strip h2{font-size:1.1rem;padding:0 1.1rem;margin-bottom:0.7rem;}
+
+.article-card{display:flex;gap:0.9rem;padding:0.9rem 1.1rem;border-bottom:1px solid var(--line);}
+.article-card .ph-photo{width:104px;height:104px;border-radius:1rem;flex:none;}
+.article-card .abody h3{font-size:0.95rem;line-height:1.3;font-weight:600;margin-top:0.35rem;}
+.article-card .abody .excerpt{font-size:0.78rem;color:var(--ink-soft);margin-top:0.3rem;line-height:1.45;}
+.article-card .abody .meta{font-size:0.68rem;color:var(--ink-soft);margin-top:0.4rem;}
+
+.bd-photo{height:min(60vw,250px);}
+.bd-body{padding:1.4rem 1.15rem 0.4rem;}
+.bd-meta{display:flex;gap:0.5rem;align-items:center;margin-bottom:0.7rem;}
+.bd-meta .date{font-size:0.76rem;color:var(--ink-soft);}
+.bd-body h1{font-size:1.45rem;line-height:1.26;}
+.bd-body .lede{margin-top:0.6rem;font-family:'Fraunces',serif;font-style:italic;color:var(--forest-light);font-size:1.02rem;line-height:1.5;}
+.bd-body .content p{font-size:0.89rem;color:var(--ink-soft);line-height:1.68;margin-top:0.95rem;}
+.bd-body .content h4{font-family:'Fraunces',serif;color:var(--forest);font-size:1.02rem;margin-top:1.3rem;margin-bottom:0.5rem;}
+.bd-share{display:flex;align-items:center;gap:0.7rem;margin-top:1.6rem;padding-top:1.3rem;border-top:1px solid var(--line);}
+.bd-share span{font-size:0.8rem;font-weight:600;color:var(--ink-soft);}
+
+/* ============================= DESKTOP PARTS ============================= */
+.dnav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem clamp(1.2rem,3.5vw,3rem);border-bottom:1px solid var(--line);}
+.dnav .dlinks{display:flex;gap:2.2rem;}
+.dnav .dlinks a{font-size:0.92rem;font-weight:600;color:var(--forest);padding-bottom:0.35rem;}
+.dnav .dlinks a.active{border-bottom:2px solid var(--gold);}
+.dnav .dright{display:flex;align-items:center;gap:0.9rem;}
+.dnav .brandmark .n1{font-size:1.15rem;}
+
+.dsection{padding:clamp(2rem,4vw,3.2rem) clamp(1.2rem,3.5vw,3rem);}
+.dhero{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,4rem);align-items:center;padding:clamp(2.4rem,5vw,4.4rem) clamp(1.2rem,3.5vw,3rem);}
+.dhero h1{font-size:clamp(2.1rem,3.4vw,2.9rem);line-height:1.08;}
+.dhero .lede{margin-top:1rem;font-size:1rem;color:var(--ink-soft);line-height:1.65;max-width:34rem;}
+.dhero .hero-cta{margin-top:1.6rem;}
+.dhero .ph-photo{border-radius:2.4rem;height:clamp(280px,26vw,380px);}
+
+.dhistoria{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(2rem,4vw,4rem);align-items:center;}
+.dhistoria .ph-photo{border-radius:60% 40% 44% 56%/56% 46% 54% 44%;height:clamp(260px,24vw,340px);}
+.dhistoria .history-text p{font-size:0.95rem;max-width:30rem;}
+
+.dgrid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;}
+.dgrid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+.dpromo{display:flex;align-items:center;justify-content:space-between;gap:2rem;background:var(--leaf-soft);border-radius:1.8rem;padding:2.3rem clamp(1.6rem,3vw,3rem);flex-wrap:wrap;}
+.dpromo h2{font-size:1.4rem;max-width:26rem;}
+.dpromo p{color:var(--ink-soft);font-size:0.9rem;max-width:26rem;margin-top:0.5rem;}
+
+.dfooter{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:2.5rem;padding:3rem clamp(1.2rem,3.5vw,3rem);background:var(--forest);color:var(--cream-soft);}
+.dfooter h3{color:var(--cream);font-size:1.4rem;margin-bottom:0.7rem;}
+.dfooter p{font-size:0.86rem;color:#CFE0D6;line-height:1.6;max-width:24rem;}
+.dfooter .fcol h4{font-family:'Fraunces',serif;color:var(--cream);font-size:0.95rem;margin-bottom:0.8rem;}
+.dfooter .fcol ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.55rem;font-size:0.85rem;color:#CFE0D6;}
+.dfooter .fsocial{display:flex;gap:0.6rem;margin-top:1rem;}
+.dfooter .fsocial .icon-btn{background:rgba(248,223,200,0.14);color:var(--cream-soft);}
+.dfooter .fbottom{grid-column:1/-1;border-top:1px solid rgba(248,223,200,0.18);margin-top:1rem;padding-top:1.2rem;font-size:0.75rem;color:#9BB5A6;display:flex;justify-content:space-between;}
+
+.dproducts-layout{display:grid;grid-template-columns:220px 1fr;gap:2.2rem;padding:0 clamp(1.2rem,3.5vw,3rem) 3rem;}
+.dfilters{display:flex;flex-direction:column;gap:0.35rem;}
+.dfilters button{text-align:left;padding:0.55rem 0.8rem;border-radius:0.7rem;font-size:0.88rem;font-weight:600;color:var(--ink-soft);}
+.dfilters button.active{background:var(--lilac-soft);color:var(--forest);}
+.dheader-row{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;padding:clamp(2rem,4vw,3rem) clamp(1.2rem,3.5vw,3rem) 1.4rem;}
+.dheader-row .search-box{width:280px;}
+.dpcard .ph-photo{height:170px;}
+
+.dproduct-layout{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,4rem);padding:clamp(2rem,4vw,3rem) clamp(1.2rem,3.5vw,3rem);}
+.dproduct-layout .ph-photo{border-radius:2rem;height:clamp(320px,28vw,420px);}
+.dproduct-info .backlink{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.84rem;color:var(--ink-soft);font-weight:600;margin-bottom:1rem;}
+.dproduct-info h1{font-size:2rem;margin-top:0.6rem;}
+.dproduct-info .pd-desc{font-size:0.94rem;max-width:32rem;}
+
+.darticle-card{background:var(--paper);border:1px solid var(--line);border-radius:1.2rem;overflow:hidden;}
+.darticle-card .ph-photo{height:170px;}
+.darticle-card .abody{padding:1.1rem 1.2rem 1.3rem;}
+.darticle-card h3{font-size:1.02rem;margin-top:0.5rem;}
+.darticle-card .excerpt{font-size:0.82rem;margin-top:0.45rem;color:var(--ink-soft);line-height:1.55;}
+
+.dcover{height:min(42vw,340px);position:relative;}
+.dcover .backlink-photo{position:absolute;top:1.6rem;left:clamp(1.2rem,3.5vw,3rem);}
+.dcolumn{max-width:700px;margin:0 auto;padding:clamp(2rem,4vw,3rem) clamp(1.2rem,3.5vw,1rem);}
+.dcolumn h1{font-size:2.1rem;line-height:1.16;}
+.dcolumn .lede{margin-top:0.8rem;}
+.dcolumn .content p{font-size:0.95rem;}
+
+.dmenu-wrap{position:relative;min-height:520px;}
+.backdrop-dim{position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(20,40,32,0.4);z-index:5;}
+.dmega{position:absolute;left:clamp(1.2rem,3.5vw,3rem);right:clamp(1.2rem,3.5vw,3rem);top:0;background:var(--paper);border-radius:0 0 1.4rem 1.4rem;box-shadow:0 30px 50px -20px rgba(20,40,32,0.4);z-index:10;display:grid;grid-template-columns:1fr 1fr;gap:2rem;padding:2rem clamp(1.4rem,3vw,2.4rem) 2.4rem;}
+.dmega .mlinks{display:flex;flex-direction:column;gap:1rem;}
+.dmega .mlinks a{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:500;color:var(--forest);}
+.dmega .mpromo{background:var(--leaf-soft);border-radius:1.2rem;padding:1.2rem;display:flex;flex-direction:column;gap:0.8rem;}
+.dmega .mpromo .ph-photo{height:120px;border-radius:0.8rem;}
+.dmega .mpromo p{font-size:0.82rem;color:var(--ink-soft);line-height:1.5;}
+
+/* ============================= STYLE GUIDE PANEL ============================= */
+.styleguide{width:100%;max-width:820px;background:var(--paper);border-radius:1.6rem;border:1px solid var(--line);overflow:hidden;}
+.sg-inner{padding:2.2rem clamp(1.2rem,4vw,2.6rem) 2.6rem;}
+.sg-block{margin-bottom:2.4rem;}
+.sg-block:last-child{margin-bottom:0;}
+.sg-block h2{font-size:1.25rem;margin-bottom:0.3rem;}
+.sg-block .sg-desc{color:var(--ink-soft);font-size:0.88rem;margin-bottom:1.2rem;max-width:38rem;}
+.swatchrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.9rem;}
+.swatch{border-radius:1rem;overflow:hidden;border:1px solid var(--line);}
+.swatch .chip-color{height:78px;}
+.swatch .swatch-info{padding:0.65rem 0.8rem;background:var(--paper);}
+.swatch .swatch-name{font-size:0.82rem;font-weight:700;color:var(--forest);}
+.swatch .swatch-hex{font-size:0.74rem;color:var(--ink-soft);font-family:monospace;}
+.type-sample{display:flex;flex-direction:column;gap:0.35rem;margin-bottom:1.4rem;}
+.type-sample .tlabel{font-size:0.72rem;color:var(--ink-soft);font-weight:600;}
+.type-sample .tsample{font-family:'Fraunces',serif;}
+.type-sample.body .tsample{font-family:'Work Sans',sans-serif;font-size:0.98rem;color:var(--ink);}
+.icon-grid{display:flex;gap:1.4rem;flex-wrap:wrap;}
+.icon-grid .igrp{display:flex;flex-direction:column;align-items:center;gap:0.4rem;}
+.icon-grid .igrp .icon-btn{width:44px;height:44px;}
+.icon-grid .igrp span{font-size:0.72rem;color:var(--ink-soft);}
+
+.page-note{text-align:center;color:var(--ink-soft);font-size:0.8rem;max-width:32rem;margin:1.1rem auto 0;line-height:1.55;}
+</style>
+</head>
+<body>
+
+<!-- ============================= WORKSPACE HEADER ============================= -->
+<header class="workspace-header">
+  <span class="kicker">Flores del Rosario</span>
+  <h1>Mockups del sitio</h1>
+  <p class="sub">Diseño mobile-first para venta de flores y artículos de jardinería. Cada vista tiene versión móvil y de escritorio, descargables como imagen. Los textos de contenido (historia, descripciones, artículos) son placeholders tipo lorem ipsum a modo de referencia.</p>
+</header>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab-btn active" data-target="styleguide">Guía de estilo</button>
+  <button class="tab-btn" data-target="home">Inicio</button>
+  <button class="tab-btn" data-target="menu">Inicio · Menú</button>
+  <button class="tab-btn" data-target="products">Productos</button>
+  <button class="tab-btn" data-target="product">Producto</button>
+  <button class="tab-btn" data-target="blog">Blog</button>
+  <button class="tab-btn" data-target="article">Blog · Artículo</button>
+</nav>
+
+<main class="stage">
+
+<!-- ============================= STYLE GUIDE ============================= -->
+<section class="frame-wrap active" id="panel-styleguide">
+  <div class="frame-toolbar" style="max-width:820px;">
+    <span></span>
+    <button class="download-btn" data-capture="sg-export" data-filename="flores-del-rosario-guia-de-estilo">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Descargar
+    </button>
+  </div>
+  <div class="styleguide" id="sg-export">
+    <div class="sg-inner">
+      <div class="sg-block">
+        <h2>Paleta de color</h2>
+        <p class="sg-desc">Extraída del isotipo de flores lilas y follaje: un fondo cálido, un verde botánico como color de marca, y el lila y dorado de las flores como acentos.</p>
+        <div class="swatchrow">
+          <div class="swatch"><div class="chip-color" style="background:#F8DFC8"></div><div class="swatch-info"><div class="swatch-name">Crema (fondo)</div><div class="swatch-hex">#F8DFC8</div></div></div>
+          <div class="swatch"><div class="chip-color" style="background:#FFFBF5"></div><div class="swatch-info"><div class="swatch-name">Papel</div><div class="swatch-hex">#FFFBF5</div></div></div>
+          <div class="swatch"><div class="chip-color" style="background:#1B4D3E"></div><div class="swatch-info"><div class="swatch-name">Verde bosque</div><div class="swatch-hex">#1B4D3E</div></div></div>
+          <div class="swatch"><div class="chip-color" style="background:#4F7A5B"></div><div class="swatch-info"><div class="swatch-name">Verde hoja</div><div class="swatch-hex">#4F7A5B</div></div></div>
+          <div class="swatch"><div class="chip-color" style="background:#B79BC7"></div><div class="swatch-info"><div class="swatch-name">Lila floral</div><div class="swatch-hex">#B79BC7</div></div></div>
+          <div class="swatch"><div class="chip-color" style="background:#D6A94A"></div><div class="swatch-info"><div class="swatch-name">Dorado</div><div class="swatch-hex">#D6A94A</div></div></div>
+        </div>
+      </div>
+
+      <div class="sg-block">
+        <h2>Tipografía</h2>
+        <p class="sg-desc">Fraunces para títulos (misma familia serif del logo, con detalle en itálica) y Work Sans para texto de cuerpo, legible en pantallas pequeñas.</p>
+        <div class="type-sample">
+          <span class="tlabel">Fraunces · 600 · Título</span>
+          <span class="tsample" style="font-size:2rem;font-weight:600;">Flores del Rosario</span>
+        </div>
+        <div class="type-sample">
+          <span class="tlabel">Fraunces · itálica · Acento</span>
+          <span class="tsample italic-accent" style="font-size:1.3rem;">Lorem ipsum dolor sit amet</span>
+        </div>
+        <div class="type-sample body">
+          <span class="tlabel">Work Sans · 400 · Cuerpo de texto</span>
+          <span class="tsample">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+        </div>
+      </div>
+
+      <div class="sg-block">
+        <h2>Botones y contacto</h2>
+        <p class="sg-desc">La compra siempre deriva a WhatsApp; Instagram y Facebook se usan para seguir el contenido de la marca.</p>
+        <div style="display:flex;gap:0.7rem;flex-wrap:wrap;margin-bottom:1.4rem;">
+          <button class="btn btn-primary">Ver productos</button>
+          <button class="btn btn-whatsapp"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Consultar por WhatsApp</button>
+          <button class="btn btn-ghost">Leer más</button>
+        </div>
+        <div class="icon-grid">
+          <div class="igrp"><div class="icon-btn" style="background:#25D366;color:#0B2B1A;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div><span>WhatsApp</span></div>
+          <div class="igrp"><div class="icon-btn"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></div><span>Instagram</span></div>
+          <div class="igrp"><div class="icon-btn"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></div><span>Facebook</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="page-note">Esta guía resume las decisiones visuales aplicadas en las seis vistas siguientes.</p>
+</section>
+
+<!-- ============================= HOME ============================= -->
+<section class="frame-wrap" id="panel-home">
+  <div class="frame-toolbar">
+    <div class="device-toggle">
+      <button class="device-btn active" data-device="mobile">Móvil</button>
+      <button class="device-btn" data-device="desktop">Escritorio</button>
+    </div>
+    <button class="download-btn">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Descargar
+    </button>
+  </div>
+
+  <div class="device-view active" data-device="mobile" data-capture="page-home-m" data-filename="flores-del-rosario-inicio-movil">
+    <div class="phone-shell">
+      <div class="phone-notch-row"><div class="phone-notch"></div></div>
+      <div class="phone-screen">
+        <div class="page" id="page-home-m">
+          <div class="statusbar"><span>9:41</span><div class="dots"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="battery"></div></div></div>
+          <div class="topnav">
+            <div class="brandmark"><svg class="sprig" viewBox="0 0 26 26"><use href="#ic-sprig"/></svg><div class="names"><span class="n1">Flores del Rosario</span><span class="n2">vivero &amp; florería</span></div></div>
+            <div class="nav-actions"><button class="icon-btn menu-toggle"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          </div>
+
+          <div class="ph-photo hero-photo tone-a"><div class="ph-caption">Foto: hilera de rosales en el jardín, al amanecer</div></div>
+          <div class="hero-copy">
+            <h1>Lorem ipsum dolor sit amet consectetur.</h1>
+            <p class="lede">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <div class="hero-cta"><button class="btn btn-primary">Ver productos</button><button class="btn btn-ghost">Nuestra historia</button></div>
+          </div>
+
+          <div class="fab-wrap" style="top:352px;"><span class="fab-note">Fijo en todas las vistas</span><div class="fab"><svg class="icon" viewBox="0 0 24 24" fill="none" style="width:26px;height:26px;"><use href="#ic-chat"/></svg></div></div>
+
+          <div class="section">
+            <div class="section-heading"><div class="eyebrow-mark"><svg viewBox="0 0 26 26"><use href="#ic-sprig"/></svg>Nuestra historia</div><h2>Lorem ipsum dolor sit amet consectetur</h2></div>
+            <div class="history-wrap">
+              <div class="ph-photo history-photo tone-d"><div class="ph-caption">Foto: manos cosechando flores</div></div>
+              <div class="history-text">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section" style="padding-top:0;">
+            <div class="section-heading"><div class="eyebrow-mark"><svg viewBox="0 0 26 26"><use href="#ic-sprig"/></svg>Destacados</div><h2>Lorem ipsum dolor sit amet</h2></div>
+          </div>
+          <div class="hscroll">
+            <div class="pcard-sm"><div class="ph-photo tone-b"><div class="ph-caption">Peonías</div></div><div class="pinfo"><h3>Ramo de peonías</h3><div class="price">$14.990</div></div></div>
+            <div class="pcard-sm"><div class="ph-photo tone-c"><div class="ph-caption">Suculentas</div></div><div class="pinfo"><h3>Set de suculentas x3</h3><div class="price">$9.490</div></div></div>
+            <div class="pcard-sm"><div class="ph-photo tone-a"><div class="ph-caption">Lisianthus</div></div><div class="pinfo"><h3>Buqué de lisianthus</h3><div class="price">$12.990</div></div></div>
+            <div class="pcard-sm"><div class="ph-photo tone-d"><div class="ph-caption">Herramientas</div></div><div class="pinfo"><h3>Set de poda</h3><div class="price">$18.990</div></div></div>
+          </div>
+
+          <div class="section" style="background:var(--leaf-soft);border-radius:1.6rem;margin:1.4rem 1.1rem 0;padding:1.5rem 1.2rem;">
+            <h2 style="font-size:1.2rem;">Lorem ipsum dolor sit amet?</h2>
+            <p style="font-size:0.85rem;color:var(--ink-soft);margin-top:0.5rem;line-height:1.55;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+            <button class="btn btn-whatsapp" style="margin-top:1rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Escribir por WhatsApp</button>
+          </div>
+
+          <footer class="footer" style="margin-top:1.6rem;">
+            <h3>Flores del Rosario</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p>
+            <div class="foot-social">
+              <a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a>
+              <a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a>
+              <a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a>
+            </div>
+            <div class="foot-links"><span>Inicio</span><span>Productos</span><span>Blog</span><span>Cómo comprar</span></div>
+            <div class="foot-bottom"><span>© 2026 Flores del Rosario</span><span>Santiago, Chile</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="device-view" data-device="desktop" data-capture="page-home-d" data-filename="flores-del-rosario-inicio-escritorio">
+    <div class="browser-shell">
+      <div class="browser-topbar"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-address"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5" stroke="currentColor" stroke-width="0"/><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>floresdelrosario.cl</div></div>
+      <div class="browser-screen">
+        <div class="dpage" id="page-home-d">
+          <div class="dnav">
+            <div class="brandmark"><svg class="sprig" viewBox="0 0 26 26" style="width:30px;height:30px;"><use href="#ic-sprig"/></svg><div class="names"><span class="n1">Flores del Rosario</span><span class="n2">vivero &amp; florería</span></div></div>
+            <div class="dlinks"><a href="#" class="active">Inicio</a><a href="#">Productos</a><a href="#">Blog</a></div>
+            <div class="dright">
+              <a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a>
+              <a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a>
+              <button class="btn btn-whatsapp" style="padding:0.6rem 1.1rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Escríbenos</button>
+            </div>
+          </div>
+
+          <div class="dhero">
+            <div><h1>Lorem ipsum dolor sit amet consectetur adipiscing.</h1><p class="lede">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.</p><div class="hero-cta"><button class="btn btn-primary">Ver productos</button><button class="btn btn-ghost">Nuestra historia</button></div></div>
+            <div class="ph-photo tone-a"><div class="ph-caption">Foto: hilera de rosales en el jardín, al amanecer</div></div>
+          </div>
+
+          <div class="dsection dhistoria">
+            <div class="ph-photo tone-d"><div class="ph-caption">Foto: manos cosechando flores</div></div>
+            <div class="history-text"><div class="eyebrow-mark"><svg viewBox="0 0 26 26"><use href="#ic-sprig"/></svg>Nuestra historia</div><h2 style="font-size:1.7rem;margin-bottom:0.7rem;">Lorem ipsum dolor sit amet consectetur</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></div>
+          </div>
+
+          <div class="dsection" style="padding-top:0;">
+            <div class="section-heading"><div class="eyebrow-mark"><svg viewBox="0 0 26 26"><use href="#ic-sprig"/></svg>Destacados</div><h2 style="font-size:1.7rem;">Lorem ipsum dolor sit amet</h2></div>
+            <div class="dgrid-4">
+              <div class="pcard-sm" style="width:auto;"><div class="ph-photo tone-b" style="height:170px;"><div class="ph-caption">Peonías</div></div><div class="pinfo"><h3>Ramo de peonías</h3><div class="price">$14.990</div></div></div>
+              <div class="pcard-sm" style="width:auto;"><div class="ph-photo tone-c" style="height:170px;"><div class="ph-caption">Suculentas</div></div><div class="pinfo"><h3>Set de suculentas x3</h3><div class="price">$9.490</div></div></div>
+              <div class="pcard-sm" style="width:auto;"><div class="ph-photo tone-a" style="height:170px;"><div class="ph-caption">Lisianthus</div></div><div class="pinfo"><h3>Buqué de lisianthus</h3><div class="price">$12.990</div></div></div>
+              <div class="pcard-sm" style="width:auto;"><div class="ph-photo tone-d" style="height:170px;"><div class="ph-caption">Herramientas</div></div><div class="pinfo"><h3>Set de poda</h3><div class="price">$18.990</div></div></div>
+            </div>
+          </div>
+
+          <div class="dsection" style="padding-top:0;">
+            <div class="dpromo">
+              <div><h2>Lorem ipsum dolor sit amet consectetur?</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p></div>
+              <button class="btn btn-whatsapp"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Escribir por WhatsApp</button>
+            </div>
+          </div>
+
+          <footer class="dfooter">
+            <div><h3>Flores del Rosario</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.</p><div class="fsocial"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div></div>
+            <div class="fcol"><h4>Navegación</h4><ul><li>Inicio</li><li>Productos</li><li>Blog</li><li>Cómo comprar</li></ul></div>
+            <div class="fcol"><h4>Contacto</h4><ul><li>Av. de las Camelias 480</li><li>Santiago, Chile</li><li>Lun a sáb, 9:00–18:30</li></ul></div>
+            <div class="fbottom"><span>© 2026 Flores del Rosario</span><span>Sitio diseñado mobile-first</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= HOME + MENU ============================= -->
+<section class="frame-wrap" id="panel-menu">
+  <div class="frame-toolbar">
+    <div class="device-toggle"><button class="device-btn active" data-device="mobile">Móvil</button><button class="device-btn" data-device="desktop">Escritorio</button></div>
+    <button class="download-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Descargar</button>
+  </div>
+
+  <div class="device-view active" data-device="mobile" data-capture="page-menu-m" data-filename="flores-del-rosario-menu-movil">
+    <div class="phone-shell">
+      <div class="phone-notch-row"><div class="phone-notch"></div></div>
+      <div class="phone-screen">
+        <div class="page" id="page-menu-m" style="min-height:100%;">
+          <div class="statusbar"><span>9:41</span><div class="dots"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="battery"></div></div></div>
+          <div class="topnav">
+            <div class="brandmark"><svg class="sprig" viewBox="0 0 26 26"><use href="#ic-sprig"/></svg><div class="names"><span class="n1">Flores del Rosario</span><span class="n2">vivero &amp; florería</span></div></div>
+            <div class="nav-actions"><button class="icon-btn"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          </div>
+          <div class="nav-overlay" style="position:absolute;top:0;height:100%;">
+            <div class="ov-top"><div class="brandmark"><svg class="sprig" viewBox="0 0 26 26" style="color:var(--cream);"><use href="#ic-sprig"/></svg><div class="names"><span class="n1" style="color:var(--cream);">Flores del Rosario</span></div></div><button class="icon-btn" data-close-menu><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+            <ul><li><a href="#"><span class="num">01</span>Inicio</a></li><li><a href="#"><span class="num">02</span>Productos</a></li><li><a href="#"><span class="num">03</span>Blog</a></li><li><a href="#"><span class="num">04</span>Cómo comprar</a></li></ul>
+            <div class="ov-contact">Av. de las Camelias 480, Santiago<br>Lun a sáb, 9:00–18:30</div>
+            <div class="ov-social"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="device-view" data-device="desktop" data-capture="page-menu-d" data-filename="flores-del-rosario-menu-escritorio">
+    <div class="browser-shell">
+      <div class="browser-topbar"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-address">floresdelrosario.cl</div></div>
+      <div class="browser-screen">
+        <div class="dpage dmenu-wrap" id="page-menu-d">
+          <div class="dnav" style="position:relative;z-index:11;background:var(--paper);">
+            <div class="brandmark"><svg class="sprig" viewBox="0 0 26 26" style="width:30px;height:30px;"><use href="#ic-sprig"/></svg><div class="names"><span class="n1">Flores del Rosario</span><span class="n2">vivero &amp; florería</span></div></div>
+            <div class="dlinks"><a href="#">Inicio</a><a href="#" class="active">Productos</a><a href="#">Blog</a></div>
+            <div class="dright"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><button class="btn btn-whatsapp" style="padding:0.6rem 1.1rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Escríbenos</button></div>
+          </div>
+          <div class="backdrop-dim"></div>
+          <div class="dmega">
+            <div class="mlinks"><a href="#">Flores</a><a href="#">Plantas</a><a href="#">Macetas y jardín</a><a href="#">Herramientas</a></div>
+            <div class="mpromo"><div class="ph-photo tone-c"><div class="ph-caption">Destacado</div></div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p><button class="btn btn-primary" style="align-self:flex-start;padding:0.55rem 1rem;font-size:0.8rem;">Ver todo</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="page-note">En móvil el menú se abre como capa completa; en escritorio, "Productos" despliega un menú con categorías sobre el contenido atenuado.</p>
+</section>
+
+<!-- ============================= PRODUCTS ============================= -->
+<section class="frame-wrap" id="panel-products">
+  <div class="frame-toolbar">
+    <div class="device-toggle"><button class="device-btn active" data-device="mobile">Móvil</button><button class="device-btn" data-device="desktop">Escritorio</button></div>
+    <button class="download-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Descargar</button>
+  </div>
+
+  <div class="device-view active" data-device="mobile" data-capture="page-products-m" data-filename="flores-del-rosario-productos-movil">
+    <div class="phone-shell">
+      <div class="phone-notch-row"><div class="phone-notch"></div></div>
+      <div class="phone-screen">
+        <div class="page" id="page-products-m">
+          <div class="statusbar"><span>9:41</span><div class="dots"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="battery"></div></div></div>
+          <div class="topnav">
+            <button class="icon-btn"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="brandmark"><div class="names" style="text-align:right;"><span class="n1">Productos</span><span class="n2">flores y jardín</span></div></div>
+            <button class="icon-btn menu-toggle"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          </div>
+          <div class="search-row"><div class="search-box"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Buscar flores, plantas, macetas…</div></div>
+          <div class="chiprow"><button class="chip active">Todas</button><button class="chip">Flores</button><button class="chip">Plantas</button><button class="chip">Macetas y jardín</button><button class="chip">Herramientas</button></div>
+
+          <div class="pgrid">
+            <div class="pcard"><div class="ph-photo tone-b"><div class="ph-caption">Peonías</div></div><div class="pbody"><span class="tag lilac ptag">Flores</span><h3>Ramo de peonías rosadas</h3><div class="price">$14.990</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+            <div class="pcard"><div class="ph-photo tone-a"><div class="ph-caption">Monstera</div></div><div class="pbody"><span class="tag leaf ptag">Plantas</span><h3>Monstera deliciosa, maceta 20cm</h3><div class="price">$22.990</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+            <div class="pcard"><div class="ph-photo tone-c"><div class="ph-caption">Maceta de barro</div></div><div class="pbody"><span class="tag ptag">Macetas</span><h3>Maceta de barro artesanal N°3</h3><div class="price">$7.990</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+            <div class="pcard"><div class="ph-photo tone-d"><div class="ph-caption">Set de poda</div></div><div class="pbody"><span class="tag leaf ptag">Herramientas</span><h3>Set de poda de 3 piezas</h3><div class="price">$18.990</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+            <div class="pcard"><div class="ph-photo tone-b"><div class="ph-caption">Girasoles</div></div><div class="pbody"><span class="tag lilac ptag">Flores</span><h3>Arreglo de girasoles</h3><div class="price">$13.490</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+            <div class="pcard"><div class="ph-photo tone-c"><div class="ph-caption">Sustrato</div></div><div class="pbody"><span class="tag ptag">Jardín</span><h3>Sustrato premium 5kg</h3><div class="price">$6.490</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+          </div>
+
+          <div class="fab-wrap" style="top:352px;"><div class="fab"><svg class="icon" viewBox="0 0 24 24" fill="none" style="width:26px;height:26px;"><use href="#ic-chat"/></svg></div></div>
+
+          <footer class="footer">
+            <div class="foot-social"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div>
+            <div class="foot-bottom"><span>© 2026 Flores del Rosario</span><span>Santiago, Chile</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="device-view" data-device="desktop" data-capture="page-products-d" data-filename="flores-del-rosario-productos-escritorio">
+    <div class="browser-shell">
+      <div class="browser-topbar"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-address">floresdelrosario.cl/productos</div></div>
+      <div class="browser-screen">
+        <div class="dpage" id="page-products-d">
+          <div class="dnav">
+            <div class="brandmark"><svg class="sprig" viewBox="0 0 26 26" style="width:30px;height:30px;"><use href="#ic-sprig"/></svg><div class="names"><span class="n1">Flores del Rosario</span></div></div>
+            <div class="dlinks"><a href="#">Inicio</a><a href="#" class="active">Productos</a><a href="#">Blog</a></div>
+            <div class="dright"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><button class="btn btn-whatsapp" style="padding:0.6rem 1.1rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Escríbenos</button></div>
+          </div>
+          <div class="dheader-row"><h2 style="font-size:1.8rem;">Productos</h2><div class="search-box"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Buscar flores, plantas, macetas…</div></div>
+          <div class="dproducts-layout">
+            <aside class="dfilters"><button class="active">Todas</button><button>Flores</button><button>Plantas</button><button>Macetas y jardín</button><button>Herramientas</button></aside>
+            <div class="dgrid-3">
+              <div class="pcard dpcard"><div class="ph-photo tone-b"><div class="ph-caption">Peonías</div></div><div class="pbody"><span class="tag lilac ptag">Flores</span><h3>Ramo de peonías rosadas</h3><div class="price">$14.990</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+              <div class="pcard dpcard"><div class="ph-photo tone-a"><div class="ph-caption">Monstera</div></div><div class="pbody"><span class="tag leaf ptag">Plantas</span><h3>Monstera deliciosa, maceta 20cm</h3><div class="price">$22.990</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+              <div class="pcard dpcard"><div class="ph-photo tone-c"><div class="ph-caption">Maceta de barro</div></div><div class="pbody"><span class="tag ptag">Macetas</span><h3>Maceta de barro artesanal N°3</h3><div class="price">$7.990</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+              <div class="pcard dpcard"><div class="ph-photo tone-d"><div class="ph-caption">Set de poda</div></div><div class="pbody"><span class="tag leaf ptag">Herramientas</span><h3>Set de poda de 3 piezas</h3><div class="price">$18.990</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+              <div class="pcard dpcard"><div class="ph-photo tone-b"><div class="ph-caption">Girasoles</div></div><div class="pbody"><span class="tag lilac ptag">Flores</span><h3>Arreglo de girasoles</h3><div class="price">$13.490</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+              <div class="pcard dpcard"><div class="ph-photo tone-c"><div class="ph-caption">Sustrato</div></div><div class="pbody"><span class="tag ptag">Jardín</span><h3>Sustrato premium 5kg</h3><div class="price">$6.490</div><div class="pfoot"><div class="mini-wa"><svg viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></div></div></div></div>
+            </div>
+          </div>
+          <footer class="dfooter">
+            <div><h3>Flores del Rosario</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.</p><div class="fsocial"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div></div>
+            <div class="fcol"><h4>Navegación</h4><ul><li>Inicio</li><li>Productos</li><li>Blog</li><li>Cómo comprar</li></ul></div>
+            <div class="fcol"><h4>Contacto</h4><ul><li>Av. de las Camelias 480</li><li>Santiago, Chile</li><li>Lun a sáb, 9:00–18:30</li></ul></div>
+            <div class="fbottom"><span>© 2026 Flores del Rosario</span><span>Sitio diseñado mobile-first</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= PRODUCT DETAIL ============================= -->
+<section class="frame-wrap" id="panel-product">
+  <div class="frame-toolbar">
+    <div class="device-toggle"><button class="device-btn active" data-device="mobile">Móvil</button><button class="device-btn" data-device="desktop">Escritorio</button></div>
+    <button class="download-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Descargar</button>
+  </div>
+
+  <div class="device-view active" data-device="mobile" data-capture="page-product-m" data-filename="flores-del-rosario-producto-movil">
+    <div class="phone-shell">
+      <div class="phone-notch-row"><div class="phone-notch"></div></div>
+      <div class="phone-screen">
+        <div class="page" id="page-product-m">
+          <div class="statusbar" style="position:absolute;top:0;left:0;right:0;z-index:5;color:var(--paper);"><span>9:41</span><div class="dots"><div class="bar" style="background:var(--paper);"></div><div class="bar" style="background:var(--paper);"></div><div class="bar" style="background:var(--paper);"></div><div class="battery" style="border-color:var(--paper);"></div></div></div>
+          <div class="ph-photo pd-photo tone-b">
+            <div class="topnav" style="position:absolute;top:22px;left:0;right:0;padding-left:1.1rem;padding-right:1.1rem;">
+              <button class="icon-btn on-photo"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="ph-caption">Foto: ramo de peonías sobre mesa de madera</div>
+          </div>
+          <div class="pd-body">
+            <span class="tag lilac">Flores</span>
+            <h1>Ramo de peonías rosadas</h1>
+            <div class="pd-price-row"><span class="pd-price">$14.990</span><span class="pd-unit">/ ramo de 8 tallos</span></div>
+            <p class="pd-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.</p>
+          </div>
+          <div class="pd-sticky-cta">
+            <button class="btn btn-whatsapp btn-block"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Consultar disponibilidad por WhatsApp</button>
+            <p style="text-align:center;font-size:0.72rem;color:var(--ink-soft);margin-top:0.55rem;">Disponibilidad y cantidad se confirman directamente por WhatsApp.</p>
+          </div>
+          <div class="section related-strip" style="padding-top:0.4rem;">
+            <h2>También te puede interesar</h2>
+            <div class="hscroll" style="padding-left:1.1rem;">
+              <div class="pcard-sm"><div class="ph-photo tone-c"><div class="ph-caption">Lisianthus</div></div><div class="pinfo"><h3>Buqué de lisianthus</h3><div class="price">$12.990</div></div></div>
+              <div class="pcard-sm"><div class="ph-photo tone-d"><div class="ph-caption">Florero</div></div><div class="pinfo"><h3>Florero de cerámica</h3><div class="price">$10.490</div></div></div>
+            </div>
+          </div>
+          <footer class="footer" style="margin-top:0.4rem;">
+            <div class="foot-social"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div>
+            <div class="foot-bottom"><span>© 2026 Flores del Rosario</span><span>Santiago, Chile</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="device-view" data-device="desktop" data-capture="page-product-d" data-filename="flores-del-rosario-producto-escritorio">
+    <div class="browser-shell">
+      <div class="browser-topbar"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-address">floresdelrosario.cl/productos/peonias</div></div>
+      <div class="browser-screen">
+        <div class="dpage" id="page-product-d">
+          <div class="dnav">
+            <div class="brandmark"><svg class="sprig" viewBox="0 0 26 26" style="width:30px;height:30px;"><use href="#ic-sprig"/></svg><div class="names"><span class="n1">Flores del Rosario</span></div></div>
+            <div class="dlinks"><a href="#">Inicio</a><a href="#" class="active">Productos</a><a href="#">Blog</a></div>
+            <div class="dright"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><button class="btn btn-whatsapp" style="padding:0.6rem 1.1rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Escríbenos</button></div>
+          </div>
+          <div class="dproduct-layout">
+            <div class="ph-photo tone-b"><div class="ph-caption">Foto: ramo de peonías sobre mesa de madera</div></div>
+            <div class="dproduct-info">
+              <span class="backlink">← Volver a productos</span>
+              <span class="tag lilac">Flores</span>
+              <h1>Ramo de peonías rosadas</h1>
+              <div class="pd-price-row"><span class="pd-price">$14.990</span><span class="pd-unit">/ ramo de 8 tallos</span></div>
+              <p class="pd-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam, quis nostrud exercitation.</p>
+              <button class="btn btn-whatsapp" style="margin-top:1.4rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Consultar disponibilidad por WhatsApp</button>
+              <p style="font-size:0.78rem;color:var(--ink-soft);margin-top:0.6rem;">Disponibilidad y cantidad se confirman directamente por WhatsApp.</p>
+            </div>
+          </div>
+          <div class="dsection" style="padding-top:0;">
+            <h2 style="font-size:1.3rem;margin-bottom:1rem;">También te puede interesar</h2>
+            <div class="dgrid-4">
+              <div class="pcard-sm" style="width:auto;"><div class="ph-photo tone-c" style="height:150px;"><div class="ph-caption">Lisianthus</div></div><div class="pinfo"><h3>Buqué de lisianthus</h3><div class="price">$12.990</div></div></div>
+              <div class="pcard-sm" style="width:auto;"><div class="ph-photo tone-d" style="height:150px;"><div class="ph-caption">Florero</div></div><div class="pinfo"><h3>Florero de cerámica</h3><div class="price">$10.490</div></div></div>
+              <div class="pcard-sm" style="width:auto;"><div class="ph-photo tone-a" style="height:150px;"><div class="ph-caption">Girasoles</div></div><div class="pinfo"><h3>Arreglo de girasoles</h3><div class="price">$13.490</div></div></div>
+              <div class="pcard-sm" style="width:auto;"><div class="ph-photo tone-b" style="height:150px;"><div class="ph-caption">Tarjeta</div></div><div class="pinfo"><h3>Tarjeta de dedicatoria</h3><div class="price">$1.990</div></div></div>
+            </div>
+          </div>
+          <footer class="dfooter">
+            <div><h3>Flores del Rosario</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.</p><div class="fsocial"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div></div>
+            <div class="fcol"><h4>Navegación</h4><ul><li>Inicio</li><li>Productos</li><li>Blog</li><li>Cómo comprar</li></ul></div>
+            <div class="fcol"><h4>Contacto</h4><ul><li>Av. de las Camelias 480</li><li>Santiago, Chile</li><li>Lun a sáb, 9:00–18:30</li></ul></div>
+            <div class="fbottom"><span>© 2026 Flores del Rosario</span><span>Sitio diseñado mobile-first</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= BLOG LIST ============================= -->
+<section class="frame-wrap" id="panel-blog">
+  <div class="frame-toolbar">
+    <div class="device-toggle"><button class="device-btn active" data-device="mobile">Móvil</button><button class="device-btn" data-device="desktop">Escritorio</button></div>
+    <button class="download-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Descargar</button>
+  </div>
+
+  <div class="device-view active" data-device="mobile" data-capture="page-blog-m" data-filename="flores-del-rosario-blog-movil">
+    <div class="phone-shell">
+      <div class="phone-notch-row"><div class="phone-notch"></div></div>
+      <div class="phone-screen">
+        <div class="page" id="page-blog-m">
+          <div class="statusbar"><span>9:41</span><div class="dots"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="battery"></div></div></div>
+          <div class="topnav">
+            <button class="icon-btn"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="brandmark"><div class="names" style="text-align:right;"><span class="n1">Blog</span><span class="n2">consejos de jardín</span></div></div>
+            <button class="icon-btn menu-toggle"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          </div>
+          <div class="section" style="padding-bottom:0.6rem;"><div class="eyebrow-mark"><svg viewBox="0 0 26 26"><use href="#ic-sprig"/></svg>Temporada actual: primavera</div><h2 style="font-size:1.35rem;">Lorem ipsum dolor sit amet</h2></div>
+          <div class="chiprow"><button class="chip active">Primavera</button><button class="chip">Verano</button><button class="chip">Otoño</button><button class="chip">Invierno</button><button class="chip">Cuidados generales</button></div>
+          <div style="margin-top:0.5rem;">
+            <div class="article-card"><div class="ph-photo tone-a"><div class="ph-caption">Almácigos</div></div><div class="abody"><span class="tag leaf">Primavera</span><h3>Qué plantar en septiembre: la guía de primavera</h3><p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p><p class="meta">12 sept · 4 min de lectura</p></div></div>
+            <div class="article-card"><div class="ph-photo tone-c"><div class="ph-caption">Macetas al sol</div></div><div class="abody"><span class="tag">Verano</span><h3>Cómo proteger tus macetas del sol de enero</h3><p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p><p class="meta">3 ene · 5 min de lectura</p></div></div>
+            <div class="article-card"><div class="ph-photo tone-d"><div class="ph-caption">Poda de otoño</div></div><div class="abody"><span class="tag leaf">Otoño</span><h3>Poda de otoño: lo que sí y lo que no</h3><p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p><p class="meta">18 abr · 3 min de lectura</p></div></div>
+            <div class="article-card" style="border-bottom:none;"><div class="ph-photo tone-b"><div class="ph-caption">Heladas</div></div><div class="abody"><span class="tag lilac">Invierno</span><h3>Flores que resisten las heladas</h3><p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p><p class="meta">9 jul · 4 min de lectura</p></div></div>
+          </div>
+          <div class="fab-wrap" style="top:120px;"><div class="fab"><svg class="icon" viewBox="0 0 24 24" fill="none" style="width:26px;height:26px;"><use href="#ic-chat"/></svg></div></div>
+          <footer class="footer" style="margin-top:1rem;">
+            <div class="foot-social"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div>
+            <div class="foot-bottom"><span>© 2026 Flores del Rosario</span><span>Santiago, Chile</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="device-view" data-device="desktop" data-capture="page-blog-d" data-filename="flores-del-rosario-blog-escritorio">
+    <div class="browser-shell">
+      <div class="browser-topbar"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-address">floresdelrosario.cl/blog</div></div>
+      <div class="browser-screen">
+        <div class="dpage" id="page-blog-d">
+          <div class="dnav">
+            <div class="brandmark"><svg class="sprig" viewBox="0 0 26 26" style="width:30px;height:30px;"><use href="#ic-sprig"/></svg><div class="names"><span class="n1">Flores del Rosario</span></div></div>
+            <div class="dlinks"><a href="#">Inicio</a><a href="#">Productos</a><a href="#" class="active">Blog</a></div>
+            <div class="dright"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><button class="btn btn-whatsapp" style="padding:0.6rem 1.1rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Escríbenos</button></div>
+          </div>
+          <div class="dheader-row"><div><div class="eyebrow-mark"><svg viewBox="0 0 26 26"><use href="#ic-sprig"/></svg>Temporada actual: primavera</div><h2 style="font-size:1.8rem;">Lorem ipsum dolor sit amet</h2></div></div>
+          <div class="chiprow" style="padding-left:clamp(1.2rem,3.5vw,3rem);"><button class="chip active">Primavera</button><button class="chip">Verano</button><button class="chip">Otoño</button><button class="chip">Invierno</button><button class="chip">Cuidados generales</button></div>
+          <div class="dsection dgrid-3">
+            <div class="darticle-card"><div class="ph-photo tone-a"><div class="ph-caption">Almácigos</div></div><div class="abody"><span class="tag leaf">Primavera</span><h3>Qué plantar en septiembre: la guía de primavera</h3><p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.</p><p class="meta">12 sept · 4 min de lectura</p></div></div>
+            <div class="darticle-card"><div class="ph-photo tone-c"><div class="ph-caption">Macetas al sol</div></div><div class="abody"><span class="tag">Verano</span><h3>Cómo proteger tus macetas del sol de enero</h3><p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.</p><p class="meta">3 ene · 5 min de lectura</p></div></div>
+            <div class="darticle-card"><div class="ph-photo tone-d"><div class="ph-caption">Poda de otoño</div></div><div class="abody"><span class="tag leaf">Otoño</span><h3>Poda de otoño: lo que sí y lo que no</h3><p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.</p><p class="meta">18 abr · 3 min de lectura</p></div></div>
+          </div>
+          <footer class="dfooter">
+            <div><h3>Flores del Rosario</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.</p><div class="fsocial"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div></div>
+            <div class="fcol"><h4>Navegación</h4><ul><li>Inicio</li><li>Productos</li><li>Blog</li><li>Cómo comprar</li></ul></div>
+            <div class="fcol"><h4>Contacto</h4><ul><li>Av. de las Camelias 480</li><li>Santiago, Chile</li><li>Lun a sáb, 9:00–18:30</li></ul></div>
+            <div class="fbottom"><span>© 2026 Flores del Rosario</span><span>Sitio diseñado mobile-first</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= BLOG ARTICLE DETAIL ============================= -->
+<section class="frame-wrap" id="panel-article">
+  <div class="frame-toolbar">
+    <div class="device-toggle"><button class="device-btn active" data-device="mobile">Móvil</button><button class="device-btn" data-device="desktop">Escritorio</button></div>
+    <button class="download-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Descargar</button>
+  </div>
+
+  <div class="device-view active" data-device="mobile" data-capture="page-article-m" data-filename="flores-del-rosario-articulo-movil">
+    <div class="phone-shell">
+      <div class="phone-notch-row"><div class="phone-notch"></div></div>
+      <div class="phone-screen">
+        <div class="page" id="page-article-m">
+          <div class="statusbar" style="position:absolute;top:0;left:0;right:0;z-index:5;color:var(--paper);"><span>9:41</span><div class="dots"><div class="bar" style="background:var(--paper);"></div><div class="bar" style="background:var(--paper);"></div><div class="bar" style="background:var(--paper);"></div><div class="battery" style="border-color:var(--paper);"></div></div></div>
+          <div class="ph-photo bd-photo tone-a">
+            <div class="topnav" style="position:absolute;top:22px;left:0;right:0;padding-left:1.1rem;padding-right:1.1rem;"><button class="icon-btn on-photo"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="ph-caption">Foto: almácigos recién trasplantados</div>
+          </div>
+          <div class="bd-body">
+            <div class="bd-meta"><span class="tag leaf">Primavera</span><span class="date">12 de septiembre</span></div>
+            <h1>Qué plantar en septiembre: la guía de primavera</h1>
+            <p class="lede">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+            <div class="content">
+              <h4>Subtítulo uno</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <h4>Subtítulo dos</h4><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <h4>Subtítulo tres</h4><p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            </div>
+            <div class="bd-share"><span>Comparte este artículo</span><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div>
+          </div>
+          <div class="section" style="background:var(--leaf-soft);border-radius:1.6rem;margin:1.6rem 1.1rem 0;padding:1.4rem 1.2rem;">
+            <h2 style="font-size:1.05rem;">Lorem ipsum dolor sit amet?</h2>
+            <p style="font-size:0.82rem;color:var(--ink-soft);margin-top:0.4rem;">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <button class="btn btn-whatsapp" style="margin-top:0.9rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Consultar disponibilidad</button>
+          </div>
+          <footer class="footer" style="margin-top:1.4rem;">
+            <div class="foot-social"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div>
+            <div class="foot-bottom"><span>© 2026 Flores del Rosario</span><span>Santiago, Chile</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="device-view" data-device="desktop" data-capture="page-article-d" data-filename="flores-del-rosario-articulo-escritorio">
+    <div class="browser-shell">
+      <div class="browser-topbar"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-address">floresdelrosario.cl/blog/guia-de-primavera</div></div>
+      <div class="browser-screen">
+        <div class="dpage" id="page-article-d">
+          <div class="dnav">
+            <div class="brandmark"><svg class="sprig" viewBox="0 0 26 26" style="width:30px;height:30px;"><use href="#ic-sprig"/></svg><div class="names"><span class="n1">Flores del Rosario</span></div></div>
+            <div class="dlinks"><a href="#">Inicio</a><a href="#">Productos</a><a href="#" class="active">Blog</a></div>
+            <div class="dright"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><button class="btn btn-whatsapp" style="padding:0.6rem 1.1rem;"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Escríbenos</button></div>
+          </div>
+          <div class="ph-photo dcover tone-a"><div class="ph-caption">Foto: almácigos recién trasplantados</div></div>
+          <div class="dcolumn">
+            <div class="bd-meta"><span class="tag leaf">Primavera</span><span class="date">12 de septiembre</span></div>
+            <h1>Qué plantar en septiembre: la guía de primavera</h1>
+            <p class="lede">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+            <div class="content">
+              <h4>Subtítulo uno</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <h4>Subtítulo dos</h4><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <h4>Subtítulo tres</h4><p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            </div>
+            <div class="bd-share"><span>Comparte este artículo</span><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div>
+          </div>
+          <div class="dsection" style="padding-top:0;">
+            <div class="dpromo"><div><h2>Lorem ipsum dolor sit amet?</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p></div><button class="btn btn-whatsapp"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg>Consultar disponibilidad</button></div>
+          </div>
+          <footer class="dfooter">
+            <div><h3>Flores del Rosario</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.</p><div class="fsocial"><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-instagram"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-facebook"/></svg></a><a class="icon-btn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none"><use href="#ic-chat"/></svg></a></div></div>
+            <div class="fcol"><h4>Navegación</h4><ul><li>Inicio</li><li>Productos</li><li>Blog</li><li>Cómo comprar</li></ul></div>
+            <div class="fcol"><h4>Contacto</h4><ul><li>Av. de las Camelias 480</li><li>Santiago, Chile</li><li>Lun a sáb, 9:00–18:30</li></ul></div>
+            <div class="fbottom"><span>© 2026 Flores del Rosario</span><span>Sitio diseñado mobile-first</span></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+  var ICONS = {
+    'ic-chat': '<path d="M12 3.2c-4.86 0-8.8 3.6-8.8 8.05 0 2.02.82 3.87 2.18 5.3-.15 1.13-.55 2.4-1.28 3.55a.4.4 0 0 0 .42.6c1.7-.32 3.06-.98 3.98-1.55a10 10 0 0 0 3.5.63c4.86 0 8.8-3.6 8.8-8.05s-3.94-8.05-8.8-8.05Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.4 11.2c.3 1.9 2.3 3.7 4.2 4l1.2-1.1c.15-.15.4-.2.6-.1l1.9.9c.2.1.3.3.3.5v1.1c0 .4-.35.7-.75.65-3.6-.45-6.9-3.5-7.5-7-.07-.4.24-.75.65-.75h1.1c.2 0 .4.1.5.3l.9 1.9c.1.2.05.45-.1.6Z" fill="currentColor" stroke="none"/>',
+    'ic-instagram': '<rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17" cy="7" r="1.15" fill="currentColor"/>',
+    'ic-facebook': '<circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M13.3 9.6h1.5V7.4h-1.6c-1.7 0-2.6 1-2.6 2.6v1.3H9v2.2h1.6v5.5h2.3v-5.5h1.7l.3-2.2h-2V10c0-.3.15-.4.4-.4Z" fill="currentColor" stroke="none"/>',
+    'ic-sprig': '<path d="M13 25 C13 16 15 9 13 1" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M13 6 C16 4.5 19 4 21 5.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M13 11 C9.5 9.5 6.5 9.5 4.5 11.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M13 16 C16.5 14.5 19.5 14.7 21.5 16.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="13" cy="2" r="2.2" fill="currentColor"/>'
+  };
+  document.querySelectorAll('svg use').forEach(function(u){
+    var id = (u.getAttribute('href')||'').replace('#','');
+    if(ICONS[id]){ u.closest('svg').innerHTML = ICONS[id]; }
+  });
+
+  /* ---- top-level tab switching ---- */
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.frame-wrap');
+  function activate(target){
+    tabs.forEach(function(t){ t.classList.toggle('active', t.dataset.target === target); });
+    panels.forEach(function(p){ p.classList.toggle('active', p.id === 'panel-' + target); });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ activate(t.dataset.target); }); });
+  document.querySelectorAll('[data-close-menu]').forEach(function(btn){ btn.addEventListener('click', function(){ activate('home'); }); });
+
+  /* ---- device toggle (mobile / escritorio) per panel ---- */
+  document.querySelectorAll('.frame-wrap').forEach(function(panel){
+    var dbtns = panel.querySelectorAll('.device-btn');
+    if(!dbtns.length) return;
+    dbtns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var device = btn.dataset.device;
+        dbtns.forEach(function(b){ b.classList.toggle('active', b === btn); });
+        panel.querySelectorAll('.device-view').forEach(function(v){ v.classList.toggle('active', v.dataset.device === device); });
+        panel.classList.toggle('desktop-active', device === 'desktop');
+      });
+    });
+  });
+
+  /* ---- download as image ---- */
+  document.querySelectorAll('.download-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var panel = btn.closest('.frame-wrap');
+      var activeView = panel.querySelector('.device-view.active') || panel.querySelector('#sg-export') && {dataset:{capture:'sg-export', filename: btn.dataset.filename}};
+      var captureId = btn.dataset.capture || (activeView && activeView.dataset && activeView.dataset.capture);
+      var filename = btn.dataset.filename || (activeView && activeView.dataset && activeView.dataset.filename) || 'mockup';
+      var el = document.getElementById(captureId);
+      if(!el || !window.html2canvas){ return; }
+      var original = btn.innerHTML;
+      btn.classList.add('is-busy');
+      btn.innerHTML = 'Generando…';
+      html2canvas(el, { scale: 2, backgroundColor: '#FFFBF5', useCORS: true }).then(function(canvas){
+        var link = document.createElement('a');
+        link.download = filename + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        btn.classList.remove('is-busy');
+        btn.innerHTML = original;
+      }).catch(function(err){
+        console.error(err);
+        btn.classList.remove('is-busy');
+        btn.innerHTML = original;
+        alert('No se pudo generar la imagen. Intenta nuevamente.');
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>

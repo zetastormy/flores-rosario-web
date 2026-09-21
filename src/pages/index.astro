@@ -1,0 +1,554 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Categorías de ejemplo reflejando el diseño base
+const categorias = [
+  { id: 'todos', label: 'Todos', active: true },
+  { id: 'ramos', label: 'Ramos' },
+  { id: 'floreros', label: 'Floreros' },
+  { id: 'condolencias', label: 'Condolencias' },
+  { id: 'eventos', label: 'Eventos' },
+];
+
+const productosDestacados = [
+  {
+    nombre: 'Ramo Primavera Silvestre',
+    precio: '$18.500',
+    unidad: 'por ramo',
+    etiqueta: 'Más vendido',
+    tipoEtiqueta: '',
+    tone: 'tone-a',
+    descripcion: 'Mix de flores de estación con eucalipto fresco y papel kraft artesanal.',
+  },
+  {
+    nombre: 'Florero Lilas & Lavanda',
+    precio: '$24.000',
+    unidad: 'con florero de vidrio',
+    etiqueta: 'Temporada',
+    tipoEtiqueta: 'lilac',
+    tone: 'tone-b',
+    descripcion: 'Arreglo aromático con tonos violetas y follaje silvestre.',
+  },
+  {
+    nombre: 'Bouquet Sol de Mayo',
+    precio: '$21.000',
+    unidad: 'por ramo',
+    etiqueta: 'Edición limitada',
+    tipoEtiqueta: '',
+    tone: 'tone-c',
+    descripcion: 'Girasoles seleccionados, solidagos y toques dorados.',
+  },
+  {
+    nombre: 'Eucalipto & Verdes Vivos',
+    precio: '$14.000',
+    unidad: 'ramo botánico',
+    etiqueta: 'Botánico',
+    tipoEtiqueta: 'leaf',
+    tone: 'tone-d',
+    descripcion: 'Follajes perennes y ramas de eucalipto cinerea aromático.',
+  },
+];
+---
+
+<BaseLayout
+  title="Flores del Rosario — Floristería Artesanal & Botánica"
+  description="Flores frescas, ramos de autor y botánica seleccionada en Rosario. Envíos en el día y pedidos personalizados por WhatsApp."
+>
+  <!-- Hero Section (Mobile First) -->
+  <section class="hero-section">
+    <div class="container hero-layout">
+      <div class="hero-content">
+        <span class="eyebrow">Floristería artesanal & botánica</span>
+        <h1 class="hero-title">Flores frescas con alma de barrio</h1>
+        <p class="hero-lead">
+          Diseños botánicos pensados con amor y dedicación. Arreglos para celebrar, acompañar y transformar cada rincón.
+        </p>
+        <div class="hero-cta">
+          <a href="#catalogo" class="btn btn-primary" id="btn-hero-catalogo">Ver catálogo</a>
+          <a
+            href="https://wa.me/5493411234567?text=%C2%A1Hola!%20Quisiera%20consultar%20por%20un%20ramo%20de%20flores."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-ghost"
+            id="btn-hero-whatsapp"
+          >
+            Hacer pedido
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card tone-a">
+          <div class="hero-card-inner">
+            <span class="card-caption">Ramos preparados en el día</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categorías / Chips -->
+  <section class="categories-strip">
+    <div class="container">
+      <div class="chips-wrapper" role="tablist" aria-label="Categorías">
+        {
+          categorias.map((cat) => (
+            <button
+              class={`chip ${cat.active ? 'active' : ''}`}
+              role="tab"
+              aria-selected={cat.active ? 'true' : 'false'}
+              id={`cat-${cat.id}`}
+            >
+              {cat.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Catálogo de Destacados (Mobile-First Grid) -->
+  <section class="products-section" id="catalogo">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker">Catálogo de estación</span>
+        <h2 class="section-title">Nuestros Ramos Más Queridos</h2>
+      </div>
+
+      <div class="products-grid">
+        {
+          productosDestacados.map((item) => (
+            <article class="product-card">
+              <div class={`product-photo ${item.tone}`}>
+                <span class={`tag ${item.tipoEtiqueta}`}>{item.etiqueta}</span>
+              </div>
+              <div class="product-body">
+                <h3 class="product-name">{item.nombre}</h3>
+                <p class="product-desc">{item.descripcion}</p>
+                <div class="product-footer">
+                  <div class="price-wrap">
+                    <span class="price">{item.precio}</span>
+                    <span class="unit">{item.unidad}</span>
+                  </div>
+                  <a
+                    href={`https://wa.me/5493411234567?text=%C2%A1Hola!%20Quiero%20pedir%20el%20${encodeURIComponent(item.nombre)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-mini-wa"
+                    aria-label={`Pedir ${item.nombre} por WhatsApp`}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Historia & Compromiso Artesanal -->
+  <section class="about-section">
+    <div class="container about-grid">
+      <div class="about-visual">
+        <div class="about-photo-shape tone-b"></div>
+      </div>
+      <div class="about-content">
+        <span class="section-kicker">Nuestra Historia</span>
+        <h2 class="section-title">Flores elegidas una por una</h2>
+        <p class="about-text">
+          Nacimos en el corazón de Rosario con la convicción de devolverle a las flores su rol protagónico en lo cotidiano.
+          Trabajamos con productores regionales seleccionando flores frescas cada mañana para asegurar la máxima durabilidad y fragancia.
+        </p>
+        <div class="about-features">
+          <div class="feature-item">
+            <strong>Envíos en el día</strong>
+            <span>En Rosario y alrededores</span>
+          </div>
+          <div class="feature-item">
+            <strong>Atención personalizada</strong>
+            <span>Asesoramiento floral a medida</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Action Button WhatsApp (Mobile) -->
+  <a
+    href="https://wa.me/5493411234567"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="whatsapp-fab"
+    aria-label="Abrir chat de WhatsApp"
+    id="whatsapp-floating-button"
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
+    </svg>
+  </a>
+</BaseLayout>
+
+<style>
+  /* ==========================================================================
+     Hero Section (Mobile-First)
+     ========================================================================== */
+  .hero-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background: linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+  }
+
+  .hero-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+
+  .eyebrow {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--forest-light);
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-weight: 600;
+    color: var(--forest);
+  }
+
+  .hero-lead {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-top: 0.8rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-visual {
+    width: 100%;
+  }
+
+  .hero-card {
+    height: 220px;
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    box-shadow: var(--shadow-md);
+  }
+
+  .hero-card-inner {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+  }
+
+  .card-caption {
+    color: var(--paper);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  @media (min-width: 768px) {
+    .hero-section {
+      padding-top: 4rem;
+      padding-bottom: 3.5rem;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      align-items: center;
+      gap: 3rem;
+    }
+
+    .hero-card {
+      height: 340px;
+    }
+  }
+
+  /* ==========================================================================
+     Chips Bar
+     ========================================================================== */
+  .categories-strip {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .chips-wrapper {
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0.3rem;
+  }
+
+  .chips-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex: none;
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    color: var(--ink-soft);
+    transition: all var(--transition-fast);
+  }
+
+  .chip:hover {
+    border-color: var(--forest);
+    color: var(--forest);
+  }
+
+  .chip.active {
+    background: var(--lilac);
+    color: var(--forest);
+    border-color: var(--lilac);
+  }
+
+  /* ==========================================================================
+     Products Grid (Mobile First: 1-2 cols -> Desktop: 4 cols)
+     ========================================================================== */
+  .products-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .section-kicker {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--gold);
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .product-photo {
+    height: 180px;
+    padding: 0.8rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .product-body {
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .product-name {
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  .product-desc {
+    color: var(--ink-soft);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .price-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .price {
+    font-weight: 700;
+    color: var(--forest);
+    font-size: 1.1rem;
+  }
+
+  .unit {
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+  }
+
+  .btn-mini-wa {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--whatsapp);
+    color: var(--whatsapp-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-fast);
+  }
+
+  .btn-mini-wa:hover {
+    transform: scale(1.08);
+  }
+
+  /* ==========================================================================
+     About Section
+     ========================================================================== */
+  .about-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+    background-color: var(--leaf-soft);
+  }
+
+  .about-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .about-visual {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .about-photo-shape {
+    width: 220px;
+    height: 240px;
+    border-radius: 58% 42% 46% 54% / 54% 48% 52% 46%;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .about-text {
+    color: var(--ink);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-top: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .feature-item {
+    background: var(--paper);
+    padding: 1rem 1.2rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .feature-item strong {
+    color: var(--forest);
+    font-size: 0.95rem;
+  }
+
+  .feature-item span {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+  }
+
+  @media (min-width: 768px) {
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      align-items: center;
+      gap: 3.5rem;
+    }
+
+    .about-photo-shape {
+      width: 280px;
+      height: 320px;
+    }
+
+    .about-features {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Tone Gradients (from mockups) */
+  .tone-a {
+    background: linear-gradient(155deg, #7fa487 0%, #4f7a5b 55%, #2e5142 100%);
+  }
+  .tone-b {
+    background: linear-gradient(155deg, #c9aed9 0%, #b79bc7 55%, #8b6d9d 100%);
+  }
+  .tone-c {
+    background: linear-gradient(155deg, #e9c57a 0%, #d6a94a 55%, #a9793b 100%);
+  }
+  .tone-d {
+    background: linear-gradient(155deg, #6d9481 0%, #3f6b54 55%, #1b4d3e 100%);
+  }
+
+  /* WhatsApp Floating Action Button */
+  .whatsapp-fab {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 99;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--whatsapp);
+    color: var(--whatsapp-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--transition-fast);
+  }
+
+  .whatsapp-fab:hover {
+    transform: scale(1.08);
+  }
+</style>

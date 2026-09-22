@@ -1,0 +1,3 @@
+# Robots.txt temporal para evitar la indexación en motores de búsqueda
+User-agent: *
+Disallow: /

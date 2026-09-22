@@ -2,6 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getArticulos, getSitioConfig, type Articulo } from '../../lib/sanity.queries';
 import { urlForImage } from '../../lib/sanity';
+import WhatsAppIcon from '../../components/icons/WhatsAppIcon.astro';
+import FacebookIcon from '../../components/icons/FacebookIcon.astro';
+import { ArrowLeft } from '@lucide/astro';
 
 export async function getStaticPaths() {
   const articulos = await getArticulos();
@@ -53,10 +56,7 @@ const shareText = `Te comparto este artículo de Flores del Rosario: "${articulo
     <div class="container article-container">
       <nav class="back-nav" aria-label="Navegación de retorno">
         <a href="/blog" class="back-link">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 12H5"></path>
-            <path d="m12 19-7-7 7-7"></path>
-          </svg>
+          <ArrowLeft size={18} aria-hidden="true" />
           Volver al blog
         </a>
       </nav>
@@ -112,9 +112,7 @@ const shareText = `Te comparto este artículo de Flores del Rosario: "${articulo
             aria-label="Compartir en WhatsApp"
             title="Compartir en WhatsApp"
           >
-            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
-            </svg>
+            <WhatsAppIcon size={20} class="icon" />
           </a>
           <a
             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
@@ -124,10 +122,7 @@ const shareText = `Te comparto este artículo de Flores del Rosario: "${articulo
             aria-label="Compartir en Facebook"
             title="Compartir en Facebook"
           >
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <circle cx="12" cy="12" r="8.6"></circle>
-              <path d="M13.3 9.6h1.5V7.4h-1.6c-1.7 0-2.6 1-2.6 2.6v1.3H9v2.2h1.6v5.5h2.3v-5.5h1.7l.3-2.2h-2V10c0-.3.15-.4.4-.4Z" fill="currentColor" stroke="none"></path>
-            </svg>
+            <FacebookIcon size={20} class="icon" />
           </a>
         </div>
       </div>
@@ -146,6 +141,7 @@ const shareText = `Te comparto este artículo de Flores del Rosario: "${articulo
           rel="noopener noreferrer"
           class="btn btn-whatsapp"
         >
+          <WhatsAppIcon size={20} />
           Consultar por WhatsApp
         </a>
       </div>

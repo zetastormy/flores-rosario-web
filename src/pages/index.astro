@@ -7,6 +7,7 @@ import {
   getSitioConfig,
 } from '../lib/sanity.queries';
 import { urlForImage } from '../lib/sanity';
+import WhatsAppIcon from '../components/icons/WhatsAppIcon.astro';
 
 const paginaInicio = await getPaginaInicio();
 const productosDestacados = await getProductosDestacados();
@@ -135,9 +136,7 @@ const formatCLP = (amount: number) => {
                     class="btn-mini-wa"
                     aria-label={`Pedir ${item.nombre} por WhatsApp`}
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
-                    </svg>
+                    <WhatsAppIcon size={18} />
                   </a>
                 </div>
               </div>
@@ -162,9 +161,7 @@ const formatCLP = (amount: number) => {
           rel="noopener noreferrer"
           class="btn btn-whatsapp promo-btn"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
-          </svg>
+          <WhatsAppIcon size={20} />
           {paginaInicio.promoBoton}
         </a>
       </div>
@@ -206,9 +203,7 @@ const formatCLP = (amount: number) => {
     aria-label="Abrir chat de WhatsApp para pedidos"
     id="whatsapp-floating-button"
   >
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
-    </svg>
+    <WhatsAppIcon size={28} />
   </a>
 </BaseLayout>
 

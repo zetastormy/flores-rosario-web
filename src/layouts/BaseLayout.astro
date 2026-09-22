@@ -2,6 +2,9 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import { getSitioConfig } from '../lib/sanity.queries';
+import WhatsAppIcon from '../components/icons/WhatsAppIcon.astro';
+import InstagramIcon from '../components/icons/InstagramIcon.astro';
+import FacebookIcon from '../components/icons/FacebookIcon.astro';
 
 interface Props {
   title?: string;
@@ -84,21 +87,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
             {
               sitioConfig.instagramUrl && (
                 <a href={sitioConfig.instagramUrl} target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Instagram">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
-                    <circle cx="12" cy="12" r="4"></circle>
-                    <circle cx="17" cy="7" r="1.15" fill="currentColor"></circle>
-                  </svg>
+                  <InstagramIcon size={20} class="icon" />
                 </a>
               )
             }
             {
               sitioConfig.facebookUrl && (
                 <a href={sitioConfig.facebookUrl} target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Facebook">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <circle cx="12" cy="12" r="8.6"></circle>
-                    <path d="M13.3 9.6h1.5V7.4h-1.6c-1.7 0-2.6 1-2.6 2.6v1.3H9v2.2h1.6v5.5h2.3v-5.5h1.7l.3-2.2h-2V10c0-.3.15-.4.4-.4Z" fill="currentColor" stroke="none"></path>
-                  </svg>
+                  <FacebookIcon size={20} class="icon" />
                 </a>
               )
             }
@@ -106,12 +102,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
               href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(sitioConfig.mensajeWhatsAppDefault)}`}
               target="_blank"
               rel="noopener noreferrer"
-              class="icon-btn"
+              class="icon-btn wa-social"
               aria-label="WhatsApp"
             >
-              <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12.031 2C6.51 2 2.023 6.487 2.023 12.008c0 1.763.46 3.486 1.332 5.002L2 22l5.123-1.343a9.98 9.98 0 0 0 4.908 1.28h.004c5.518 0 10.005-4.487 10.005-10.008.001-2.674-1.038-5.187-2.928-7.078A9.94 9.94 0 0 0 12.031 2z"></path>
-              </svg>
+              <WhatsAppIcon size={20} class="icon" />
             </a>
           </div>
         </div>

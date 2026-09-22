@@ -14,6 +14,6 @@
       .theme-light-use { display: none; }
     }
   </style>
-  <use class="theme-light-use" href="#img-dark" x="229" y="221" />
-  <use class="theme-dark-use" href="#img-light" x="229" y="221" />
+  <use class="theme-light-use" href="#img-dark" x="185" y="216" />
+  <use class="theme-dark-use" href="#img-light" x="185" y="216" />
 </svg>

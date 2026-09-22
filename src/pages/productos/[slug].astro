@@ -32,12 +32,12 @@ const formatCLP = (amount: number) => {
   }).format(amount);
 };
 
-const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(producto.precio)}) en Calbuco. ¿Tienen disponibilidad?`;
+const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(producto.precio)}) con entrega en Puerto Montt o alrededores. ¿Tienen disponibilidad?`;
 ---
 
 <BaseLayout
   title={`${producto.nombre} — ${sitioConfig.nombreNegocio}`}
-  description={`${producto.descripcion.slice(0, 150)}... Pide directamente por WhatsApp en Calbuco, Chile.`}
+  description={`${producto.descripcion.slice(0, 150)}... Pide directamente por WhatsApp con entregas en Puerto Montt y alrededores.`}
 >
   <article class="product-detail-page">
     <div class="container detail-container">
@@ -128,7 +128,7 @@ const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(p
               Pedir este producto por WhatsApp
             </a>
             <p class="pd-note">
-              La disponibilidad, personalización y horarios de entrega en Calbuco se confirman de forma inmediata por WhatsApp.
+              Entregas a domicilio en Puerto Montt y alrededores. La disponibilidad, personalización y horarios se confirman de forma inmediata por WhatsApp.
             </p>
           </div>
         </div>

@@ -35,9 +35,10 @@ export const sitioConfig = {
     },
     {
       name: 'direccion',
-      title: 'Dirección física / Local',
+      title: 'Zona de entrega / Despacho',
+      description: 'Zona de cobertura para pedidos a domicilio (sin atención presencial)',
       type: 'string',
-      initialValue: 'Calbuco, Región de Los Lagos, Chile',
+      initialValue: 'Entregas a domicilio en Puerto Montt y alrededores',
     },
     {
       name: 'horariosAtencion',

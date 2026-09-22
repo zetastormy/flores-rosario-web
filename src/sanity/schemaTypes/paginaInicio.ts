@@ -15,7 +15,7 @@ export const paginaInicio = {
       name: 'heroKicker',
       title: 'Kicker / Antetítulo del Hero',
       type: 'string',
-      initialValue: 'Floristería artesanal & botánica · Calbuco',
+      initialValue: 'Floristería artesanal & botánica',
     },
     {
       name: 'heroTitulo',
@@ -30,7 +30,7 @@ export const paginaInicio = {
       type: 'text',
       rows: 3,
       initialValue:
-        'Diseños botánicos pensados con amor y dedicación. Arreglos florales, plantas y materiales de jardinería para celebrar, acompañar y transformar cada rincón en Calbuco.',
+        'Diseños botánicos pensados con amor y dedicación. Arreglos florales, plantas y materiales de jardinería para celebrar, acompañar y transformar cada rincón, con entregas en Puerto Montt y alrededores.',
       validation: (Rule: any) => Rule.required(),
     },
     {
@@ -68,7 +68,7 @@ export const paginaInicio = {
       name: 'historiaTitulo',
       title: 'Título de la Sección Historia',
       type: 'string',
-      initialValue: 'Flores elegidas una por una en Calbuco',
+      initialValue: 'Flores elegidas una por una con dedicación',
     },
     {
       name: 'historiaTexto',
@@ -76,7 +76,7 @@ export const paginaInicio = {
       type: 'text',
       rows: 5,
       initialValue:
-        'Nacimos en Calbuco, entre aguas calmas y canales australes, con la convicción de conectar la naturaleza con el día a día. Trabajamos con flores frescas seleccionadas, plantas adaptadas al clima del sur y materiales durables de jardinería para que cada hogar florezca.',
+        'Nacimos en el sur de Chile con la convicción de devolverle a las flores y a la botánica su lugar en la vida diaria. Seleccionamos flores frescas cada mañana, cultivamos variedades adaptadas a nuestro clima húmedo y proveemos insumos de jardinería confiables para cuidar la tierra, con entregas en Puerto Montt y alrededores.',
     },
     {
       name: 'historiaImagen',

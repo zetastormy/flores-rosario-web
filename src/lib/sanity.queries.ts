@@ -78,37 +78,37 @@ export interface Articulo {
 }
 
 /* ==========================================================================
-   Valores de Respaldo (Fallback Data) extraídos de docs/ y adaptados a Calbuco
+   Valores de Respaldo (Fallback Data) extraídos de docs/ y adaptados al proyecto
    ========================================================================== */
 
 export const fallbackSitioConfig: SitioConfig = {
   nombreNegocio: 'Flores del Rosario',
-  subtitulo: 'vivero & florería · Calbuco',
+  subtitulo: 'vivero & florería',
   telefonoWhatsApp: '56912345678',
-  mensajeWhatsAppDefault: '¡Hola! Quisiera consultar por un pedido en Flores del Rosario.',
+  mensajeWhatsAppDefault: '¡Hola! Quisiera consultar por disponibilidad y entregas en Puerto Montt y alrededores.',
   instagramUrl: 'https://instagram.com/floresdelrosario.calbuco',
   facebookUrl: 'https://facebook.com/floresdelrosario.calbuco',
-  direccion: 'Av. Brasil 120, Calbuco, Región de Los Lagos, Chile',
-  horariosAtencion: 'Lun a sáb, 9:00 a 18:30 hrs',
-  bannerAviso: '🌿 Envíos florales y materiales de jardinería en Calbuco y alrededores',
+  direccion: 'Entregas a domicilio en Puerto Montt y alrededores',
+  horariosAtencion: 'Lun a sáb, 9:00 a 18:30 hrs (Atención y pedidos online)',
+  bannerAviso: '🌿 Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp',
 };
 
 export const fallbackPaginaInicio: PaginaInicio = {
-  bannerAviso: 'Envíos locales en Calbuco y alrededores · Pedidos con anticipación por WhatsApp',
-  heroKicker: 'Floristería artesanal & botánica · Calbuco',
+  bannerAviso: 'Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp',
+  heroKicker: 'Floristería artesanal & botánica',
   heroTitulo: 'Flores frescas con alma de barrio',
   heroBajada:
-    'Diseños botánicos pensados con amor y dedicación. Arreglos para celebrar, acompañar y transformar cada rincón.',
+    'Diseños botánicos pensados con amor y dedicación. Arreglos para celebrar, acompañar y transformar cada rincón, con entregas en Puerto Montt y alrededores.',
   heroBotonCatalogo: 'Ver catálogo',
   heroBotonWhatsapp: 'Hacer pedido',
   heroCaption: 'Ramos preparados en el día',
   historiaKicker: 'Nuestra Historia',
-  historiaTitulo: 'Flores elegidas una por una en Calbuco',
+  historiaTitulo: 'Flores elegidas una por una con dedicación',
   historiaTexto:
-    'Nacimos en Calbuco, entre islas y aguas calmas del sur de Chile, con la convicción de devolverle a las flores y a la botánica su lugar en la vida diaria. Seleccionamos flores frescas cada mañana, cultivamos variedades adaptadas a nuestro clima húmedo y proveemos insumos de jardinería confiables para cuidar la tierra.',
+    'Nacimos en el sur de Chile con la convicción de devolverle a las flores y a la botánica su lugar en la vida diaria. Seleccionamos flores frescas cada mañana, cultivamos variedades adaptadas a nuestro clima húmedo y proveemos insumos de jardinería confiables para cuidar la tierra, con entregas en Puerto Montt y alrededores.',
   promoTitulo: '¿Buscas un arreglo especial o materiales para tu jardín?',
   promoTexto:
-    'Realizamos ramos de ocasión, arreglos personalizados, plantas en maceta y reparto de insumos en Calbuco.',
+    'Realizamos ramos de ocasión, arreglos personalizados, plantas en maceta y materiales de jardinería con entregas en Puerto Montt y alrededores.',
   promoBoton: 'Consultar disponibilidad',
 };
 

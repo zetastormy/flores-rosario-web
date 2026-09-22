@@ -42,7 +42,7 @@ const formatCLP = (amount: number) => {
             {paginaInicio.heroBotonCatalogo}
           </a>
           <a
-            href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent('¡Hola! Quisiera consultar por un arreglo floral o materiales de jardinería en Calbuco.')}`}
+            href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent('¡Hola! Quisiera consultar por un arreglo floral o materiales de jardinería con entrega en Puerto Montt o alrededores.')}`}
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-ghost"
@@ -129,7 +129,7 @@ const formatCLP = (amount: number) => {
                     {item.unidad && <span class="unit">{item.unidad}</span>}
                   </div>
                   <a
-                    href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola! Quiero pedir el producto "${item.nombre}" (${formatCLP(item.precio)}) en Calbuco.`)}`}
+                    href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola! Quiero pedir el producto "${item.nombre}" (${formatCLP(item.precio)}). ¿Tienen disponibilidad de entrega en Puerto Montt o alrededores?`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="btn-mini-wa"
@@ -171,7 +171,7 @@ const formatCLP = (amount: number) => {
     </div>
   </section>
 
-  <!-- Historia & Compromiso Artesanal en Calbuco -->
+  <!-- Historia & Compromiso Artesanal -->
   <section class="about-section" id="historia">
     <div class="container about-grid">
       <div class="about-visual">
@@ -193,16 +193,6 @@ const formatCLP = (amount: number) => {
         <p class="about-text">
           {paginaInicio.historiaTexto}
         </p>
-        <div class="about-features">
-          <div class="feature-item">
-            <strong>Envíos locales en Calbuco</strong>
-            <span>Reparto en la comuna y sectores cercanos</span>
-          </div>
-          <div class="feature-item">
-            <strong>Atención cercana y personalizada</strong>
-            <span>Asesoría botánica y floral vía WhatsApp</span>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -601,34 +591,8 @@ const formatCLP = (amount: number) => {
     font-size: 0.98rem;
     line-height: 1.7;
     margin-top: 0.9rem;
-    margin-bottom: 1.8rem;
+    margin-bottom: 0;
     max-width: 34rem;
-  }
-
-  .about-features {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
-
-  .feature-item {
-    background: var(--leaf-soft);
-    padding: 1.1rem 1.3rem;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(79, 122, 91, 0.2);
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .feature-item strong {
-    color: var(--forest);
-    font-size: 0.98rem;
-  }
-
-  .feature-item span {
-    color: var(--ink-soft);
-    font-size: 0.84rem;
   }
 
   @media (min-width: 768px) {
@@ -642,10 +606,6 @@ const formatCLP = (amount: number) => {
     .about-photo-shape {
       width: 320px;
       height: 360px;
-    }
-
-    .about-features {
-      grid-template-columns: 1fr 1fr;
     }
   }
 

@@ -14,7 +14,7 @@ const sitioConfig = await getSitioConfig();
 
 const {
   title = `${sitioConfig.nombreNegocio} — ${sitioConfig.subtitulo}`,
-  description = 'Ramos frescos, flores de estación, arreglos y materiales de jardinería elaborados con dedicación en Calbuco, Chile.',
+  description = 'Ramos frescos, flores de estación, arreglos y materiales de jardinería elaborados con dedicación. Entregas en Puerto Montt y alrededores.',
   ogImage = '/assets/logo/flores_rosario_og.jpeg',
   bannerAviso,
 } = Astro.props;
@@ -78,7 +78,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
             </a>
           </div>
           <p class="footer-desc">
-            Floristería artesanal, arreglos florales, plantas vivas y materiales de jardinería elaborados en Calbuco, Región de Los Lagos, Chile.
+            Floristería artesanal, arreglos florales, plantas vivas y materiales de jardinería. Entregas a domicilio en Puerto Montt y alrededores.
           </p>
           <div class="footer-socials">
             {
@@ -127,8 +127,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
         </div>
 
         <div class="footer-contact">
-          <h4>Contacto & Ubicación</h4>
-          <p class="contact-line">{sitioConfig.direccion}</p>
+          <h4>Contacto & Entregas</h4>
+          <p class="contact-line">Entregas en Puerto Montt y alrededores</p>
           <p class="contact-line">{sitioConfig.horariosAtencion}</p>
           <p class="contact-line">
             WhatsApp: <a href={`https://wa.me/${sitioConfig.telefonoWhatsApp}`} class="wa-phone-link">+{sitioConfig.telefonoWhatsApp}</a>
@@ -138,7 +138,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
 
       <div class="container footer-bottom">
         <p>&copy; {new Date().getFullYear()} {sitioConfig.nombreNegocio}. Todos los derechos reservados.</p>
-        <p class="footer-tagline">Flores y botánica desde Calbuco para el sur de Chile</p>
+        <p class="footer-tagline">Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp</p>
       </div>
     </footer>
 

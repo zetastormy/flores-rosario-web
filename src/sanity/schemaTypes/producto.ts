@@ -48,7 +48,6 @@ export const producto = {
       options: {
         hotspot: true,
       },
-      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'galeria',
@@ -61,6 +60,12 @@ export const producto = {
       title: 'Descripción',
       type: 'text',
       rows: 4,
+    },
+    {
+      name: 'cuidados',
+      title: 'Recomendaciones de cuidado',
+      type: 'text',
+      rows: 3,
     },
     {
       name: 'destacado',

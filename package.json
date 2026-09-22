@@ -9,7 +9,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sanity": "sanity",
+    "sanity:export": "node scripts/export-to-sanity.mjs",
+    "sanity:import": "sanity dataset import data/sanity-export.ndjson production --replace"
   },
   "dependencies": {
     "@astrojs/react": "^7.0.0",

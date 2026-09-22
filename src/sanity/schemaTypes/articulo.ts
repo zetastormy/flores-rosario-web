@@ -44,7 +44,6 @@ export const articulo = {
       options: {
         hotspot: true,
       },
-      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'categoria',

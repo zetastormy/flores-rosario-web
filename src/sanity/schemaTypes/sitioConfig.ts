@@ -34,11 +34,22 @@ export const sitioConfig = {
       type: 'url',
     },
     {
+      name: 'facebookUrl',
+      title: 'Enlace de Facebook',
+      type: 'url',
+    },
+    {
       name: 'direccion',
       title: 'Zona de entrega / Despacho',
       description: 'Zona de cobertura para pedidos a domicilio (sin atención presencial)',
       type: 'string',
       initialValue: 'Entregas a domicilio en Puerto Montt y alrededores',
+    },
+    {
+      name: 'horariosAtencion',
+      title: 'Horarios de Atención',
+      type: 'string',
+      initialValue: 'Lunes a Sábado: 09:00 - 19:00',
     },
     {
       name: 'bannerAviso',

@@ -30,5 +30,11 @@ export const categoria = {
       title: 'Icono o Identificador visual',
       type: 'string',
     },
+    {
+      name: 'orden',
+      title: 'Orden de visualización',
+      type: 'number',
+      initialValue: 0,
+    },
   ],
 };

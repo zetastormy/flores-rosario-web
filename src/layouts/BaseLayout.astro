@@ -27,7 +27,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Favicon adaptativo según tono del navegador (Dark / Light) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/assets/logo/flores_rosario_dark.png" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/png" href="/assets/logo/flores_rosario_light.png" media="(prefers-color-scheme: dark)" />
+    <link rel="apple-touch-icon" href="/assets/logo/flores_rosario_dark.png" />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
 
@@ -63,14 +67,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
       <div class="container footer-content">
         <div class="footer-brand">
           <div class="footer-brand-header">
-            <img
-              src="/assets/logo/flores_rosario.svg"
-              alt="Logo"
-              width="36"
-              height="36"
-              class="footer-logo"
-            />
-            <h3 class="footer-title">{sitioConfig.nombreNegocio}</h3>
+            <a href="/" aria-label="Ir al inicio de Flores del Rosario">
+              <img
+                src="/assets/logo/flores_rosario_light.svg"
+                alt="Flores del Rosario"
+                width="80"
+                height="80"
+                class="footer-logo"
+              />
+            </a>
           </div>
           <p class="footer-desc">
             Floristería artesanal, arreglos florales, plantas vivas y materiales de jardinería elaborados en Calbuco, Región de Los Lagos, Chile.
@@ -163,13 +168,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresro
       .footer-brand-header {
         display: flex;
         align-items: center;
-        gap: 0.6rem;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1.25rem;
       }
 
-      .footer-title {
-        color: var(--cream);
-        font-size: 1.4rem;
+      .footer-logo {
+        height: 88px;
+        width: 88px;
+        object-fit: contain;
+        display: block;
+        transition: transform var(--transition-fast);
+      }
+
+      .footer-logo:hover {
+        transform: scale(1.05);
       }
 
       .footer-desc {

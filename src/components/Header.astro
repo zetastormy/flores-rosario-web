@@ -27,19 +27,15 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
 <!-- Cabecera Principal -->
 <header class="site-header" id="site-header">
   <div class="container header-container">
-    <!-- Brandmark (Logo & Nombre) -->
+    <!-- Brandmark (Logo Monocromático Dark sobre fondo claro) -->
     <a href="/" class="brandmark" aria-label="Ir al inicio de Flores del Rosario">
       <img
-        src="/assets/logo/flores_rosario.svg"
-        alt="Isotipo Flores del Rosario"
-        class="sprig"
-        width="34"
-        height="34"
+        src="/assets/logo/flores_rosario_dark.svg"
+        alt="Flores del Rosario"
+        class="brand-logo"
+        width="62"
+        height="62"
       />
-      <div class="names">
-        <span class="n1">{sitioConfig.nombreNegocio}</span>
-        <span class="n2">{sitioConfig.subtitulo}</span>
-      </div>
     </a>
 
     <!-- Navegación de Escritorio con Mega Menú -->
@@ -157,19 +153,16 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
 <div class="mobile-nav-overlay" id="mobile-menu-overlay" aria-hidden="true">
   <div class="overlay-inner container">
     <div class="overlay-topbar">
-      <div class="brandmark brandmark-light">
+      <!-- Brandmark (Logo Monocromático Light sobre fondo oscuro) -->
+      <a href="/" class="brandmark brandmark-light" aria-label="Ir al inicio de Flores del Rosario">
         <img
-          src="/assets/logo/flores_rosario.svg"
+          src="/assets/logo/flores_rosario_light.svg"
           alt="Flores del Rosario"
-          class="sprig"
-          width="32"
-          height="32"
+          class="brand-logo"
+          width="66"
+          height="66"
         />
-        <div class="names">
-          <span class="n1">{sitioConfig.nombreNegocio}</span>
-          <span class="n2">{sitioConfig.subtitulo}</span>
-        </div>
-      </div>
+      </a>
       <button
         type="button"
         class="icon-btn close-btn"
@@ -294,31 +287,34 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
   .brandmark {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    line-height: 1;
+    text-decoration: none;
   }
 
-  .brandmark .sprig {
-    flex-shrink: 0;
+  .brandmark .brand-logo {
+    display: block;
+    height: 58px;
+    width: 58px;
+    object-fit: contain;
+    transition: transform var(--transition-fast);
   }
 
-  .brandmark .names {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
+  .brandmark:hover .brand-logo {
+    transform: scale(1.05);
   }
 
-  .brandmark .n1 {
-    font-family: var(--font-serif);
-    font-weight: 600;
-    font-size: 1.08rem;
-    color: var(--forest);
+  @media (min-width: 768px) {
+    .brandmark .brand-logo {
+      height: 68px;
+      width: 68px;
+    }
   }
 
-  .brandmark .n2 {
-    font-size: 0.64rem;
-    letter-spacing: 0.04em;
-    color: var(--ink-soft);
-    text-transform: uppercase;
+  @media (min-width: 1024px) {
+    .brandmark .brand-logo {
+      height: 74px;
+      width: 74px;
+    }
   }
 
   /* ==========================================================================
@@ -569,12 +565,9 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     margin-bottom: 2.8rem;
   }
 
-  .brandmark-light .n1 {
-    color: var(--cream);
-  }
-
-  .brandmark-light .n2 {
-    color: var(--lilac-soft);
+  .brandmark-light .brand-logo {
+    height: 64px;
+    width: 64px;
   }
 
   .close-btn {

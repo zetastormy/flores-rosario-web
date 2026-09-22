@@ -58,36 +58,26 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
           <ChevronDown size={16} class="chevron" aria-hidden="true" />
         </a>
 
-        <!-- Mega Menú Desplegable -->
+        <!-- Submenú Desplegable de Categorías -->
         <div class="desktop-megamenu" id="desktop-megamenu" role="region" aria-label="Submenú de productos">
-          <div class="mega-grid">
-            <div class="mega-categories">
-              <span class="mega-kicker">Categorías</span>
-              <ul class="mega-links-list">
-                {
-                  categorias.map((cat) => (
-                    <li>
-                      <a href={`/productos?categoria=${cat.slug.current}`} class="mega-cat-link">
-                        {cat.nombre}
-                      </a>
-                    </li>
-                  ))
-                }
-                <li>
-                  <a href="/productos" class="mega-cat-link all-products">
-                    Ver todos los productos &rarr;
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div class="mega-promo">
-              <div class="promo-box tone-c">
-                <span class="promo-badge">Puerto Montt y alrededores</span>
-                <h4>Flores & Jardinería Artesanal</h4>
-                <p>Entregas en el día y preparación especial para cada ocasión.</p>
-                <a href="/productos" class="btn btn-primary btn-sm">Explorar catálogo</a>
-              </div>
-            </div>
+          <div class="mega-categories">
+            <span class="mega-kicker">Categorías</span>
+            <ul class="mega-links-list">
+              {
+                categorias.map((cat) => (
+                  <li>
+                    <a href={`/productos?categoria=${cat.slug.current}`} class="mega-cat-link">
+                      {cat.nombre}
+                    </a>
+                  </li>
+                ))
+              }
+              <li>
+                <a href="/productos" class="mega-cat-link all-products">
+                  Ver todos los productos &rarr;
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -199,7 +189,6 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     <div class="overlay-footer">
       <div class="overlay-contact-info">
         <p class="address">Entregas en Puerto Montt y alrededores</p>
-        <p class="hours">{sitioConfig.horariosAtencion}</p>
       </div>
 
       <div class="overlay-socials">
@@ -351,12 +340,12 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     top: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(10px);
-    width: min(640px, 90vw);
+    width: 240px;
     background-color: var(--paper);
     border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
-    padding: 1.8rem 2rem;
+    padding: 1.2rem 1.4rem;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -374,13 +363,6 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
 
   .mega-trigger-wrap:hover .chevron {
     transform: rotate(180deg);
-  }
-
-  .mega-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 2rem;
-    align-items: stretch;
   }
 
   .mega-kicker {
@@ -418,47 +400,6 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     font-weight: 700;
     color: var(--forest);
     margin-top: 0.6rem;
-  }
-
-  .promo-box {
-    padding: 1.2rem;
-    border-radius: var(--radius-md);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    height: 100%;
-    justify-content: center;
-  }
-
-  .promo-box.tone-c {
-    background: linear-gradient(155deg, #f9edd2 0%, #f3e3c4 55%, #e6cb91 100%);
-  }
-
-  .promo-badge {
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: #7a5a1e;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .promo-box h4 {
-    font-size: 1.05rem;
-    color: var(--forest);
-    line-height: 1.2;
-  }
-
-  .promo-box p {
-    font-size: 0.8rem;
-    color: var(--ink-soft);
-    line-height: 1.4;
-  }
-
-  .btn-sm {
-    padding: 0.5rem 0.95rem;
-    font-size: 0.8rem;
-    align-self: flex-start;
-    margin-top: 0.3rem;
   }
 
   /* ==========================================================================

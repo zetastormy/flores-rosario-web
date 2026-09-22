@@ -12,7 +12,7 @@ export interface SitioConfig {
   instagramUrl?: string;
   facebookUrl?: string;
   direccion: string;
-  horariosAtencion: string;
+  horariosAtencion?: string;
   bannerAviso?: string;
 }
 
@@ -89,7 +89,6 @@ export const fallbackSitioConfig: SitioConfig = {
   instagramUrl: 'https://instagram.com/floresdelrosario.calbuco',
   facebookUrl: 'https://facebook.com/floresdelrosario.calbuco',
   direccion: 'Entregas a domicilio en Puerto Montt y alrededores',
-  horariosAtencion: 'Lun a sáb, 9:00 a 18:30 hrs (Atención y pedidos online)',
   bannerAviso: '🌿 Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp',
 };
 

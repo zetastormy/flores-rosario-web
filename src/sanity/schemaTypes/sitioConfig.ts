@@ -41,12 +41,6 @@ export const sitioConfig = {
       initialValue: 'Entregas a domicilio en Puerto Montt y alrededores',
     },
     {
-      name: 'horariosAtencion',
-      title: 'Horarios de atención',
-      type: 'string',
-      initialValue: 'Lunes a Sábados: 9:00 a 19:00 hrs',
-    },
-    {
       name: 'bannerAviso',
       title: 'Aviso destacado en cabecera (opcional)',
       type: 'string',

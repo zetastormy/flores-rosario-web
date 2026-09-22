@@ -171,7 +171,7 @@ En la carpeta `docs/` se encuentran los activos de referencia que deben respetar
   - Las consultas GROQ deben estructurarse mediante capas de acceso a datos (`src/lib/sanity.queries.ts`) que provean valores de respaldo predeterminados coherentes extraídos de `docs/`.
   - Esto garantiza que `astro build` siempre compile con éxito en Cloudflare Pages o entornos locales, independientemente del estado de sincronización del CMS.
 - **Modelos de Contenido Establecidos**:
-  1. `sitioConfig` (Singleton): Configuración global, WhatsApp, redes, horarios, zona de entregas en Puerto Montt y alrededores, y banners informativos.
+  1. `sitioConfig` (Singleton): Configuración global, WhatsApp, redes, zona de entregas en Puerto Montt y alrededores, y banners informativos.
   2. `paginaInicio` (Singleton): Titulares del hero, bajadas de texto, botones CTA, historia del negocio y destacados.
   3. `producto`: Flores, arreglos y materiales de jardinería con precios en CLP, unidad, etiqueta, galería, descripción y disponibilidad.
   4. `categoria`: Categorización de productos (ej: Ramos, Floreros, Jardinería, Plantas, Condolencias).

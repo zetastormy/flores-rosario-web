@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getProductos, getSitioConfig, type Producto } from '../../lib/sanity.queries';
 import { urlForImage } from '../../lib/sanity';
 import WhatsAppIcon from '../../components/icons/WhatsAppIcon.astro';
-import { ArrowLeft, Sprout } from '@lucide/astro';
+import { ArrowLeft, Sprout, Maximize2, ChevronLeft, ChevronRight, X } from '@lucide/astro';
 
 export async function getStaticPaths() {
   const productos = await getProductos();
@@ -35,6 +35,27 @@ const formatCLP = (amount: number) => {
 };
 
 const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(producto.precio)}) con entrega en Puerto Montt o alrededores. ¿Tienen disponibilidad?`;
+
+// Unificar fotos del producto: imagen principal + galería de Sanity CMS
+const rawImages = [
+  producto.imagen,
+  ...(Array.isArray(producto.galeria) ? producto.galeria : []),
+].filter(Boolean);
+
+// Deduplicar imágenes por asset._ref
+const fotos = rawImages.filter((img, idx, arr) => {
+  const ref = img?.asset?._ref;
+  if (!ref) return true;
+  return arr.findIndex((other) => other?.asset?._ref === ref) === idx;
+});
+
+const imagenesData = fotos.map((foto, index) => ({
+  id: index,
+  thumbUrl: urlForImage(foto).width(180).height(160).auto('format').url(),
+  mediumUrl: urlForImage(foto).width(800).height(700).auto('format').url(),
+  fullUrl: urlForImage(foto).width(1920).quality(92).auto('format').url(),
+  alt: `${producto.nombre} - Foto ${index + 1}`,
+}));
 ---
 
 <BaseLayout
@@ -53,16 +74,35 @@ const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(p
 
       <!-- Layout Principal del Detalle (Columna Foto + Columna Información) -->
       <div class="product-detail-layout">
-        <!-- Visual / Fotografía Principal -->
+        <!-- Visual / Fotografía Principal y Galería -->
         <div class="pd-visual">
-          <div class={`pd-photo-frame ${producto.tone || 'tone-a'}`}>
+          <div
+            class={`pd-photo-frame ${producto.tone || 'tone-a'}`}
+            id="pd-main-frame"
+            role={imagenesData.length > 0 ? 'button' : undefined}
+            tabindex={imagenesData.length > 0 ? 0 : undefined}
+            aria-label={imagenesData.length > 0 ? 'Abrir visor de galería a tamaño completo' : undefined}
+          >
             {
-              producto.imagen ? (
-                <img
-                  src={urlForImage(producto.imagen).width(700).height(600).url()}
-                  alt={producto.nombre}
-                  class="pd-main-img"
-                />
+              imagenesData.length > 0 ? (
+                <>
+                  <img
+                    id="pd-active-img"
+                    src={imagenesData[0].mediumUrl}
+                    alt={imagenesData[0].alt}
+                    class="pd-main-img"
+                  />
+                  <button
+                    type="button"
+                    class="pd-zoom-trigger"
+                    id="pd-zoom-btn"
+                    aria-label="Ver imagen a tamaño completo"
+                    title="Ver imagen a tamaño completo"
+                  >
+                    <Maximize2 size={16} />
+                    <span>Ver tamaño completo</span>
+                  </button>
+                </>
               ) : (
                 <div class="pd-caption-placeholder">
                   <span>Foto del producto</span>
@@ -77,6 +117,24 @@ const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(p
               )
             }
           </div>
+
+          <!-- Tira de Miniaturas si hay múltiples imágenes -->
+          {
+            imagenesData.length > 1 && (
+              <div class="pd-thumbnails-strip" role="group" aria-label="Galería de imágenes secundarias">
+                {imagenesData.map((img, idx) => (
+                  <button
+                    type="button"
+                    class={`pd-thumb-btn ${idx === 0 ? 'active' : ''}`}
+                    data-index={idx}
+                    aria-label={`Ver foto ${idx + 1} de ${imagenesData.length}`}
+                  >
+                    <img src={img.thumbUrl} alt={img.alt} class="pd-thumb-img" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            )
+          }
         </div>
 
         <!-- Información y Acciones de Compra -->
@@ -165,6 +223,94 @@ const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(p
     </div>
   </article>
 
+  <!-- Visor / Lightbox a Tamaño Completo de la Galería -->
+  {
+    imagenesData.length > 0 && (
+      <div
+        id="pd-lightbox"
+        class="pd-lightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Galería a tamaño completo de ${producto.nombre}`}
+        hidden
+      >
+        <div class="lb-backdrop" id="lb-backdrop" />
+
+        <div class="lb-dialog-content">
+          <!-- Barra superior de controles -->
+          <div class="lb-header">
+            <div class="lb-meta">
+              <span class="lb-product-name">{producto.nombre}</span>
+              {imagenesData.length > 1 && (
+                <span id="lb-counter" class="lb-counter">
+                  1 / {imagenesData.length}
+                </span>
+              )}
+            </div>
+            <button
+              type="button"
+              id="lb-close-btn"
+              class="lb-close-btn"
+              aria-label="Cerrar visor a tamaño completo"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          <!-- Escenario central con foto y navegación -->
+          <div class="lb-stage">
+            {imagenesData.length > 1 && (
+              <button
+                type="button"
+                id="lb-prev-btn"
+                class="lb-nav-btn lb-prev-btn"
+                aria-label="Foto anterior"
+              >
+                <ChevronLeft size={34} />
+              </button>
+            )}
+
+            <div class="lb-image-wrapper">
+              <img
+                id="lb-full-img"
+                src={imagenesData[0].fullUrl}
+                alt={imagenesData[0].alt}
+                class="lb-full-img"
+              />
+            </div>
+
+            {imagenesData.length > 1 && (
+              <button
+                type="button"
+                id="lb-next-btn"
+                class="lb-nav-btn lb-next-btn"
+                aria-label="Foto siguiente"
+              >
+                <ChevronRight size={34} />
+              </button>
+            )}
+          </div>
+
+          <!-- Tira de miniaturas inferior dentro del modal -->
+          {imagenesData.length > 1 && (
+            <div class="lb-thumbs-bar" role="tablist" aria-label="Miniaturas de galería">
+              {imagenesData.map((img, idx) => (
+                <button
+                  type="button"
+                  class={`lb-thumb-btn ${idx === 0 ? 'active' : ''}`}
+                  data-lb-index={idx}
+                  aria-label={`Ver foto ${idx + 1}`}
+                >
+                  <img src={img.thumbUrl} alt="" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   <!-- Botón Flotante WhatsApp -->
   <a
     href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(waMessage)}`}
@@ -239,23 +385,338 @@ const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(p
     object-fit: cover;
   }
 
-  .pd-tag-floating {
+  .pd-zoom-trigger {
     position: absolute;
-    top: 1.1rem;
-    left: 1.1rem;
-    z-index: 5;
+    bottom: 0.9rem;
+    right: 0.9rem;
+    z-index: 6;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius-full);
+    background: var(--paper);
+    color: var(--forest);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1.2px solid var(--line);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
   }
 
-  .pd-caption-placeholder {
+  .pd-zoom-trigger:hover {
+    background: var(--forest);
+    color: var(--cream);
+    border-color: var(--forest);
+  }
+
+  /* Tira de Miniaturas en la Página */
+  .pd-thumbnails-strip {
     display: flex;
-    align-items: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    scrollbar-width: none;
+  }
+
+  .pd-thumbnails-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pd-thumb-btn {
+    flex: 0 0 72px;
+    height: 72px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--line);
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--paper);
+    transition: border-color var(--transition-fast);
+  }
+
+  .pd-thumb-btn:hover {
+    border-color: var(--leaf);
+  }
+
+  .pd-thumb-btn.active {
+    border-color: var(--forest);
+    outline: 2px solid var(--forest);
+  }
+
+  .pd-thumb-img {
+    width: 100%;
     height: 100%;
-    padding: 1rem 1.4rem;
-    color: var(--paper);
+    object-fit: cover;
+  }
+
+  /* ==========================================================================
+     Lightbox / Fullscreen Gallery Modal (Totalmente Responsivo)
+     ========================================================================== */
+  .pd-lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    width: 100dvw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .pd-lightbox.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(22, 38, 30, 0.96);
+  }
+
+  .lb-dialog-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.75rem 0.75rem 0.5rem;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 768px) {
+    .lb-dialog-content {
+      padding: 1.2rem 2rem 1rem;
+    }
+  }
+
+  .lb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(248, 223, 200, 0.15);
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .lb-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .lb-product-name {
     font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 0.88rem;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+    font-size: clamp(0.95rem, 2.2vw, 1.35rem);
+    color: var(--paper);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lb-counter {
+    font-size: 0.8rem;
+    color: var(--cream);
+    font-weight: 600;
+    background: rgba(248, 223, 200, 0.12);
+    border: 1px solid rgba(248, 223, 200, 0.22);
+    padding: 0.18rem 0.55rem;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .lb-close-btn {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: var(--radius-full);
+    background: rgba(248, 223, 200, 0.12);
+    border: 1px solid rgba(248, 223, 200, 0.25);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .lb-close-btn:hover {
+    background: var(--forest-light);
+    color: var(--paper);
+  }
+
+  .lb-stage {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    width: 100%;
+    margin: 0.5rem 0;
+    overflow: hidden;
+  }
+
+  .lb-image-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .lb-full-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    user-select: none;
+    -webkit-user-drag: none;
+    cursor: default;
+    transition: opacity 0.2s ease;
+  }
+
+  .lb-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: var(--radius-full);
+    background: rgba(22, 38, 30, 0.65);
+    border: 1px solid rgba(248, 223, 200, 0.3);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .lb-nav-btn:hover {
+    background: var(--forest);
+    color: var(--paper);
+  }
+
+  .lb-prev-btn {
+    left: 0.25rem;
+  }
+
+  .lb-next-btn {
+    right: 0.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .lb-nav-btn {
+      width: 52px;
+      height: 52px;
+      min-width: 52px;
+      min-height: 52px;
+      background: rgba(248, 223, 200, 0.15);
+    }
+    .lb-prev-btn {
+      left: 1.5rem;
+    }
+    .lb-next-btn {
+      right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .lb-prev-btn {
+      left: 2rem;
+    }
+    .lb-next-btn {
+      right: 2rem;
+    }
+  }
+
+  .lb-thumbs-bar {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    overflow-x: auto;
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+    border-top: 1px solid rgba(248, 223, 200, 0.15);
+    scrollbar-width: none;
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+
+  .lb-thumbs-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lb-thumb-btn {
+    flex: 0 0 50px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid transparent;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    opacity: 0.55;
+    transition: opacity var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  @media (min-width: 768px) {
+    .lb-thumbs-bar {
+      gap: 0.75rem;
+      padding-top: 0.65rem;
+    }
+    .lb-thumb-btn {
+      flex: 0 0 62px;
+      height: 62px;
+    }
+  }
+
+  @media (max-height: 480px) {
+    .lb-thumbs-bar {
+      display: none;
+    }
+  }
+
+  .lb-thumb-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lb-thumb-btn:hover {
+    opacity: 0.85;
+  }
+
+  .lb-thumb-btn.active {
+    border-color: var(--cream);
+    opacity: 1;
   }
 
   /* Info Column */
@@ -475,3 +936,187 @@ const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(p
     transform: scale(1.08);
   }
 </style>
+
+<script define:vars={{ imagenesData }}>
+  // Control interactivo de la galería de fotos y visor modal a tamaño completo
+  let currentIndex = 0;
+
+  const mainImg = document.getElementById('pd-active-img');
+  const mainFrame = document.getElementById('pd-main-frame');
+  const zoomBtn = document.getElementById('pd-zoom-btn');
+  const thumbBtns = document.querySelectorAll('.pd-thumb-btn');
+
+  const lightbox = document.getElementById('pd-lightbox');
+  const backdrop = document.getElementById('lb-backdrop');
+  const closeBtn = document.getElementById('lb-close-btn');
+  const prevBtn = document.getElementById('lb-prev-btn');
+  const nextBtn = document.getElementById('lb-next-btn');
+  const lbFullImg = document.getElementById('lb-full-img');
+  const lbCounter = document.getElementById('lb-counter');
+  const lbThumbBtns = document.querySelectorAll('.lb-thumb-btn');
+
+  let lastActiveElement = null;
+
+  function updateActiveImage(index) {
+    if (!imagenesData || imagenesData.length === 0) return;
+    currentIndex = (index + imagenesData.length) % imagenesData.length;
+    const current = imagenesData[currentIndex];
+
+    // Actualizar vista previa en página de producto
+    if (mainImg) {
+      mainImg.src = current.mediumUrl;
+      mainImg.alt = current.alt;
+    }
+
+    // Actualizar miniaturas de la página
+    thumbBtns.forEach((btn, idx) => {
+      if (idx === currentIndex) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-current', 'true');
+      } else {
+        btn.classList.remove('active');
+        btn.removeAttribute('aria-current');
+      }
+    });
+
+    // Actualizar imagen grande en el Lightbox
+    if (lbFullImg) {
+      lbFullImg.src = current.fullUrl;
+      lbFullImg.alt = current.alt;
+    }
+    if (lbCounter) {
+      lbCounter.textContent = `${currentIndex + 1} / ${imagenesData.length}`;
+    }
+
+    // Actualizar miniaturas dentro del Lightbox
+    lbThumbBtns.forEach((btn, idx) => {
+      if (idx === currentIndex) {
+        btn.classList.add('active');
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  function openLightbox(index) {
+    if (!lightbox) return;
+    lastActiveElement = document.activeElement;
+    if (typeof index === 'number') {
+      updateActiveImage(index);
+    }
+    lightbox.removeAttribute('hidden');
+    requestAnimationFrame(() => {
+      lightbox.classList.add('is-open');
+    });
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKeyDown);
+
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove('is-open');
+    setTimeout(() => {
+      lightbox.setAttribute('hidden', '');
+    }, 250);
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onKeyDown);
+
+    if (lastActiveElement && typeof lastActiveElement.focus === 'function') {
+      lastActiveElement.focus();
+    }
+  }
+
+  function onKeyDown(e) {
+    if (e.key === 'Escape') {
+      closeLightbox();
+    } else if (e.key === 'ArrowLeft') {
+      updateActiveImage(currentIndex - 1);
+    } else if (e.key === 'ArrowRight') {
+      updateActiveImage(currentIndex + 1);
+    }
+  }
+
+  // Event Listeners en miniaturas de la página
+  thumbBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.getAttribute('data-index') || '0', 10);
+      updateActiveImage(idx);
+    });
+  });
+
+  // Abrir Lightbox al hacer clic en el botón de zoom o en el marco de la foto
+  if (zoomBtn) {
+    zoomBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openLightbox(currentIndex);
+    });
+  }
+  if (mainFrame) {
+    mainFrame.addEventListener('click', () => {
+      openLightbox(currentIndex);
+    });
+    mainFrame.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(currentIndex);
+      }
+    });
+  }
+
+  // Event Listeners dentro del Lightbox
+  if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+  if (backdrop) backdrop.addEventListener('click', closeLightbox);
+  const imageWrapper = document.querySelector('.lb-image-wrapper');
+  if (imageWrapper) {
+    imageWrapper.addEventListener('click', (e) => {
+      if (e.target === imageWrapper) {
+        closeLightbox();
+      }
+    });
+  }
+  if (prevBtn) {
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateActiveImage(currentIndex - 1);
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateActiveImage(currentIndex + 1);
+    });
+  }
+
+  lbThumbBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.getAttribute('data-lb-index') || '0', 10);
+      updateActiveImage(idx);
+    });
+  });
+
+  // Gestos táctiles de desplazamiento (Swipe) en móvil
+  let touchStartX = 0;
+  let touchEndX = 0;
+  if (lightbox) {
+    lightbox.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diffX = touchEndX - touchStartX;
+      if (Math.abs(diffX) > 40) {
+        if (diffX < 0) {
+          updateActiveImage(currentIndex + 1);
+        } else {
+          updateActiveImage(currentIndex - 1);
+        }
+      }
+    }, { passive: true });
+  }
+</script>

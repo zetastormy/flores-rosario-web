@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getArticulos, getSitioConfig } from '../../lib/sanity.queries';
+import { getArticulos, getSitioConfig, calcularTiempoLectura } from '../../lib/sanity.queries';
 import { urlForImage } from '../../lib/sanity';
 import WhatsAppIcon from '../../components/icons/WhatsAppIcon.astro';
 import { Sprout, ArrowRight, BookOpen } from '@lucide/astro';
@@ -86,7 +86,7 @@ const formatDate = (dateStr: string) => {
                   <div class="article-meta">
                     <span class="meta-date">{formatDate(art.fechaPublicacion)}</span>
                     <span class="meta-dot">·</span>
-                    <span class="meta-time">{art.tiempoLectura} de lectura</span>
+                    <span class="meta-time">{calcularTiempoLectura(art)} de lectura</span>
                   </div>
 
                   <a href={`/blog/${art.slug.current}`}>

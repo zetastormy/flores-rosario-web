@@ -227,7 +227,6 @@ export const documents = [
     titulo: 'Qué plantar en septiembre: la guía de primavera',
     slug: { _type: 'slug', current: 'que-plantar-en-septiembre-guia-primavera' },
     fechaPublicacion: '2026-09-12T10:00:00.000Z',
-    tiempoLectura: '4 min',
     resumen:
       'Consejos prácticos para preparar el suelo, sembrar semillas de estación y proteger tus brotes del clima austral.',
     categoria: 'Primavera',
@@ -303,7 +302,6 @@ export const documents = [
     titulo: 'Cuidados esenciales para tus flores frescas en agua',
     slug: { _type: 'slug', current: 'cuidados-esenciales-flores-frescas' },
     fechaPublicacion: '2026-08-28T10:00:00.000Z',
-    tiempoLectura: '3 min',
     resumen:
       'Aprende a prolongar la vida de tus ramos cortados cortando los tallos y cambiando el agua en el momento justo.',
     categoria: 'Consejos Florales',
@@ -358,7 +356,6 @@ export const documents = [
     titulo: 'El arte de elegir la maceta correcta para cada planta',
     slug: { _type: 'slug', current: 'elegir-la-maceta-correcta' },
     fechaPublicacion: '2026-08-15T10:00:00.000Z',
-    tiempoLectura: '5 min',
     resumen:
       'Drenaje, porosidad del barro vs. plástico y proporciones ideales para que las raíces se desarrollen sanas.',
     categoria: 'Jardinería',

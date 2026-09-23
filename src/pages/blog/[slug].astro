@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getArticulos, getSitioConfig, type Articulo } from '../../lib/sanity.queries';
+import { getArticulos, getSitioConfig, calcularTiempoLectura, type Articulo } from '../../lib/sanity.queries';
 import { urlForImage } from '../../lib/sanity';
 import WhatsAppIcon from '../../components/icons/WhatsAppIcon.astro';
 import FacebookIcon from '../../components/icons/FacebookIcon.astro';
@@ -26,7 +26,7 @@ const relacionados = todos
   .filter((a) => a.slug.current !== articulo.slug.current)
   .slice(0, 2);
 
-const shareUrl = new URL(Astro.url.pathname, Astro.site || 'https://floresrosario.pages.dev').toString();
+const shareUrl = new URL(Astro.url.pathname, Astro.site || 'https://floresdelrosario.cl').toString();
 const shareText = `Te comparto este artículo de Flores del Rosario: "${articulo.titulo}"`;
 
 const formatDate = (dateStr: string) => {
@@ -77,7 +77,7 @@ const formatDate = (dateStr: string) => {
           {articulo.categoria && <span class="tag leaf">{articulo.categoria}</span>}
           <span class="meta-date">{formatDate(articulo.fechaPublicacion)}</span>
           <span class="meta-dot">·</span>
-          <span class="meta-time">{articulo.tiempoLectura} de lectura</span>
+          <span class="meta-time">{calcularTiempoLectura(articulo)} de lectura</span>
         </div>
 
         <h1 class="article-headline">{articulo.titulo}</h1>
@@ -89,26 +89,44 @@ const formatDate = (dateStr: string) => {
 
       <!-- Contenido Editorial -->
       <div class="article-content prose">
-        <h3>Preparando el entorno para el clima del sur</h3>
-        <p>
-          En el sur de Chile y sus alrededores, las variaciones de humedad, viento y precipitaciones
-          marcan los ciclos de la vegetación. Es fundamental elegir plantas adaptadas a suelos ricos en materia orgánica
-          y proteger las especies más sensibles durante los cambios bruscos de temperatura.
-        </p>
+        {
+          articulo.contenido && Array.isArray(articulo.contenido) && articulo.contenido.length > 0 ? (
+            articulo.contenido.map((block: any) => {
+              if (block._type === 'block') {
+                const text = block.children?.map((c: any) => c.text).join('') || '';
+                if (block.style === 'h2') return <h2>{text}</h2>;
+                if (block.style === 'h3') return <h3>{text}</h3>;
+                if (block.style === 'h4') return <h4>{text}</h4>;
+                if (block.style === 'blockquote') return <blockquote><p>{text}</p></blockquote>;
+                return <p>{text}</p>;
+              }
+              return null;
+            })
+          ) : (
+            <>
+              <h3>Preparando el entorno para el clima del sur</h3>
+              <p>
+                En el sur de Chile y sus alrededores, las variaciones de humedad, viento y precipitaciones
+                marcan los ciclos de la vegetación. Es fundamental elegir plantas adaptadas a suelos ricos en materia orgánica
+                y proteger las especies más sensibles durante los cambios bruscos de temperatura.
+              </p>
 
-        <h3>El secreto de un sustrato saludable</h3>
-        <p>
-          Un buen drenaje es clave para evitar encharcamientos. La combinación de tierra de hojas, perlita y abono orgánico
-          proporciona la oxigenación necesaria para que las raíces se desarrollen sin asfixia, tanto en canteros exteriores
-          como en macetas de interior.
-        </p>
+              <h3>El secreto de un sustrato saludable</h3>
+              <p>
+                Un buen drenaje es clave para evitar encharcamientos. La combinación de tierra de hojas, perlita y abono orgánico
+                proporciona la oxigenación necesaria para que las raíces se desarrollen sin asfixia, tanto en canteros exteriores
+                como en macetas de interior.
+              </p>
 
-        <h3>Riego y luminosidad</h3>
-        <p>
-          Durante los meses de primavera y verano, es conveniente regar a primera hora de la mañana o al atardecer para
-          evitar la evaporación inmediata. En interiores, ubicar las plantas cerca de ventanas con luz difusa favorece una
-          floración prolongada y hojas de verde intenso.
-        </p>
+              <h3>Riego y luminosidad</h3>
+              <p>
+                Durante los meses de primavera y verano, es conveniente regar a primera hora de la mañana o al atardecer para
+                evitar la evaporación inmediata. En interiores, ubicar las plantas cerca de ventanas con luz difusa favorece una
+                floración prolongada y hojas de verde intenso.
+              </p>
+            </>
+          )
+        }
       </div>
 
       <!-- Barra para Compartir -->
@@ -177,7 +195,11 @@ const formatDate = (dateStr: string) => {
                       )}
                     </div>
                     <div class="more-body">
-                      <span class="more-meta">{rel.fechaPublicacion}</span>
+                      <div class="article-meta more-meta">
+                        <span class="meta-date">{formatDate(rel.fechaPublicacion)}</span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-time">{calcularTiempoLectura(rel)} de lectura</span>
+                      </div>
                       <h4>{rel.titulo}</h4>
                     </div>
                   </a>
@@ -413,18 +435,21 @@ const formatDate = (dateStr: string) => {
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.4rem;
   }
 
   .more-meta {
-    font-size: 0.76rem;
+    font-size: 0.78rem;
     color: var(--ink-soft);
+    margin-bottom: 0.1rem;
+    gap: 0.4rem;
   }
 
   .more-body h4 {
     font-size: 0.98rem;
     color: var(--forest);
-    line-height: 1.3;
+    line-height: 1.35;
+    margin: 0;
   }
 
   /* Tone Gradients */

@@ -453,11 +453,15 @@ const imagenesData = fotos.map((foto, index) => ({
   }
 
   /* ==========================================================================
-     Lightbox / Fullscreen Gallery Modal (Sober & Cohesive with GEMINI.md)
+     Lightbox / Fullscreen Gallery Modal (Totalmente Responsivo)
      ========================================================================== */
   .pd-lightbox {
     position: fixed;
     inset: 0;
+    width: 100vw;
+    width: 100dvw;
+    height: 100vh;
+    height: 100dvh;
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -483,48 +487,66 @@ const imagenesData = fotos.map((foto, index) => ({
     z-index: 2;
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1.2rem;
+    padding: 0.75rem 0.75rem 0.5rem;
     box-sizing: border-box;
+  }
+
+  @media (min-width: 768px) {
+    .lb-dialog-content {
+      padding: 1.2rem 2rem 1rem;
+    }
   }
 
   .lb-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 0.8rem;
+    padding-bottom: 0.6rem;
     border-bottom: 1px solid rgba(248, 223, 200, 0.15);
+    gap: 0.75rem;
+    flex-shrink: 0;
   }
 
   .lb-meta {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    flex-wrap: wrap;
+    gap: 0.6rem;
+    min-width: 0;
+    flex: 1;
   }
 
   .lb-product-name {
     font-family: var(--font-serif);
-    font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+    font-size: clamp(0.95rem, 2.2vw, 1.35rem);
     color: var(--paper);
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .lb-counter {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: var(--cream);
     font-weight: 600;
     background: rgba(248, 223, 200, 0.12);
     border: 1px solid rgba(248, 223, 200, 0.22);
-    padding: 0.2rem 0.65rem;
+    padding: 0.18rem 0.55rem;
     border-radius: var(--radius-full);
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .lb-close-btn {
+    flex-shrink: 0;
     width: 40px;
     height: 40px;
+    min-width: 40px;
     border-radius: var(--radius-full);
     background: rgba(248, 223, 200, 0.12);
     border: 1px solid rgba(248, 223, 200, 0.25);
@@ -548,7 +570,9 @@ const imagenesData = fotos.map((foto, index) => ({
     align-items: center;
     justify-content: center;
     min-height: 0;
-    margin: 0.8rem 0;
+    width: 100%;
+    margin: 0.5rem 0;
+    overflow: hidden;
   }
 
   .lb-image-wrapper {
@@ -557,28 +581,35 @@ const imagenesData = fotos.map((foto, index) => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 0.5rem;
+    padding: 0;
+    cursor: pointer;
   }
 
   .lb-full-img {
-    max-width: min(100%, 1100px);
-    max-height: calc(88vh - 160px);
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
     border-radius: var(--radius-md);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     user-select: none;
     -webkit-user-drag: none;
+    cursor: default;
+    transition: opacity 0.2s ease;
   }
 
   .lb-nav-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: var(--radius-full);
-    background: rgba(248, 223, 200, 0.15);
-    border: 1px solid rgba(248, 223, 200, 0.25);
+    background: rgba(22, 38, 30, 0.65);
+    border: 1px solid rgba(248, 223, 200, 0.3);
     color: var(--cream);
     display: flex;
     align-items: center;
@@ -589,22 +620,25 @@ const imagenesData = fotos.map((foto, index) => ({
   }
 
   .lb-nav-btn:hover {
-    background: var(--forest-light);
+    background: var(--forest);
     color: var(--paper);
   }
 
   .lb-prev-btn {
-    left: 0.5rem;
+    left: 0.25rem;
   }
 
   .lb-next-btn {
-    right: 0.5rem;
+    right: 0.25rem;
   }
 
   @media (min-width: 768px) {
     .lb-nav-btn {
       width: 52px;
       height: 52px;
+      min-width: 52px;
+      min-height: 52px;
+      background: rgba(248, 223, 200, 0.15);
     }
     .lb-prev-btn {
       left: 1.5rem;
@@ -614,14 +648,26 @@ const imagenesData = fotos.map((foto, index) => ({
     }
   }
 
+  @media (min-width: 1200px) {
+    .lb-prev-btn {
+      left: 2rem;
+    }
+    .lb-next-btn {
+      right: 2rem;
+    }
+  }
+
   .lb-thumbs-bar {
     display: flex;
-    gap: 0.65rem;
+    gap: 0.5rem;
     justify-content: center;
     overflow-x: auto;
-    padding-top: 0.6rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
     border-top: 1px solid rgba(248, 223, 200, 0.15);
     scrollbar-width: none;
+    flex-shrink: 0;
+    max-width: 100%;
   }
 
   .lb-thumbs-bar::-webkit-scrollbar {
@@ -629,8 +675,8 @@ const imagenesData = fotos.map((foto, index) => ({
   }
 
   .lb-thumb-btn {
-    flex: 0 0 58px;
-    height: 58px;
+    flex: 0 0 50px;
+    height: 50px;
     border-radius: var(--radius-sm);
     border: 1.5px solid transparent;
     padding: 0;
@@ -639,6 +685,23 @@ const imagenesData = fotos.map((foto, index) => ({
     background: rgba(255, 255, 255, 0.05);
     opacity: 0.55;
     transition: opacity var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  @media (min-width: 768px) {
+    .lb-thumbs-bar {
+      gap: 0.75rem;
+      padding-top: 0.65rem;
+    }
+    .lb-thumb-btn {
+      flex: 0 0 62px;
+      height: 62px;
+    }
+  }
+
+  @media (max-height: 480px) {
+    .lb-thumbs-bar {
+      display: none;
+    }
   }
 
   .lb-thumb-btn img {
@@ -1007,6 +1070,14 @@ const imagenesData = fotos.map((foto, index) => ({
   // Event Listeners dentro del Lightbox
   if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
   if (backdrop) backdrop.addEventListener('click', closeLightbox);
+  const imageWrapper = document.querySelector('.lb-image-wrapper');
+  if (imageWrapper) {
+    imageWrapper.addEventListener('click', (e) => {
+      if (e.target === imageWrapper) {
+        closeLightbox();
+      }
+    });
+  }
   if (prevBtn) {
     prevBtn.addEventListener('click', (e) => {
       e.stopPropagation();

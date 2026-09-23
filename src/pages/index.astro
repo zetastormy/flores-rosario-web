@@ -119,10 +119,10 @@ const formatCLP = (amount: number) => {
         categorias && categorias.length > 0 && (
           <div class="categories-filter-bar">
             <div class="chips-wrapper" role="tablist" aria-label="Categorías de productos">
-              {categorias.map((cat, index) => (
+              {categorias.map((cat) => (
                 <a
                   href={`/productos${cat.slug.current !== 'todas' ? `?categoria=${cat.slug.current}` : ''}`}
-                  class={`chip ${index === 0 ? 'active' : ''}`}
+                  class="chip"
                   id={`chip-${cat.slug.current}`}
                 >
                   {cat.nombre}

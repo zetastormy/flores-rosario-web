@@ -168,10 +168,10 @@ const formatDate = (dateStr: string) => {
           href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola! Leí el artículo "${articulo.titulo}" y quisiera consultar por productos de jardinería.`)}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="btn btn-whatsapp"
+          class="btn btn-whatsapp support-btn"
         >
           <WhatsAppIcon size={20} />
-          Consultar por WhatsApp
+          Consultar disponibilidad
         </a>
       </div>
 
@@ -372,11 +372,21 @@ const formatDate = (dateStr: string) => {
     line-height: 1.55;
   }
 
+  .support-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   @media (min-width: 768px) {
     .article-support-box {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      gap: 2rem;
     }
   }
 

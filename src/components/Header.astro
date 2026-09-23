@@ -1,0 +1,819 @@
+---
+import { getSitioConfig, getCategorias } from '../lib/sanity.queries';
+import WhatsAppIcon from './icons/WhatsAppIcon.astro';
+import InstagramIcon from './icons/InstagramIcon.astro';
+import FacebookIcon from './icons/FacebookIcon.astro';
+import { Menu, X, ChevronDown, ArrowRight } from '@lucide/astro';
+
+interface Props {
+  currentPath?: string;
+  bannerAviso?: string;
+}
+
+const { currentPath = '/', bannerAviso } = Astro.props;
+const isHome = currentPath === '/' || currentPath === '';
+
+const sitioConfig = await getSitioConfig();
+const categorias = await getCategorias();
+const noticeText = bannerAviso || sitioConfig.bannerAviso;
+---
+
+<!-- Envoltorio de Cabecera (Soporte para modo transparente sobre el Hero en Home) -->
+<div class={`site-header-wrapper ${isHome ? 'is-home' : ''}`} id="site-header-wrapper">
+  {
+    noticeText && (
+      <aside class="top-announcement" aria-label="Aviso destacado">
+        <div class="container announcement-inner">
+          <span>{noticeText}</span>
+        </div>
+      </aside>
+    )
+  }
+
+  <!-- Cabecera Principal -->
+  <header class={`site-header ${isHome ? 'is-home' : ''}`} id="site-header">
+  <div class="container header-container">
+    <!-- Brandmark (Logo Normal a color / Monocromático light cuando no se haya scrolleado en Home) -->
+    <a href="/" class="brandmark" aria-label="Ir al inicio de Flores del Rosario">
+      <img
+        src="/assets/logo/flores_rosario.svg"
+        alt="Flores del Rosario"
+        class="brand-logo logo-normal"
+        width="62"
+        height="62"
+      />
+      <img
+        src="/assets/logo/flores_rosario_light.svg"
+        alt="Flores del Rosario"
+        class="brand-logo logo-light"
+        width="62"
+        height="62"
+      />
+    </a>
+
+    <!-- Navegación de Escritorio con Mega Menú -->
+    <nav class="desktop-nav" aria-label="Navegación de escritorio">
+      <a href="/" class={`dlink ${currentPath === '/' ? 'active' : ''}`}>Inicio</a>
+
+      <div class="mega-trigger-wrap" id="mega-trigger-wrap">
+        <a
+          href="/productos"
+          class={`dlink with-dropdown ${currentPath.startsWith('/productos') ? 'active' : ''}`}
+          id="btn-desktop-products"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Productos
+          <ChevronDown size={16} class="chevron" aria-hidden="true" />
+        </a>
+
+        <!-- Submenú Desplegable de Categorías -->
+        <div class="desktop-megamenu" id="desktop-megamenu" role="region" aria-label="Submenú de productos">
+          <div class="mega-categories">
+            {
+              categorias && categorias.length > 0 ? (
+                <ul class="mega-links-list">
+                  {categorias.map((cat) => (
+                    <li>
+                      <a href={`/productos?categoria=${cat.slug.current}`} class="mega-cat-link">
+                        {cat.nombre}
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <a href="/productos" class="mega-cat-link all-products">
+                      Ver todos los productos <ArrowRight size={15} class="arrow" aria-hidden="true" />
+                    </a>
+                  </li>
+                </ul>
+              ) : (
+                <div class="mega-empty-wrap">
+                  <p class="mega-empty-text">No existen categorías</p>
+                  <a href="/productos" class="mega-cat-link all-products">
+                    Ver todos los productos <ArrowRight size={15} class="arrow" aria-hidden="true" />
+                  </a>
+                </div>
+              )
+            }
+          </div>
+        </div>
+      </div>
+
+      <a href="/blog" class={`dlink ${currentPath.startsWith('/blog') ? 'active' : ''}`}>Blog</a>
+      <a href="/#historia" class="dlink">Nuestra Historia</a>
+    </nav>
+
+    <!-- Acciones en Cabecera -->
+    <div class="header-right">
+      <!-- Enlaces Redes Sociales (Desktop) -->
+      <div class="desktop-social">
+        {
+          sitioConfig.instagramUrl && (
+            <a
+              href={sitioConfig.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="icon-btn"
+              aria-label="Instagram"
+            >
+              <InstagramIcon size={20} class="icon" />
+            </a>
+          )
+        }
+      </div>
+
+      <!-- Botón Pedido WhatsApp -->
+      <a
+        href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(sitioConfig.mensajeWhatsAppDefault)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-whatsapp header-wa-cta"
+        id="header-wa-cta"
+        aria-label="Pedir por WhatsApp"
+      >
+        <WhatsAppIcon size={18} class="icon" />
+        <span class="wa-label">Escríbenos</span>
+      </a>
+
+      <!-- Botón Menú Móvil Hamburguesa -->
+      <button
+        type="button"
+        class="icon-btn mobile-menu-toggle"
+        id="btn-open-mobile-menu"
+        aria-label="Abrir menú de navegación"
+        aria-controls="mobile-menu-overlay"
+        aria-expanded="false"
+      >
+        <Menu size={22} class="icon" aria-hidden="true" />
+      </button>
+    </div>
+  </div>
+</header>
+</div>
+
+<!-- Menú Móvil a Pantalla Completa (Overlay) -->
+<div class="mobile-nav-overlay" id="mobile-menu-overlay" aria-hidden="true">
+  <div class="overlay-inner container">
+    <div class="overlay-topbar">
+      <!-- Brandmark (Logo Monocromático Light sobre fondo oscuro) -->
+      <a href="/" class="brandmark brandmark-light" aria-label="Ir al inicio de Flores del Rosario">
+        <img
+          src="/assets/logo/flores_rosario_light.svg"
+          alt="Flores del Rosario"
+          class="brand-logo"
+          width="66"
+          height="66"
+        />
+      </a>
+      <button
+        type="button"
+        class="icon-btn close-btn"
+        id="btn-close-mobile-menu"
+        aria-label="Cerrar menú de navegación"
+      >
+        <X size={22} class="icon" aria-hidden="true" />
+      </button>
+    </div>
+
+    <nav class="overlay-nav" aria-label="Menú móvil">
+      <ul>
+        <li>
+          <a href="/" class="overlay-link">
+            <span class="num">01</span>
+            <span class="txt">Inicio</span>
+          </a>
+        </li>
+        <li>
+          <a href="/productos" class="overlay-link">
+            <span class="num">02</span>
+            <span class="txt">Catálogo & Jardinería</span>
+          </a>
+        </li>
+        <li>
+          <a href="/blog" class="overlay-link">
+            <span class="num">03</span>
+            <span class="txt">Blog & Consejos</span>
+          </a>
+        </li>
+        <li>
+          <a href="/#historia" class="overlay-link">
+            <span class="num">04</span>
+            <span class="txt">Nuestra Historia</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="overlay-footer">
+      <div class="overlay-contact-info">
+        <p class="address">Entregas en Puerto Montt y alrededores</p>
+      </div>
+
+      <div class="overlay-socials">
+        {
+          sitioConfig.instagramUrl && (
+            <a href={sitioConfig.instagramUrl} target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Instagram">
+              <InstagramIcon size={20} class="icon" />
+            </a>
+          )
+        }
+        {
+          sitioConfig.facebookUrl && (
+            <a href={sitioConfig.facebookUrl} target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Facebook">
+              <FacebookIcon size={20} class="icon" />
+            </a>
+          )
+        }
+        <a
+          href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(sitioConfig.mensajeWhatsAppDefault)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="icon-btn wa-social"
+          aria-label="WhatsApp"
+        >
+          <WhatsAppIcon size={20} class="icon" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ==========================================================================
+     Top Announcement Bar & Header Wrapper
+     ========================================================================== */
+  .site-header-wrapper {
+    width: 100%;
+  }
+
+  .site-header-wrapper.is-home {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    pointer-events: none;
+  }
+
+  .site-header-wrapper.is-home .top-announcement,
+  .site-header-wrapper.is-home .site-header {
+    pointer-events: auto;
+  }
+
+  .site-header-wrapper.is-home .top-announcement {
+    background-color: rgba(14, 38, 30, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid transparent;
+  }
+
+  .top-announcement {
+    background-color: var(--forest);
+    color: var(--cream-soft);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-align: center;
+    padding: 0.45rem 1rem;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid rgba(248, 223, 200, 0.15);
+    transition: background-color var(--transition-normal);
+  }
+
+  /* ==========================================================================
+     Site Header (Sticky & Scroll-aware on Home)
+     ========================================================================== */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    background-color: var(--paper);
+    border-bottom: 1px solid var(--line);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Modo transparente sobre el Hero en Home */
+  .site-header.is-home {
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+  }
+
+  .site-header.is-home .dlink {
+    color: var(--paper);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+  }
+
+  .site-header.is-home .dlink:hover {
+    color: var(--gold);
+  }
+
+  .site-header.is-home .dlink.active {
+    color: var(--cream);
+  }
+
+  .site-header.is-home .dlink.active::after {
+    background-color: var(--gold);
+  }
+
+  /* Botón de Instagram y acciones en Home sin scroll (fondo oscuro) */
+  .site-header.is-home:not(.is-scrolled) .icon-btn {
+    background: rgba(255, 255, 255, 0.16);
+    color: var(--paper);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .site-header.is-home:not(.is-scrolled) .icon-btn:hover {
+    background: var(--cream);
+    color: var(--forest);
+    border-color: var(--cream);
+  }
+
+  .site-header.is-home .mobile-menu-toggle {
+    color: var(--paper);
+    background: transparent;
+    border: none;
+  }
+
+  /* Estado cuando el usuario hace scroll hacia abajo en Home */
+  .site-header.is-home.is-scrolled {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: rgba(255, 251, 245, 0.96); /* Retorno al color original var(--paper) */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .site-header.is-home.is-scrolled .dlink {
+    color: var(--forest); /* Retorno al color original */
+    text-shadow: none;
+  }
+
+  .site-header.is-home.is-scrolled .dlink:hover,
+  .site-header.is-home.is-scrolled .dlink.active {
+    color: var(--leaf);
+  }
+
+  .site-header.is-home.is-scrolled .dlink.active::after {
+    background-color: var(--gold);
+  }
+
+  .site-header.is-home.is-scrolled .icon-btn {
+    background: var(--leaf-soft);
+    color: var(--forest);
+    border: 1px solid transparent;
+  }
+
+  .site-header.is-home.is-scrolled .icon-btn:hover {
+    background: var(--forest);
+    color: var(--cream);
+  }
+
+  .site-header.is-home.is-scrolled .mobile-menu-toggle {
+    color: var(--forest);
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    position: relative;
+  }
+
+  .brandmark {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .brandmark .brand-logo {
+    display: block;
+    height: 58px;
+    width: 58px;
+    object-fit: contain;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), height 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  .brandmark .logo-light {
+    display: none;
+  }
+
+  /* En Home sin scroll: logo monocromático light para máxima visibilidad sobre el fondo oscuro Y TAMAÑO MÁS GRANDE */
+  .site-header.is-home:not(.is-scrolled) .brandmark .logo-normal {
+    display: none;
+  }
+
+  .site-header.is-home:not(.is-scrolled) .brandmark .logo-light {
+    display: block;
+    height: 72px;
+    width: 72px;
+  }
+
+  /* En Home con scroll o en otras páginas: logo normal a color y tamaño estándar */
+  .site-header.is-home.is-scrolled .brandmark .logo-normal {
+    display: block;
+    height: 58px;
+    width: 58px;
+  }
+
+  .site-header.is-home.is-scrolled .brandmark .logo-light {
+    display: none;
+  }
+
+  /* Oscurecimiento sutil en hover sin cambiar de tamaño ni generar brillo */
+  .brandmark:hover .brand-logo {
+    filter: brightness(0.82);
+    opacity: 0.9;
+  }
+
+  .site-header.is-home:not(.is-scrolled) .brandmark:hover .logo-light {
+    filter: brightness(0.8);
+    opacity: 0.85;
+  }
+
+  @media (min-width: 768px) {
+    .brandmark .brand-logo {
+      height: 68px;
+      width: 68px;
+    }
+
+    .site-header.is-home:not(.is-scrolled) .brandmark .logo-light {
+      height: 86px;
+      width: 86px;
+    }
+
+    .site-header.is-home.is-scrolled .brandmark .logo-normal {
+      height: 68px;
+      width: 68px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .brandmark .brand-logo {
+      height: 74px;
+      width: 74px;
+    }
+
+    .site-header.is-home:not(.is-scrolled) .brandmark .logo-light {
+      height: 96px;
+      width: 96px;
+    }
+
+    .site-header.is-home.is-scrolled .brandmark .logo-normal {
+      height: 74px;
+      width: 74px;
+    }
+  }
+
+  /* ==========================================================================
+     Desktop Navigation & Mega Menu
+     ========================================================================== */
+  .desktop-nav {
+    display: none;
+    align-items: center;
+    gap: 2.2rem;
+  }
+
+  .dlink {
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: var(--forest);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    position: relative;
+    transition: color var(--transition-fast);
+  }
+
+  .dlink:hover,
+  .dlink.active {
+    color: var(--leaf);
+  }
+
+  .dlink.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--gold);
+    border-radius: var(--radius-full);
+  }
+
+  .mega-trigger-wrap {
+    position: relative;
+  }
+
+  .mega-trigger-wrap .chevron {
+    transition: transform var(--transition-fast);
+  }
+
+  .desktop-megamenu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    min-width: 250px;
+    width: max-content;
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 1.1rem 1.4rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--transition-normal), transform var(--transition-normal), visibility var(--transition-normal);
+    z-index: 100;
+  }
+
+  .mega-trigger-wrap:hover .desktop-megamenu,
+  .mega-trigger-wrap:focus-within .desktop-megamenu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .mega-trigger-wrap:hover .chevron {
+    transform: rotate(180deg);
+  }
+
+  .mega-links-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .mega-cat-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
+  }
+
+  .mega-cat-link:hover {
+    color: var(--forest);
+    transform: translateX(3px);
+  }
+
+  .mega-cat-link.all-products {
+    font-weight: 700;
+    color: var(--forest);
+    margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+  }
+
+  .mega-cat-link.all-products .arrow {
+    display: inline-block;
+    transition: transform var(--transition-fast);
+  }
+
+  .mega-cat-link.all-products:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .mega-empty-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .mega-empty-text {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0;
+  }
+
+  /* ==========================================================================
+     Header Right Actions
+     ========================================================================== */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .desktop-social {
+    display: none;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .header-wa-cta {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.82rem;
+  }
+
+  .wa-label {
+    display: none;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+  }
+
+  @media (min-width: 768px) {
+    .wa-label {
+      display: inline;
+    }
+    .header-wa-cta {
+      padding: 0.65rem 1.15rem;
+      font-size: 0.88rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .desktop-nav {
+      display: flex;
+    }
+    .desktop-social {
+      display: flex;
+    }
+    .mobile-menu-toggle {
+      display: none;
+    }
+  }
+
+  /* ==========================================================================
+     Mobile Nav Overlay (Full Screen)
+     ========================================================================== */
+  .mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background-color: var(--forest);
+    color: var(--cream);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .mobile-nav-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .overlay-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 1.4rem;
+    padding-bottom: 2rem;
+  }
+
+  .overlay-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.8rem;
+  }
+
+  .brandmark-light .brand-logo {
+    height: 64px;
+    width: 64px;
+  }
+
+  .close-btn {
+    background: rgba(248, 223, 200, 0.16);
+    color: var(--cream);
+  }
+
+  .close-btn:hover {
+    background: rgba(248, 223, 200, 0.3);
+  }
+
+  .overlay-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
+
+  .overlay-link {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    font-weight: 500;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .overlay-link:hover {
+    color: var(--gold);
+    transform: translateX(6px);
+  }
+
+  .overlay-link .num {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .overlay-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(248, 223, 200, 0.18);
+  }
+
+  .overlay-contact-info {
+    font-size: 0.85rem;
+    color: var(--lilac-soft);
+    line-height: 1.6;
+    margin-bottom: 1.4rem;
+  }
+
+  .overlay-socials {
+    display: flex;
+    gap: 0.8rem;
+  }
+
+  .overlay-socials .icon-btn {
+    background: rgba(248, 223, 200, 0.14);
+    color: var(--cream);
+  }
+
+  .overlay-socials .icon-btn:hover {
+    background: var(--cream);
+    color: var(--forest);
+  }
+</style>
+
+<script>
+  function setupNavigation() {
+    const openBtn = document.getElementById('btn-open-mobile-menu');
+    const closeBtn = document.getElementById('btn-close-mobile-menu');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const overlayLinks = overlay?.querySelectorAll('.overlay-link');
+
+    function openMenu() {
+      overlay?.classList.add('is-active');
+      overlay?.setAttribute('aria-hidden', 'false');
+      openBtn?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      overlay?.classList.remove('is-active');
+      overlay?.setAttribute('aria-hidden', 'true');
+      openBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    openBtn?.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+
+    overlayLinks?.forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Escuchar Escape para cerrar menú
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList.contains('is-active')) {
+        closeMenu();
+      }
+    });
+
+    // Control de desplazamiento para navbar en Home: de transparente a su color original
+    const header = document.getElementById('site-header');
+    if (header && header.classList.contains('is-home')) {
+      const handleScroll = () => {
+        const scrolled = window.scrollY > 40;
+        header.classList.toggle('is-scrolled', scrolled);
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+    }
+  }
+
+  setupNavigation();
+  document.addEventListener('astro:after-swap', setupNavigation);
+</script>

@@ -1,0 +1,23 @@
+---
+import WhatsAppIcon from './WhatsAppIcon.astro';
+import InstagramIcon from './InstagramIcon.astro';
+import FacebookIcon from './FacebookIcon.astro';
+
+interface Props {
+  name: 'whatsapp' | 'instagram' | 'facebook';
+  size?: number | string;
+  class?: string;
+}
+
+const { name, size = 20, class: className = '' } = Astro.props;
+---
+
+{
+  name === 'whatsapp' ? (
+    <WhatsAppIcon size={size} class={className} />
+  ) : name === 'instagram' ? (
+    <InstagramIcon size={size} class={className} />
+  ) : name === 'facebook' ? (
+    <FacebookIcon size={size} class={className} />
+  ) : null
+}

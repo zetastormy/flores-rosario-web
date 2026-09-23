@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Design Tokens - Flores del Rosario
+   Extracted from prototypes in docs/prototypes/flores-del-rosario-mockups.html
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --cream: #F8DFC8;
+  --cream-soft: #FBEADC;
+  --paper: #FFFBF5;
+  --forest: #1B4D3E;
+  --forest-light: #2E6350;
+  --leaf: #4F7A5B;
+  --leaf-soft: #DCE7DE;
+  --lilac: #B79BC7;
+  --lilac-soft: #EFE6F2;
+  --gold: #D6A94A;
+  --gold-soft: #F3E3C4;
+  --ink: #26302B;
+  --ink-soft: #5B6660;
+  --whatsapp: #25D366;
+  --whatsapp-dark: #0B2B1A;
+
+  /* Lines & Shadows */
+  --line: rgba(27, 77, 62, 0.16);
+  --shadow-sm: 0 4px 12px rgba(27, 77, 62, 0.08);
+  --shadow-md: 0 12px 28px -8px rgba(27, 77, 62, 0.22);
+  --shadow-lg: 0 18px 40px -18px rgba(27, 77, 62, 0.35);
+
+  /* Typography */
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Radii */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.4rem;
+  --radius-xl: 2.2rem;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+}

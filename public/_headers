@@ -1,0 +1,11 @@
+# Cloudflare Pages Headers
+# Cache static assets forever (Astro hashes asset filenames)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Security headers for all routes
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Robots-Tag: noindex, nofollow

@@ -1,0 +1,817 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  getPaginaInicio,
+  getProductosDestacados,
+  getCategorias,
+  getSitioConfig,
+} from '../lib/sanity.queries';
+import { urlForImage } from '../lib/sanity';
+import WhatsAppIcon from '../components/icons/WhatsAppIcon.astro';
+import { ArrowRight, Sprout } from '@lucide/astro';
+
+const paginaInicio = await getPaginaInicio();
+const productosDestacados = await getProductosDestacados();
+const categorias = await getCategorias();
+const sitioConfig = await getSitioConfig();
+
+// URL optimizada para foto de fondo del hero
+const heroImageUrl = paginaInicio.heroImagen
+  ? urlForImage(paginaInicio.heroImagen).width(1920).quality(85).auto('format').url()
+  : null;
+
+// Formateador de moneda en pesos chilenos
+const formatCLP = (amount: number) => {
+  return new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP',
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+---
+
+<BaseLayout
+  title={`${sitioConfig.nombreNegocio} — ${sitioConfig.subtitulo}`}
+  description={paginaInicio.heroBajada}
+  bannerAviso={paginaInicio.bannerAviso}
+>
+  <!-- Hero Section (Fondo con foto difuminada y gradiente sobrepuesto) -->
+  <section class="hero-section">
+    <div class="hero-bg-wrapper" aria-hidden="true">
+      {
+        heroImageUrl ? (
+          <img
+            src={heroImageUrl}
+            alt=""
+            class="hero-bg-img"
+            loading="eager"
+            fetchpriority="high"
+          />
+        ) : (
+          <div class="hero-bg-fallback" />
+        )
+      }
+      <div class="hero-bg-overlay" />
+    </div>
+
+    <div class="container hero-layout">
+      <div class="hero-content">
+        <h1 class="hero-title">{paginaInicio.heroTitulo}</h1>
+        <p class="hero-lead">
+          {paginaInicio.heroBajada}
+        </p>
+        <div class="hero-cta">
+          <a href="#catalogo" class="btn btn-hero-catalog" id="btn-hero-catalogo">
+            {paginaInicio.heroBotonCatalogo}
+          </a>
+          <a
+            href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent('¡Hola! Quisiera consultar por un arreglo floral o materiales de jardinería con entrega en Puerto Montt o alrededores.')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-hero-whatsapp"
+            id="btn-hero-whatsapp"
+          >
+            <WhatsAppIcon size={18} />
+            {paginaInicio.heroBotonWhatsapp}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catálogo de Destacados (Mobile-First Grid) -->
+  <section class="products-section" id="catalogo">
+    <div class="container">
+      <div class="section-header-row">
+        <div>
+          <span class="section-kicker">Catálogo & Botánica</span>
+          <h2 class="section-title">Destacados de la Temporada</h2>
+        </div>
+        <a href="/productos" class="link-all-products">
+          Ver todo el catálogo <ArrowRight size={16} class="arrow" aria-hidden="true" />
+        </a>
+      </div>
+
+      <!-- Categorías / Chips Dinámicos integrados bajo el título -->
+      {
+        categorias && categorias.length > 0 && (
+          <div class="categories-filter-bar">
+            <div class="chips-wrapper" role="tablist" aria-label="Categorías de productos">
+              {categorias.map((cat, index) => (
+                <a
+                  href={`/productos${cat.slug.current !== 'todas' ? `?categoria=${cat.slug.current}` : ''}`}
+                  class={`chip ${index === 0 ? 'active' : ''}`}
+                  id={`chip-${cat.slug.current}`}
+                >
+                  {cat.nombre}
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      {
+        productosDestacados && productosDestacados.length > 0 ? (
+          <div class="products-grid">
+            {productosDestacados.map((item) => (
+              <article class="product-card">
+                <div class={`product-photo ${item.tone || 'tone-a'}`}>
+                  {item.imagen && (
+                    <img
+                      src={urlForImage(item.imagen).width(400).height(300).url()}
+                      alt={item.nombre}
+                      class="pcard-img"
+                    />
+                  )}
+                  {item.etiqueta && (
+                    <span class={`tag ${item.tipoEtiqueta || ''}`}>{item.etiqueta}</span>
+                  )}
+                </div>
+                <div class="product-body">
+                  <h3 class="product-name">{item.nombre}</h3>
+                  <p class="product-desc">{item.descripcion}</p>
+                  <div class="product-footer">
+                    <div class="price-wrap">
+                      <span class="price">{formatCLP(item.precio)}</span>
+                      {item.unidad && <span class="unit">{item.unidad}</span>}
+                    </div>
+                    <a
+                      href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola! Quiero pedir el producto "${item.nombre}" (${formatCLP(item.precio)}). ¿Tienen disponibilidad de entrega en Puerto Montt o alrededores?`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="btn-mini-wa"
+                      aria-label={`Pedir ${item.nombre} por WhatsApp`}
+                    >
+                      <WhatsAppIcon size={18} />
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="empty-state-box">
+            <div class="empty-icon-wrap" aria-hidden="true">
+              <Sprout size={36} class="empty-icon" />
+            </div>
+            <h3 class="empty-title">No existen productos</h3>
+            <p class="empty-desc">
+              Por el momento no hay productos destacados disponibles en el catálogo. Te invitamos a consultarnos directamente por WhatsApp para pedidos especiales o arreglos a medida.
+            </p>
+            <a
+              href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent('¡Hola! Quisiera consultar por disponibilidad de flores o pedidos especiales en Flores del Rosario.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-whatsapp empty-wa-btn"
+            >
+              <WhatsAppIcon size={18} />
+              Consultar por WhatsApp
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Banner Promocional Intermedio (Prototipo docs) -->
+  <section class="promo-strip-section">
+    <div class="container">
+      <div class="promo-card-main">
+        <div class="promo-copy">
+          <h2>{paginaInicio.promoTitulo}</h2>
+          <p>{paginaInicio.promoTexto}</p>
+        </div>
+        <a
+          href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent('¡Hola! Quisiera consultar por disponibilidad y pedidos especiales en Flores del Rosario.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-whatsapp promo-btn"
+        >
+          <WhatsAppIcon size={20} />
+          {paginaInicio.promoBoton}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Historia & Compromiso Artesanal -->
+  <section class="about-section" id="historia">
+    <div class="container about-grid">
+      <div class="about-visual">
+        <div class="about-photo-shape tone-b">
+          {
+            paginaInicio.historiaImagen && (
+              <img
+                src={urlForImage(paginaInicio.historiaImagen).width(800).height(900).url()}
+                alt={paginaInicio.historiaTitulo}
+                class="about-img"
+              />
+            )
+          }
+        </div>
+      </div>
+      <div class="about-content">
+        <span class="section-kicker">{paginaInicio.historiaKicker}</span>
+        <h2 class="section-title">{paginaInicio.historiaTitulo}</h2>
+        <p class="about-text">
+          {paginaInicio.historiaTexto}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Action Button WhatsApp (Mobile) -->
+  <a
+    href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(sitioConfig.mensajeWhatsAppDefault)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="whatsapp-fab"
+    aria-label="Abrir chat de WhatsApp para pedidos"
+    id="whatsapp-floating-button"
+  >
+    <WhatsAppIcon size={28} />
+  </a>
+</BaseLayout>
+
+<style>
+  /* ==========================================================================
+     Hero Section (Foto de Fondo Difuminada + Gradiente Botánico Continuo)
+     ========================================================================== */
+  .hero-section {
+    position: relative;
+    overflow: hidden;
+    padding-top: calc(105px + 2.8rem);
+    padding-bottom: 3.5rem;
+    background-color: var(--paper);
+  }
+
+  .hero-bg-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 75%,
+      rgba(0, 0, 0, 0.92) 83%,
+      rgba(0, 0, 0, 0.70) 90%,
+      rgba(0, 0, 0, 0.28) 96%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 75%,
+      rgba(0, 0, 0, 0.92) 83%,
+      rgba(0, 0, 0, 0.70) 90%,
+      rgba(0, 0, 0, 0.28) 96%,
+      transparent 100%
+    );
+  }
+
+  .hero-bg-img {
+    position: absolute;
+    inset: -32px;
+    width: calc(100% + 64px);
+    height: calc(100% + 64px);
+    object-fit: cover;
+    object-position: center;
+    filter: blur(14px) brightness(0.72) saturate(1.2);
+    transform: scale(1.08);
+  }
+
+  .hero-bg-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+  }
+
+  .hero-bg-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(14, 38, 30, 0.88) 0%,
+      rgba(27, 77, 62, 0.74) 30%,
+      rgba(27, 77, 62, 0.78) 58%,
+      rgba(36, 85, 68, 0.82) 78%,
+      rgba(60, 105, 80, 0.88) 90%,
+      rgba(79, 122, 91, 0.92) 100%
+    );
+  }
+
+  .hero-layout {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-content {
+    max-width: 44rem;
+  }
+
+  .eyebrow {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--gold);
+    font-size: 1.05rem;
+    display: inline-block;
+    margin-bottom: 0.65rem;
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+  }
+
+  .hero-title {
+    font-size: clamp(2.3rem, 6.8vw, 3.8rem);
+    font-weight: 600;
+    color: #FFFFFF;
+    line-height: 1.1;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero-lead {
+    color: var(--cream-soft);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-top: 1.1rem;
+    max-width: 38rem;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 0.9rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-hero-catalog {
+    background: var(--cream);
+    color: var(--forest);
+    font-weight: 700;
+    padding: 0.9rem 1.6rem;
+    border-radius: var(--radius-full);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    transition: transform var(--transition-fast), background var(--transition-normal), color var(--transition-normal);
+  }
+
+  .btn-hero-catalog:hover {
+    background: #FFFFFF;
+    color: var(--forest-light);
+    transform: translateY(-2px);
+  }
+
+  .btn-hero-whatsapp {
+    background: var(--whatsapp);
+    color: var(--whatsapp-dark);
+    font-weight: 700;
+    padding: 0.9rem 1.6rem;
+    border-radius: var(--radius-full);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+    transition: transform var(--transition-fast), filter var(--transition-fast);
+  }
+
+  .btn-hero-whatsapp:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+  }
+
+  @media (min-width: 768px) {
+    .hero-section {
+      padding-top: calc(115px + 3.5rem);
+      padding-bottom: 6rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 5vw, 4rem);
+    }
+
+    .hero-lead {
+      font-size: 1.15rem;
+    }
+  }
+
+  /* ==========================================================================
+     Products Section & Integrated Category Filters
+     ========================================================================== */
+  .products-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.4rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .section-kicker {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--gold);
+    font-size: 0.98rem;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.7rem, 4.5vw, 2.3rem);
+  }
+
+  .link-all-products {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--forest);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: color var(--transition-fast);
+  }
+
+  .link-all-products .arrow {
+    transition: transform var(--transition-fast);
+  }
+
+  .link-all-products:hover {
+    color: var(--leaf);
+  }
+
+  .link-all-products:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .categories-filter-bar {
+    margin-bottom: 2rem;
+  }
+
+  .chips-wrapper {
+    display: flex;
+    gap: 0.65rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0.35rem;
+  }
+
+  .chips-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex: none;
+    padding: 0.55rem 1.25rem;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 600;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    color: var(--ink-soft);
+    transition: all var(--transition-fast);
+  }
+
+  .chip:hover {
+    border-color: var(--forest);
+    color: var(--forest);
+    transform: translateY(-1px);
+  }
+
+  .chip.active {
+    background: var(--lilac);
+    color: var(--forest);
+    border-color: var(--lilac);
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.6rem;
+  }
+
+  .product-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .product-photo {
+    height: 190px;
+    padding: 0.9rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .pcard-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-body {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+  }
+
+  .product-name {
+    font-size: 1.08rem;
+    line-height: 1.25;
+  }
+
+  .product-desc {
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .price-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .price {
+    font-weight: 700;
+    color: var(--forest);
+    font-size: 1.15rem;
+  }
+
+  .unit {
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+  }
+
+  .btn-mini-wa {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-full);
+    background: var(--whatsapp);
+    color: var(--whatsapp-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-fast);
+  }
+
+  .btn-mini-wa:hover {
+    transform: scale(1.1);
+  }
+
+  /* ==========================================================================
+     Promo Card Main
+     ========================================================================== */
+  .promo-strip-section {
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .promo-card-main {
+    background-color: var(--leaf-soft);
+    border-radius: var(--radius-xl);
+    padding: 2.2rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    text-align: center;
+    border: 1px solid rgba(79, 122, 91, 0.2);
+  }
+
+  .promo-copy h2 {
+    font-size: clamp(1.4rem, 3.5vw, 1.85rem);
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+
+  .promo-copy p {
+    color: var(--ink-soft);
+    font-size: 0.94rem;
+    line-height: 1.6;
+    max-width: 34rem;
+  }
+
+  .promo-btn {
+    padding: 0.85rem 1.8rem;
+    font-size: 0.94rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.6rem;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  @media (min-width: 768px) {
+    .promo-card-main {
+      padding: 3rem 3rem;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .promo-btn {
+      width: auto;
+      max-width: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  /* ==========================================================================
+     About Section
+     ========================================================================== */
+  .about-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    background-color: var(--paper);
+    border-top: 1px solid var(--line);
+  }
+
+  .about-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .about-visual {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .about-photo-shape {
+    width: 290px;
+    height: 315px;
+    max-width: 90vw;
+    border-radius: 58% 42% 46% 54% / 54% 48% 52% 46%;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .about-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-text {
+    color: var(--ink);
+    font-size: 0.98rem;
+    line-height: 1.7;
+    margin-top: 0.9rem;
+    margin-bottom: 0;
+    max-width: 34rem;
+  }
+
+  @media (min-width: 768px) {
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      align-items: center;
+      gap: 3.5rem;
+    }
+
+    .about-photo-shape {
+      width: 380px;
+      height: 415px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .about-grid {
+      grid-template-columns: 1fr 1.3fr;
+      gap: 5rem;
+    }
+
+    .about-photo-shape {
+      width: 440px;
+      height: 480px;
+    }
+  }
+
+  /* Tone Gradients */
+  .tone-a {
+    background: linear-gradient(155deg, #7fa487 0%, #4f7a5b 55%, #2e5142 100%);
+  }
+  .tone-b {
+    background: linear-gradient(155deg, #c9aed9 0%, #b79bc7 55%, #8b6d9d 100%);
+  }
+  .tone-c {
+    background: linear-gradient(155deg, #e9c57a 0%, #d6a94a 55%, #a9793b 100%);
+  }
+  .tone-d {
+    background: linear-gradient(155deg, #6d9481 0%, #3f6b54 55%, #1b4d3e 100%);
+  }
+
+  /* WhatsApp Floating Action Button */
+  .whatsapp-fab {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 90;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--whatsapp);
+    color: var(--whatsapp-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--transition-fast), filter var(--transition-fast);
+  }
+
+  .whatsapp-fab:hover {
+    transform: scale(1.08);
+    filter: brightness(1.05);
+  }
+
+  /* Empty State Plano (sin efecto flotante) */
+  .empty-state-box {
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 3rem 1.5rem;
+    margin: 1rem auto;
+    max-width: 580px;
+    box-shadow: none;
+  }
+
+  .empty-icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background-color: var(--leaf-soft);
+    color: var(--forest);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    border: 1px solid rgba(79, 122, 91, 0.2);
+  }
+
+  .empty-title {
+    font-size: 1.45rem;
+    color: var(--forest);
+    margin-bottom: 0.6rem;
+  }
+
+  .empty-desc {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.8rem;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .empty-wa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.6rem;
+    font-size: 0.92rem;
+  }
+</style>

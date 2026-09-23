@@ -1,0 +1,262 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import { getSitioConfig } from '../lib/sanity.queries';
+import WhatsAppIcon from '../components/icons/WhatsAppIcon.astro';
+import InstagramIcon from '../components/icons/InstagramIcon.astro';
+import FacebookIcon from '../components/icons/FacebookIcon.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  bannerAviso?: string;
+}
+
+const sitioConfig = await getSitioConfig();
+
+const {
+  title = `${sitioConfig.nombreNegocio} — ${sitioConfig.subtitulo}`,
+  description = 'Ramos frescos, flores de estación, arreglos y materiales de jardinería elaborados con dedicación. Entregas en Puerto Montt y alrededores.',
+  ogImage = '/assets/logo/flores_rosario_og.jpeg',
+  bannerAviso,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://floresrosario.pages.dev');
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Favicon monocromático adaptativo según tono del navegador (SVG prioritario) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/assets/logo/flores_rosario_dark.svg" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/assets/logo/flores_rosario_light.svg" media="(prefers-color-scheme: dark)" />
+    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/assets/logo/flores_rosario_dark.png" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <meta name="robots" content="index, follow" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Google Fonts Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Work+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Componente de Cabecera y Navegación Dinámica -->
+    <Header currentPath={Astro.url.pathname} bannerAviso={bannerAviso} />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <!-- Pie de página Dinámico basado en Sanity CMS -->
+    <footer class="site-footer" id="contacto">
+      <div class="container footer-content">
+        <div class="footer-brand">
+          <div class="footer-brand-header">
+            <a href="/" aria-label="Ir al inicio de Flores del Rosario">
+              <img
+                src="/assets/logo/flores_rosario_light.svg"
+                alt="Flores del Rosario"
+                width="80"
+                height="80"
+                class="footer-logo"
+              />
+            </a>
+          </div>
+          <p class="footer-desc">
+            Floristería artesanal, arreglos florales, plantas vivas y materiales de jardinería. Entregas a domicilio en Puerto Montt y alrededores.
+          </p>
+          <div class="footer-socials">
+            {
+              sitioConfig.instagramUrl && (
+                <a href={sitioConfig.instagramUrl} target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Instagram">
+                  <InstagramIcon size={20} class="icon" />
+                </a>
+              )
+            }
+            {
+              sitioConfig.facebookUrl && (
+                <a href={sitioConfig.facebookUrl} target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Facebook">
+                  <FacebookIcon size={20} class="icon" />
+                </a>
+              )
+            }
+            <a
+              href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(sitioConfig.mensajeWhatsAppDefault)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="icon-btn wa-social"
+              aria-label="WhatsApp"
+            >
+              <WhatsAppIcon size={20} class="icon" />
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h4>Navegación</h4>
+          <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/productos">Catálogo & Jardinería</a></li>
+            <li><a href="/blog">Blog Botánico</a></li>
+            <li><a href="/#historia">Nuestra Historia</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h4>Contacto & Entregas</h4>
+          <p class="contact-line">Entregas en Puerto Montt y alrededores</p>
+          <p class="contact-line">
+            WhatsApp: <a href={`https://wa.me/${sitioConfig.telefonoWhatsApp}`} class="wa-phone-link">+{sitioConfig.telefonoWhatsApp}</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="container footer-bottom">
+        <p>&copy; {new Date().getFullYear()} {sitioConfig.nombreNegocio}. Todos los derechos reservados.</p>
+        <p class="footer-tagline">Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp</p>
+      </div>
+    </footer>
+
+    <style>
+      /* Footer */
+      .site-footer {
+        background-color: var(--forest);
+        color: var(--cream-soft);
+        padding-top: 3.5rem;
+        padding-bottom: 2rem;
+        margin-top: 4rem;
+        border-top: 1px solid rgba(248, 223, 200, 0.15);
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      @media (min-width: 768px) {
+        .footer-content {
+          grid-template-columns: 1.5fr 1fr 1fr;
+        }
+      }
+
+      .footer-brand-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.25rem;
+      }
+
+      .footer-logo {
+        height: 88px;
+        width: 88px;
+        object-fit: contain;
+        display: block;
+        transition: transform var(--transition-fast);
+      }
+
+      .footer-logo:hover {
+        transform: scale(1.05);
+      }
+
+      .footer-desc {
+        color: #cfe0d6;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        max-width: 26rem;
+      }
+
+      .footer-socials {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1.2rem;
+      }
+
+      .footer-socials .icon-btn {
+        background: rgba(248, 223, 200, 0.14);
+        color: var(--cream-soft);
+      }
+
+      .footer-socials .icon-btn:hover {
+        background: var(--cream);
+        color: var(--forest);
+      }
+
+      .footer-links h4,
+      .footer-contact h4 {
+        color: var(--cream);
+        font-size: 0.98rem;
+        margin-bottom: 0.85rem;
+      }
+
+      .footer-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+
+      .footer-links a {
+        color: #cfe0d6;
+        font-size: 0.88rem;
+        transition: color var(--transition-fast);
+      }
+
+      .footer-links a:hover {
+        color: var(--cream);
+      }
+
+      .footer-contact .contact-line {
+        color: #cfe0d6;
+        font-size: 0.88rem;
+        line-height: 1.65;
+        margin-bottom: 0.35rem;
+      }
+
+      .wa-phone-link {
+        color: var(--gold-soft);
+        font-weight: 600;
+        text-decoration: underline;
+      }
+
+      .footer-bottom {
+        border-top: 1px solid rgba(248, 223, 200, 0.18);
+        margin-top: 2.4rem;
+        padding-top: 1.4rem;
+        font-size: 0.78rem;
+        color: #9bb5a6;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      @media (min-width: 768px) {
+        .footer-bottom {
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+    </style>
+  </body>
+</html>

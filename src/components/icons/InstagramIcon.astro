@@ -1,0 +1,23 @@
+---
+import { siInstagram } from 'simple-icons';
+
+interface Props {
+  size?: number | string;
+  class?: string;
+}
+
+const { size = 20, class: className = '' } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="currentColor"
+  class={`icon icon-instagram ${className}`.trim()}
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={siInstagram.path} />
+</svg>

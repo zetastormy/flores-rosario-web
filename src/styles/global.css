@@ -1,0 +1,209 @@
+@import './tokens.css';
+
+/* ==========================================================================
+   CSS Reset & Base (Mobile-First)
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--forest);
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+/* ==========================================================================
+   Utility & Common Classes (Mobile-First)
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Tablet & Desktop Scaling */
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    max-width: 1180px;
+  }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: transform var(--transition-fast), background var(--transition-normal), color var(--transition-normal);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--forest);
+  color: var(--cream);
+}
+
+.btn-primary:hover {
+  background: var(--forest-light);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--forest);
+  border: 1.5px solid var(--forest);
+}
+
+.btn-ghost:hover {
+  background: var(--leaf-soft);
+}
+
+.btn-whatsapp {
+  background: var(--whatsapp);
+  color: var(--whatsapp-dark);
+  font-weight: 700;
+}
+
+.btn-whatsapp:hover {
+  filter: brightness(1.05);
+}
+
+/* Tags & Badges */
+.tag {
+  display: inline-block;
+  padding: 0.28rem 0.7rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--gold-soft);
+  color: #7A5A1E;
+}
+
+.tag.lilac {
+  background: var(--lilac-soft);
+  color: #5B4467;
+}
+
+.tag.leaf {
+  background: var(--leaf-soft);
+  color: var(--forest);
+}
+
+/* Icon button */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--leaf-soft);
+  color: var(--forest);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background: var(--forest);
+  color: var(--cream);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Botanical Photographic Tones & Visual Atmosphere
+   ========================================================================== */
+.ph-photo {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  color: var(--paper);
+}
+
+.ph-photo .ph-caption {
+  position: relative;
+  z-index: 2;
+  font-size: 0.72rem;
+  font-style: italic;
+  font-family: var(--font-serif);
+  padding: 0.6rem 0.85rem;
+  background: linear-gradient(0deg, rgba(11, 43, 26, 0.48), transparent);
+  width: 100%;
+}
+
+.tone-a {
+  background: linear-gradient(155deg, #7FA487 0%, #4F7A5B 55%, #2E5142 100%);
+}
+
+.tone-b {
+  background: linear-gradient(155deg, #C9AED9 0%, #B79BC7 55%, #8B6D9D 100%);
+}
+
+.tone-c {
+  background: linear-gradient(155deg, #E9C57A 0%, #D6A94A 55%, #A9793B 100%);
+}
+
+.tone-d {
+  background: linear-gradient(155deg, #6D9481 0%, #3F6B54 55%, #1B4D3E 100%);
+}

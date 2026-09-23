@@ -129,10 +129,10 @@ const formatDate = (dateStr: string) => {
           href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent('¡Hola! Estuve leyendo el blog y tengo una duda sobre el cuidado de mis plantas.')}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="btn btn-whatsapp"
+          class="btn btn-whatsapp bcta-btn"
         >
           <WhatsAppIcon size={20} />
-          Consultar por WhatsApp
+          Consultar disponibilidad
         </a>
       </div>
     </div>
@@ -363,12 +363,22 @@ const formatDate = (dateStr: string) => {
     max-width: 36rem;
   }
 
+  .bcta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   @media (min-width: 768px) {
     .blog-cta-banner {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
       padding: 2.8rem 3rem;
+      gap: 2rem;
     }
   }
 

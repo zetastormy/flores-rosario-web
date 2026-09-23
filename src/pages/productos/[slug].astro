@@ -97,7 +97,7 @@ const waMessage = `¡Hola! Me interesa pedir "${producto.nombre}" (${formatCLP(p
 
           <!-- Cuidados o Especificaciones -->
           {
-            producto.cuidados && (
+            producto.cuidados && producto.cuidados.trim().length > 0 && (
               <div class="pd-care-box">
                 <div class="care-icon-title">
                   <Sprout size={18} aria-hidden="true" />

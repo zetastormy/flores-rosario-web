@@ -216,7 +216,6 @@ export const documents = [
     },
     descripcion:
       'Mezcla orgánica con turba, perlita, humus de lombriz y fibra de coco. Excelente retención de humedad y aireación.',
-    cuidados: 'Almacenar en un lugar fresco y protegido de la lluvia.',
     destacado: false,
     disponible: true,
   },
@@ -468,6 +467,15 @@ async function main() {
   try {
     await client.patch('drafts.sitioConfig').unset(['facebookUrl', 'horariosAtencion']).commit();
     console.log('  ✓ Campos facebookUrl y horariosAtencion eliminados de drafts.sitioConfig');
+  } catch (_) {}
+
+  // Limpiar cuidados de prod-6 (Sustrato premium)
+  try {
+    await client.patch('prod-6').unset(['cuidados']).commit();
+    console.log('  ✓ Campo cuidados eliminado de prod-6 (Sustrato)');
+  } catch (_) {}
+  try {
+    await client.patch('drafts.prod-6').unset(['cuidados']).commit();
   } catch (_) {}
 
   console.log('\n🎉 ¡Importación completada con éxito!');

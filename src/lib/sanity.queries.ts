@@ -68,7 +68,6 @@ export interface Articulo {
   titulo: string;
   slug: { current: string };
   fechaPublicacion: string;
-  tiempoLectura: string;
   resumen: string;
   imagenPortada?: any;
   tone?: string;
@@ -249,10 +248,10 @@ export async function getArticulos(): Promise<Articulo[]> {
         titulo,
         slug,
         fechaPublicacion,
-        tiempoLectura,
         resumen,
         imagenPortada,
-        categoria
+        categoria,
+        contenido
       }`
     );
     if (Array.isArray(data)) {
@@ -275,4 +274,44 @@ export async function getArticuloBySlug(slug: string): Promise<Articulo | undefi
     // fallback
   }
   return undefined;
+}
+
+/* ==========================================================================
+   Cálculo de Tiempo de Lectura en Cliente / SSG
+   ========================================================================== */
+
+export function extractTextFromPortableText(blocks: any): string {
+  if (!blocks) return '';
+  if (typeof blocks === 'string') return blocks;
+  if (!Array.isArray(blocks)) return '';
+
+  return blocks
+    .map((block) => {
+      if (block._type !== 'block' || !block.children) {
+        return '';
+      }
+      return block.children.map((child: any) => child.text || '').join('');
+    })
+    .join(' ');
+}
+
+export function calcularTiempoLectura(articulo?: { contenido?: any; resumen?: string }): string {
+  if (!articulo) return '1 min';
+
+  let textoCompleto = '';
+
+  if (articulo.contenido) {
+    textoCompleto += extractTextFromPortableText(articulo.contenido);
+  }
+
+  if (articulo.resumen) {
+    textoCompleto += ` ${articulo.resumen}`;
+  }
+
+  const palabras = textoCompleto.trim().split(/\s+/).filter(Boolean).length;
+  if (palabras === 0) return '1 min';
+
+  // Velocidad de lectura estándar: ~200 palabras por minuto
+  const minutos = Math.max(1, Math.ceil(palabras / 200));
+  return `${minutos} min`;
 }

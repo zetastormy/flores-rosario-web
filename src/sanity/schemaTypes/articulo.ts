@@ -26,11 +26,6 @@ export const articulo = {
       initialValue: () => new Date().toISOString(),
     },
     {
-      name: 'tiempoLectura',
-      title: 'Tiempo estimado de lectura (ej: 4 min)',
-      type: 'string',
-    },
-    {
       name: 'resumen',
       title: 'Resumen o Extracto',
       type: 'text',

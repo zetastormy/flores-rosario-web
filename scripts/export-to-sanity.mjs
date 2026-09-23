@@ -43,9 +43,7 @@ export const documents = [
     mensajeWhatsAppDefault:
       '¡Hola! Quisiera consultar por disponibilidad y entregas en Puerto Montt y alrededores.',
     instagramUrl: 'https://instagram.com/floresdelrosario.calbuco',
-    facebookUrl: 'https://facebook.com/floresdelrosario.calbuco',
     direccion: 'Entregas a domicilio en Puerto Montt y alrededores',
-    horariosAtencion: 'Lunes a Sábado: 09:00 - 19:00',
     bannerAviso:
       '🌿 Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp',
   },
@@ -461,6 +459,16 @@ async function main() {
       console.error(`  ❌ Error al importar ${doc._id}:`, err.message);
     }
   }
+
+  // Limpiar campos que ya no forman parte del esquema en sitioConfig y borradores
+  try {
+    await client.patch('sitioConfig').unset(['facebookUrl', 'horariosAtencion']).commit();
+    console.log('  ✓ Campos facebookUrl y horariosAtencion eliminados de sitioConfig');
+  } catch (_) {}
+  try {
+    await client.patch('drafts.sitioConfig').unset(['facebookUrl', 'horariosAtencion']).commit();
+    console.log('  ✓ Campos facebookUrl y horariosAtencion eliminados de drafts.sitioConfig');
+  } catch (_) {}
 
   console.log('\n🎉 ¡Importación completada con éxito!');
 }

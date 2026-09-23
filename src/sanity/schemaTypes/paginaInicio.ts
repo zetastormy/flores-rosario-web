@@ -12,16 +12,10 @@ export const paginaInicio = {
     },
     // Sección Hero
     {
-      name: 'heroKicker',
-      title: 'Kicker / Antetítulo del Hero',
-      type: 'string',
-      initialValue: 'Floristería artesanal & botánica',
-    },
-    {
       name: 'heroTitulo',
       title: 'Título Principal del Hero',
       type: 'string',
-      initialValue: 'Flores frescas con alma de barrio',
+      initialValue: 'Flores cultivadas con propósito',
       validation: (Rule: any) => Rule.required(),
     },
     {
@@ -30,7 +24,7 @@ export const paginaInicio = {
       type: 'text',
       rows: 3,
       initialValue:
-        'Diseños botánicos pensados con amor y dedicación. Arreglos florales, plantas y materiales de jardinería para celebrar, acompañar y transformar cada rincón, con entregas en Puerto Montt y alrededores.',
+        'Te invitamos a conectar con la naturaleza viviendo el momento presente por medio de la contemplación del cultivo artesanal de flores.',
       validation: (Rule: any) => Rule.required(),
     },
     {
@@ -68,7 +62,7 @@ export const paginaInicio = {
       name: 'historiaTitulo',
       title: 'Título de la Sección Historia',
       type: 'string',
-      initialValue: 'Flores elegidas una por una con dedicación',
+      initialValue: 'Un cambio radical',
     },
     {
       name: 'historiaTexto',
@@ -76,7 +70,7 @@ export const paginaInicio = {
       type: 'text',
       rows: 5,
       initialValue:
-        'Nacimos en el sur de Chile con la convicción de devolverle a las flores y a la botánica su lugar en la vida diaria. Seleccionamos flores frescas cada mañana, cultivamos variedades adaptadas a nuestro clima húmedo y proveemos insumos de jardinería confiables para cuidar la tierra, con entregas en Puerto Montt y alrededores.',
+        'Nacimos en el sur de Chile exactamente en la comuna de Calbuco, llegamos hace 4 años desde la ciudad de Puerto Montt buscando un lugar que nos entregue calma en un momento complejo de salud mental que vivíamos con uno de nuestros hijos.\n\nEste lugar se transformó en nuestro refugio y comencé a cultivar en un terreno el cual supuestamente no servía para ello, sin embargo, pudimos cosechar nuestros primeros cultivos y eso nos generó una gran emoción. Este fue el impulso que me llevó a enamorarme poco a poco de los cultivos, pero especialmente de las flores que hoy quiero compartir con todos.',
     },
     {
       name: 'historiaImagen',
@@ -97,7 +91,7 @@ export const paginaInicio = {
       type: 'text',
       rows: 2,
       initialValue:
-        'Escríbenos directamente a nuestro WhatsApp para pedidos personalizados, ramos de ocasión o asesoramiento botánico.',
+        'Realizamos ramos de ocasión, arreglos personalizados, plantas en maceta y materiales de jardinería con entregas en Puerto Montt y alrededores.',
     },
     {
       name: 'promoBoton',

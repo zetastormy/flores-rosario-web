@@ -8,7 +8,7 @@ import { ArrowLeft } from '@lucide/astro';
 
 export async function getStaticPaths() {
   const articulos = await getArticulos();
-  return articulos.map((articulo) => ({
+  return (articulos || []).map((articulo) => ({
     params: { slug: articulo.slug.current },
     props: { articulo },
   }));
@@ -28,6 +28,17 @@ const relacionados = todos
 
 const shareUrl = new URL(Astro.url.pathname, Astro.site || 'https://floresrosario.pages.dev').toString();
 const shareText = `Te comparto este artículo de Flores del Rosario: "${articulo.titulo}"`;
+
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  return new Intl.DateTimeFormat('es-CL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(d);
+};
 ---
 
 <BaseLayout
@@ -64,7 +75,7 @@ const shareText = `Te comparto este artículo de Flores del Rosario: "${articulo
       <header class="article-header">
         <div class="article-meta">
           {articulo.categoria && <span class="tag leaf">{articulo.categoria}</span>}
-          <span class="meta-date">{articulo.fechaPublicacion}</span>
+          <span class="meta-date">{formatDate(articulo.fechaPublicacion)}</span>
           <span class="meta-dot">·</span>
           <span class="meta-time">{articulo.tiempoLectura} de lectura</span>
         </div>

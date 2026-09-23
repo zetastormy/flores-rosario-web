@@ -14,24 +14,26 @@ export const sitioConfig = {
       name: 'subtitulo',
       title: 'Subtítulo / Eslogan',
       type: 'string',
-      initialValue: 'Floristería artesanal, botánica & jardinería',
+      initialValue: 'flores con propósito',
     },
     {
       name: 'telefonoWhatsApp',
       title: 'Número de WhatsApp (con código de país)',
       type: 'string',
-      description: 'Ejemplo: 56912345678',
+      initialValue: '56966223508',
+      description: 'Ejemplo: 56966223508',
     },
     {
       name: 'mensajeWhatsAppDefault',
       title: 'Mensaje predeterminado de WhatsApp',
       type: 'string',
-      initialValue: '¡Hola! Quisiera consultar por arreglos florales o materiales de jardinería.',
+      initialValue: '¡Hola! Quisiera consultar por disponibilidad.',
     },
     {
       name: 'instagramUrl',
       title: 'Enlace de Instagram',
       type: 'url',
+      initialValue: 'https://instagram.com/floresdelrosario_cl',
     },
     {
       name: 'direccion',
@@ -44,6 +46,7 @@ export const sitioConfig = {
       name: 'bannerAviso',
       title: 'Aviso destacado en cabecera (opcional)',
       type: 'string',
+      initialValue: '🌿 Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp',
     },
   ],
 };

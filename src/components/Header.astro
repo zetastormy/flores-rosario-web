@@ -3,7 +3,7 @@ import { getSitioConfig, getCategorias } from '../lib/sanity.queries';
 import WhatsAppIcon from './icons/WhatsAppIcon.astro';
 import InstagramIcon from './icons/InstagramIcon.astro';
 import FacebookIcon from './icons/FacebookIcon.astro';
-import { Menu, X, ChevronDown } from '@lucide/astro';
+import { Menu, X, ChevronDown, ArrowRight } from '@lucide/astro';
 
 interface Props {
   currentPath?: string;
@@ -33,12 +33,19 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
   <!-- Cabecera Principal -->
   <header class={`site-header ${isHome ? 'is-home' : ''}`} id="site-header">
   <div class="container header-container">
-    <!-- Brandmark (Logo Normal no monocromático en SVG) -->
+    <!-- Brandmark (Logo Normal a color / Monocromático light cuando no se haya scrolleado en Home) -->
     <a href="/" class="brandmark" aria-label="Ir al inicio de Flores del Rosario">
       <img
         src="/assets/logo/flores_rosario.svg"
         alt="Flores del Rosario"
-        class="brand-logo"
+        class="brand-logo logo-normal"
+        width="62"
+        height="62"
+      />
+      <img
+        src="/assets/logo/flores_rosario_light.svg"
+        alt="Flores del Rosario"
+        class="brand-logo logo-light"
         width="62"
         height="62"
       />
@@ -63,23 +70,31 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
         <!-- Submenú Desplegable de Categorías -->
         <div class="desktop-megamenu" id="desktop-megamenu" role="region" aria-label="Submenú de productos">
           <div class="mega-categories">
-            <span class="mega-kicker">Categorías</span>
-            <ul class="mega-links-list">
-              {
-                categorias.map((cat) => (
+            {
+              categorias && categorias.length > 0 ? (
+                <ul class="mega-links-list">
+                  {categorias.map((cat) => (
+                    <li>
+                      <a href={`/productos?categoria=${cat.slug.current}`} class="mega-cat-link">
+                        {cat.nombre}
+                      </a>
+                    </li>
+                  ))}
                   <li>
-                    <a href={`/productos?categoria=${cat.slug.current}`} class="mega-cat-link">
-                      {cat.nombre}
+                    <a href="/productos" class="mega-cat-link all-products">
+                      Ver todos los productos <ArrowRight size={15} class="arrow" aria-hidden="true" />
                     </a>
                   </li>
-                ))
-              }
-              <li>
-                <a href="/productos" class="mega-cat-link all-products">
-                  Ver todos los productos &rarr;
-                </a>
-              </li>
-            </ul>
+                </ul>
+              ) : (
+                <div class="mega-empty-wrap">
+                  <p class="mega-empty-text">No existen categorías</p>
+                  <a href="/productos" class="mega-cat-link all-products">
+                    Ver todos los productos <ArrowRight size={15} class="arrow" aria-hidden="true" />
+                  </a>
+                </div>
+              )
+            }
           </div>
         </div>
       </div>
@@ -249,7 +264,7 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     background-color: rgba(14, 38, 30, 0.45);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid transparent;
   }
 
   .top-announcement {
@@ -279,7 +294,7 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
   /* Modo transparente sobre el Hero en Home */
   .site-header.is-home {
     background-color: transparent;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid transparent;
   }
 
   .site-header.is-home .dlink {
@@ -299,12 +314,25 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     background-color: var(--gold);
   }
 
-  .site-header.is-home .icon-btn {
+  /* Botón de Instagram y acciones en Home sin scroll (fondo oscuro) */
+  .site-header.is-home:not(.is-scrolled) .icon-btn {
+    background: rgba(255, 255, 255, 0.16);
     color: var(--paper);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .site-header.is-home:not(.is-scrolled) .icon-btn:hover {
+    background: var(--cream);
+    color: var(--forest);
+    border-color: var(--cream);
   }
 
   .site-header.is-home .mobile-menu-toggle {
     color: var(--paper);
+    background: transparent;
+    border: none;
   }
 
   /* Estado cuando el usuario hace scroll hacia abajo en Home */
@@ -337,7 +365,14 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
   }
 
   .site-header.is-home.is-scrolled .icon-btn {
+    background: var(--leaf-soft);
     color: var(--forest);
+    border: 1px solid transparent;
+  }
+
+  .site-header.is-home.is-scrolled .icon-btn:hover {
+    background: var(--forest);
+    color: var(--cream);
   }
 
   .site-header.is-home.is-scrolled .mobile-menu-toggle {
@@ -365,11 +400,44 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     height: 58px;
     width: 58px;
     object-fit: contain;
-    transition: transform var(--transition-fast);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), height 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter var(--transition-fast), opacity var(--transition-fast);
   }
 
+  .brandmark .logo-light {
+    display: none;
+  }
+
+  /* En Home sin scroll: logo monocromático light para máxima visibilidad sobre el fondo oscuro Y TAMAÑO MÁS GRANDE */
+  .site-header.is-home:not(.is-scrolled) .brandmark .logo-normal {
+    display: none;
+  }
+
+  .site-header.is-home:not(.is-scrolled) .brandmark .logo-light {
+    display: block;
+    height: 72px;
+    width: 72px;
+  }
+
+  /* En Home con scroll o en otras páginas: logo normal a color y tamaño estándar */
+  .site-header.is-home.is-scrolled .brandmark .logo-normal {
+    display: block;
+    height: 58px;
+    width: 58px;
+  }
+
+  .site-header.is-home.is-scrolled .brandmark .logo-light {
+    display: none;
+  }
+
+  /* Oscurecimiento sutil en hover sin cambiar de tamaño ni generar brillo */
   .brandmark:hover .brand-logo {
-    transform: scale(1.05);
+    filter: brightness(0.82);
+    opacity: 0.9;
+  }
+
+  .site-header.is-home:not(.is-scrolled) .brandmark:hover .logo-light {
+    filter: brightness(0.8);
+    opacity: 0.85;
   }
 
   @media (min-width: 768px) {
@@ -377,10 +445,30 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
       height: 68px;
       width: 68px;
     }
+
+    .site-header.is-home:not(.is-scrolled) .brandmark .logo-light {
+      height: 86px;
+      width: 86px;
+    }
+
+    .site-header.is-home.is-scrolled .brandmark .logo-normal {
+      height: 68px;
+      width: 68px;
+    }
   }
 
   @media (min-width: 1024px) {
     .brandmark .brand-logo {
+      height: 74px;
+      width: 74px;
+    }
+
+    .site-header.is-home:not(.is-scrolled) .brandmark .logo-light {
+      height: 96px;
+      width: 96px;
+    }
+
+    .site-header.is-home.is-scrolled .brandmark .logo-normal {
       height: 74px;
       width: 74px;
     }
@@ -437,12 +525,13 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     top: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(10px);
-    width: 240px;
+    min-width: 250px;
+    width: max-content;
     background-color: var(--paper);
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
-    padding: 1.2rem 1.4rem;
+    padding: 1.1rem 1.4rem;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -460,15 +549,6 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
 
   .mega-trigger-wrap:hover .chevron {
     transform: rotate(180deg);
-  }
-
-  .mega-kicker {
-    font-family: var(--font-serif);
-    font-style: italic;
-    color: var(--gold);
-    font-size: 0.88rem;
-    display: block;
-    margin-bottom: 0.8rem;
   }
 
   .mega-links-list {
@@ -496,7 +576,33 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
   .mega-cat-link.all-products {
     font-weight: 700;
     color: var(--forest);
-    margin-top: 0.6rem;
+    margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+  }
+
+  .mega-cat-link.all-products .arrow {
+    display: inline-block;
+    transition: transform var(--transition-fast);
+  }
+
+  .mega-cat-link.all-products:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .mega-empty-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .mega-empty-text {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0;
   }
 
   /* ==========================================================================

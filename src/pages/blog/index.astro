@@ -3,12 +3,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getArticulos, getSitioConfig } from '../../lib/sanity.queries';
 import { urlForImage } from '../../lib/sanity';
 import WhatsAppIcon from '../../components/icons/WhatsAppIcon.astro';
-import { Sprout } from '@lucide/astro';
+import { Sprout, ArrowRight, BookOpen } from '@lucide/astro';
 
 const articulos = await getArticulos();
 const sitioConfig = await getSitioConfig();
 
 const tagsBlog = ['Todos', 'Primavera', 'Verano', 'Otoño', 'Invierno', 'Cuidados generales'];
+
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  return new Intl.DateTimeFormat('es-CL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(d);
+};
 ---
 
 <BaseLayout
@@ -19,10 +30,6 @@ const tagsBlog = ['Todos', 'Primavera', 'Verano', 'Otoño', 'Invierno', 'Cuidado
   <section class="blog-header-section">
     <div class="container">
       <div class="bheader-content">
-        <div class="eyebrow-mark">
-          <Sprout size={18} class="sprig-mini" aria-hidden="true" />
-          Temporada actual: Primavera en el Sur
-        </div>
         <h1 class="bheader-title">Blog Botánico & Consejos</h1>
         <p class="bheader-desc">
           Aprende a cuidar tus flores frescas, preparar la tierra para cada estación y elegir las mejores plantas para tu hogar en el sur.
@@ -32,69 +39,83 @@ const tagsBlog = ['Todos', 'Primavera', 'Verano', 'Otoño', 'Invierno', 'Cuidado
   </section>
 
   <!-- Chips de Filtro por Época / Tema -->
-  <div class="blog-filters-strip">
-    <div class="container">
-      <div class="chiprow" role="tablist" aria-label="Temas del blog">
-        {
-          tagsBlog.map((tag, idx) => (
-            <button
-              class={`chip blog-chip ${idx === 0 ? 'active' : ''}`}
-              data-blog-tag={tag.toLowerCase()}
-              role="tab"
-              aria-selected={idx === 0 ? 'true' : 'false'}
-            >
-              {tag}
-            </button>
-          ))
-        }
+  {
+    articulos && articulos.length > 0 && (
+      <div class="blog-filters-strip">
+        <div class="container">
+          <div class="chiprow" role="tablist" aria-label="Temas del blog">
+            {tagsBlog.map((tag, idx) => (
+              <button
+                class={`chip blog-chip ${idx === 0 ? 'active' : ''}`}
+                data-blog-tag={tag.toLowerCase()}
+                role="tab"
+                aria-selected={idx === 0 ? 'true' : 'false'}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    )
+  }
 
   <!-- Grilla de Artículos -->
   <section class="blog-list-section">
     <div class="container">
-      <div class="blog-grid" id="blog-grid">
-        {
-          articulos.map((art) => (
-            <article class="article-card" data-tag={art.categoria?.toLowerCase() || 'general'}>
-              <a href={`/blog/${art.slug.current}`} class="acard-photo-wrap">
-                <div class={`article-photo ${art.tone || 'tone-a'}`}>
-                  {art.imagenPortada && (
-                    <img
-                      src={urlForImage(art.imagenPortada).width(500).height(320).url()}
-                      alt={art.titulo}
-                      class="acard-img"
-                      loading="lazy"
-                    />
-                  )}
-                  {art.categoria && <span class="tag leaf acard-tag">{art.categoria}</span>}
-                </div>
-              </a>
-
-              <div class="article-body">
-                <div class="article-meta">
-                  <span class="meta-date">{art.fechaPublicacion}</span>
-                  <span class="meta-dot">·</span>
-                  <span class="meta-time">{art.tiempoLectura} de lectura</span>
-                </div>
-
-                <a href={`/blog/${art.slug.current}`}>
-                  <h2 class="article-title">{art.titulo}</h2>
+      {
+        articulos && articulos.length > 0 ? (
+          <div class="blog-grid" id="blog-grid">
+            {articulos.map((art) => (
+              <article class="article-card" data-tag={art.categoria?.toLowerCase() || 'general'}>
+                <a href={`/blog/${art.slug.current}`} class="acard-photo-wrap">
+                  <div class={`article-photo ${art.tone || 'tone-a'}`}>
+                    {art.imagenPortada && (
+                      <img
+                        src={urlForImage(art.imagenPortada).width(500).height(320).url()}
+                        alt={art.titulo}
+                        class="acard-img"
+                        loading="lazy"
+                      />
+                    )}
+                    {art.categoria && <span class="tag leaf acard-tag">{art.categoria}</span>}
+                  </div>
                 </a>
 
-                <p class="article-excerpt">{art.resumen}</p>
+                <div class="article-body">
+                  <div class="article-meta">
+                    <span class="meta-date">{formatDate(art.fechaPublicacion)}</span>
+                    <span class="meta-dot">·</span>
+                    <span class="meta-time">{art.tiempoLectura} de lectura</span>
+                  </div>
 
-                <div class="article-footer">
-                  <a href={`/blog/${art.slug.current}`} class="read-more-link">
-                    Leer artículo completo &rarr;
+                  <a href={`/blog/${art.slug.current}`}>
+                    <h2 class="article-title">{art.titulo}</h2>
                   </a>
+
+                  <p class="article-excerpt">{art.resumen}</p>
+
+                  <div class="article-footer">
+                    <a href={`/blog/${art.slug.current}`} class="read-more-link">
+                      Leer artículo completo <ArrowRight size={15} class="arrow" aria-hidden="true" />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))
-        }
-      </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="empty-blog-box">
+            <div class="empty-icon-wrap" aria-hidden="true">
+              <BookOpen size={40} class="empty-icon-svg" />
+            </div>
+            <h2 class="empty-title">No existen publicaciones</h2>
+            <p class="empty-desc">
+              Aún no hay publicaciones en nuestro cuaderno botánico. Muy pronto compartiremos guías estacionales, consejos de cuidado para flores y plantas, e historias desde nuestro jardín.
+            </p>
+          </div>
+        )
+      }
 
       <!-- Banner de Llamada a la Acción al Pie del Blog -->
       <div class="blog-cta-banner">
@@ -301,12 +322,19 @@ const tagsBlog = ['Todos', 'Primavera', 'Verano', 'Otoño', 'Invierno', 'Cuidado
     color: var(--forest);
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    transition: color var(--transition-fast), transform var(--transition-fast);
+    gap: 0.4rem;
+    transition: color var(--transition-fast);
+  }
+
+  .read-more-link .arrow {
+    transition: transform var(--transition-fast);
   }
 
   .read-more-link:hover {
     color: var(--leaf);
+  }
+
+  .read-more-link:hover .arrow {
     transform: translateX(4px);
   }
 
@@ -356,6 +384,50 @@ const tagsBlog = ['Todos', 'Primavera', 'Verano', 'Otoño', 'Invierno', 'Cuidado
   }
   .tone-d {
     background: linear-gradient(155deg, #6d9481 0%, #3f6b54 55%, #1b4d3e 100%);
+  }
+
+  /* Empty State de Blog Vacío (Plano, sin efecto flotante) */
+  .empty-blog-box {
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 3rem 1.5rem;
+    margin: 1rem auto 3rem;
+    max-width: 580px;
+    box-shadow: none;
+  }
+
+  .empty-icon-wrap {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    background-color: var(--leaf-soft);
+    color: var(--forest);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.3rem;
+    border: 1px solid rgba(79, 122, 91, 0.2);
+  }
+
+  .empty-icon-svg {
+    stroke-width: 1.8;
+  }
+
+  .empty-title {
+    font-size: 1.5rem;
+    color: var(--forest);
+    margin-bottom: 0.65rem;
+  }
+
+  .empty-desc {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
   }
 </style>
 

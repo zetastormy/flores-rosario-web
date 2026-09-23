@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getProductos, getCategorias, getSitioConfig } from '../../lib/sanity.queries';
 import { urlForImage } from '../../lib/sanity';
 import WhatsAppIcon from '../../components/icons/WhatsAppIcon.astro';
-import { Search } from '@lucide/astro';
+import { Search, Sprout } from '@lucide/astro';
 
 const productos = await getProductos();
 const categorias = await getCategorias();
@@ -27,7 +27,6 @@ const formatCLP = (amount: number) => {
     <div class="container">
       <div class="pheader-content">
         <div class="pheader-titles">
-          <span class="eyebrow-kicker">Catálogo & Botánica · Entregas en Puerto Montt y alrededores</span>
           <h1 class="pheader-title">Nuestros Productos</h1>
           <p class="pheader-desc">
             Flores frescas de estación, plantas adaptadas al sur y materiales durables para tu jardín.
@@ -54,24 +53,26 @@ const formatCLP = (amount: number) => {
   </section>
 
   <!-- Chips de Categoría Móvil -->
-  <div class="mobile-filter-chips">
-    <div class="container">
-      <div class="chiprow" role="tablist" aria-label="Filtrar por categoría">
-        {
-          categorias.map((cat, idx) => (
-            <button
-              class={`chip filter-chip ${idx === 0 ? 'active' : ''}`}
-              data-cat-slug={cat.slug.current}
-              role="tab"
-              aria-selected={idx === 0 ? 'true' : 'false'}
-            >
-              {cat.nombre}
-            </button>
-          ))
-        }
+  {
+    categorias && categorias.length > 0 && (
+      <div class="mobile-filter-chips">
+        <div class="container">
+          <div class="chiprow" role="tablist" aria-label="Filtrar por categoría">
+            {categorias.map((cat, idx) => (
+              <button
+                class={`chip filter-chip ${idx === 0 ? 'active' : ''}`}
+                data-cat-slug={cat.slug.current}
+                role="tab"
+                aria-selected={idx === 0 ? 'true' : 'false'}
+              >
+                {cat.nombre}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    )
+  }
 
   <!-- Contenedor Principal: Sidebar en Desktop + Grid de Productos -->
   <section class="catalog-main-section">
@@ -79,18 +80,22 @@ const formatCLP = (amount: number) => {
       <!-- Filtros Laterales (Desktop) -->
       <aside class="desktop-sidebar-filters" aria-label="Filtros de categoría">
         <span class="filter-heading">Categorías</span>
-        <div class="dfilters-list">
-          {
-            categorias.map((cat, idx) => (
-              <button
-                class={`dfilter-btn ${idx === 0 ? 'active' : ''}`}
-                data-cat-slug={cat.slug.current}
-              >
-                <span>{cat.nombre}</span>
-              </button>
-            ))
-          }
-        </div>
+        {
+          categorias && categorias.length > 0 ? (
+            <div class="dfilters-list">
+              {categorias.map((cat, idx) => (
+                <button
+                  class={`dfilter-btn ${idx === 0 ? 'active' : ''}`}
+                  data-cat-slug={cat.slug.current}
+                >
+                  <span>{cat.nombre}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p class="empty-sidebar-cats">No existen categorías</p>
+          )
+        }
 
         <!-- Tarjeta Promocional en Sidebar -->
         <div class="sidebar-promo-card tone-c">
@@ -111,74 +116,97 @@ const formatCLP = (amount: number) => {
 
       <!-- Lista / Grilla de Productos -->
       <div class="catalog-products-area">
-        <div class="results-meta">
-          <span id="results-count">Mostrando {productos.length} productos</span>
-        </div>
+        {
+          productos && productos.length > 0 ? (
+            <>
+              <div class="results-meta">
+                <span id="results-count">Mostrando {productos.length} productos</span>
+              </div>
 
-        <div class="catalog-grid" id="catalog-grid">
-          {
-            productos.map((item) => (
-              <article
-                class="product-card catalog-card"
-                data-category={item.categoria?.slug.current || 'otros'}
-                data-name={item.nombre.toLowerCase()}
-                data-desc={item.descripcion.toLowerCase()}
-              >
-                <a href={`/productos/${item.slug.current}`} class="pcard-link-wrap">
-                  <div class={`product-photo ${item.tone || 'tone-a'}`}>
-                    {item.imagen && (
-                      <img
-                        src={urlForImage(item.imagen).width(400).height(300).url()}
-                        alt={item.nombre}
-                        class="pcard-img"
-                        loading="lazy"
-                      />
-                    )}
-                    {item.etiqueta && (
-                      <span class={`tag ${item.tipoEtiqueta || ''}`}>{item.etiqueta}</span>
-                    )}
-                  </div>
-                </a>
-
-                <div class="product-body">
-                  <span class="pcard-category-label">{item.categoria?.nombre || 'Botánica'}</span>
-                  <a href={`/productos/${item.slug.current}`}>
-                    <h3 class="product-name">{item.nombre}</h3>
-                  </a>
-                  <p class="product-desc">{item.descripcion}</p>
-
-                  <div class="product-footer">
-                    <div class="price-wrap">
-                      <span class="price">{formatCLP(item.precio)}</span>
-                      {item.unidad && <span class="unit">{item.unidad}</span>}
-                    </div>
-
-                    <a
-                      href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola! Quiero pedir el producto "${item.nombre}" (${formatCLP(item.precio)}). ¿Tienen disponibilidad de entrega en Puerto Montt o alrededores?`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="btn-mini-wa"
-                      aria-label={`Pedir ${item.nombre} por WhatsApp`}
-                      title="Pedir por WhatsApp"
-                    >
-                      <WhatsAppIcon size={18} />
+              <div class="catalog-grid" id="catalog-grid">
+                {productos.map((item) => (
+                  <article
+                    class="product-card catalog-card"
+                    data-category={item.categoria?.slug.current || 'otros'}
+                    data-name={item.nombre.toLowerCase()}
+                    data-desc={item.descripcion.toLowerCase()}
+                  >
+                    <a href={`/productos/${item.slug.current}`} class="pcard-link-wrap">
+                      <div class={`product-photo ${item.tone || 'tone-a'}`}>
+                        {item.imagen && (
+                          <img
+                            src={urlForImage(item.imagen).width(400).height(300).url()}
+                            alt={item.nombre}
+                            class="pcard-img"
+                            loading="lazy"
+                          />
+                        )}
+                        {item.etiqueta && (
+                          <span class={`tag ${item.tipoEtiqueta || ''}`}>{item.etiqueta}</span>
+                        )}
+                      </div>
                     </a>
-                  </div>
-                </div>
-              </article>
-            ))
-          }
-        </div>
 
-        <!-- Estado Vacío (Sin Resultados) -->
-        <div id="empty-state" class="empty-state" style="display:none;">
-          <div class="empty-icon">🌸</div>
-          <h3>No encontramos productos</h3>
-          <p>Prueba con otro término de búsqueda o selecciona otra categoría.</p>
-          <button type="button" class="btn btn-ghost" id="reset-filters-btn">
-            Restablecer filtros
-          </button>
-        </div>
+                    <div class="product-body">
+                      <span class="pcard-category-label">{item.categoria?.nombre || 'Botánica'}</span>
+                      <a href={`/productos/${item.slug.current}`}>
+                        <h3 class="product-name">{item.nombre}</h3>
+                      </a>
+                      <p class="product-desc">{item.descripcion}</p>
+
+                      <div class="product-footer">
+                        <div class="price-wrap">
+                          <span class="price">{formatCLP(item.precio)}</span>
+                          {item.unidad && <span class="unit">{item.unidad}</span>}
+                        </div>
+
+                        <a
+                          href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola! Quiero pedir el producto "${item.nombre}" (${formatCLP(item.precio)}). ¿Tienen disponibilidad de entrega en Puerto Montt o alrededores?`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="btn-mini-wa"
+                          aria-label={`Pedir ${item.nombre} por WhatsApp`}
+                          title="Pedir por WhatsApp"
+                        >
+                          <WhatsAppIcon size={18} />
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <!-- Estado Vacío (Sin Resultados por búsqueda) -->
+              <div id="empty-state" class="empty-state" style="display:none;">
+                <div class="empty-icon">🌸</div>
+                <h3>No encontramos productos</h3>
+                <p>Prueba con otro término de búsqueda o selecciona otra categoría.</p>
+                <button type="button" class="btn btn-ghost" id="reset-filters-btn">
+                  Restablecer filtros
+                </button>
+              </div>
+            </>
+          ) : (
+            <div class="empty-catalog-box">
+              <div class="empty-icon-wrap" aria-hidden="true">
+                <Sprout size={40} class="empty-icon-svg" />
+              </div>
+              <h2 class="empty-title">No existen productos</h2>
+              <p class="empty-desc">
+                Por el momento no hay productos registrados o disponibles en el catálogo. Te invitamos a comunicarte directamente con nosotros vía WhatsApp para coordinar pedidos especiales y ramos a medida.
+              </p>
+              <a
+                href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent('¡Hola! Quisiera consultar por disponibilidad de productos o pedidos especiales.')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-whatsapp empty-wa-btn"
+              >
+                <WhatsAppIcon size={18} />
+                Consultar por WhatsApp
+              </a>
+            </div>
+          )
+        }
       </div>
     </div>
   </section>
@@ -456,6 +484,12 @@ const formatCLP = (amount: number) => {
     font-size: 0.82rem;
     padding: 0.65rem 1rem;
     margin-top: 0.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    gap: 0.5rem;
   }
 
   /* Catalog Grid */
@@ -648,6 +682,67 @@ const formatCLP = (amount: number) => {
 
   .whatsapp-fab:hover {
     transform: scale(1.08);
+  }
+
+  /* Empty State de Catálogo Vacío (Plano, sin efecto flotante) */
+  .empty-catalog-box {
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 3rem 1.5rem;
+    margin: 1rem auto;
+    max-width: 580px;
+    box-shadow: none;
+  }
+
+  .empty-icon-wrap {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    background-color: var(--leaf-soft);
+    color: var(--forest);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.3rem;
+    border: 1px solid rgba(79, 122, 91, 0.2);
+  }
+
+  .empty-icon-svg {
+    stroke-width: 1.8;
+  }
+
+  .empty-title {
+    font-size: 1.5rem;
+    color: var(--forest);
+    margin-bottom: 0.65rem;
+  }
+
+  .empty-desc {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.8rem;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .empty-wa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    font-size: 0.94rem;
+  }
+
+  .empty-sidebar-cats {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    padding: 0.5rem 0;
   }
 </style>
 

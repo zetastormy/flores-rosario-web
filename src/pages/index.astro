@@ -8,6 +8,7 @@ import {
 } from '../lib/sanity.queries';
 import { urlForImage } from '../lib/sanity';
 import WhatsAppIcon from '../components/icons/WhatsAppIcon.astro';
+import { ArrowRight, Sprout } from '@lucide/astro';
 
 const paginaInicio = await getPaginaInicio();
 const productosDestacados = await getProductosDestacados();
@@ -53,12 +54,8 @@ const formatCLP = (amount: number) => {
       <div class="hero-bg-overlay" />
     </div>
 
-    <!-- Capa inferior en degradé para fundir suavemente con el fondo de la página -->
-    <div class="hero-bottom-degrade" aria-hidden="true" />
-
     <div class="container hero-layout">
       <div class="hero-content">
-        <span class="eyebrow">{paginaInicio.heroKicker}</span>
         <h1 class="hero-title">{paginaInicio.heroTitulo}</h1>
         <p class="hero-lead">
           {paginaInicio.heroBajada}
@@ -82,25 +79,6 @@ const formatCLP = (amount: number) => {
     </div>
   </section>
 
-  <!-- Categorías / Chips Dinámicos de Sanity -->
-  <section class="categories-strip">
-    <div class="container">
-      <div class="chips-wrapper" role="tablist" aria-label="Categorías de productos">
-        {
-          categorias.map((cat, index) => (
-            <a
-              href={`/productos${cat.slug.current !== 'todas' ? `?categoria=${cat.slug.current}` : ''}`}
-              class={`chip ${index === 0 ? 'active' : ''}`}
-              id={`chip-${cat.slug.current}`}
-            >
-              {cat.nombre}
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
   <!-- Catálogo de Destacados (Mobile-First Grid) -->
   <section class="products-section" id="catalogo">
     <div class="container">
@@ -110,49 +88,89 @@ const formatCLP = (amount: number) => {
           <h2 class="section-title">Destacados de la Temporada</h2>
         </div>
         <a href="/productos" class="link-all-products">
-          Ver todo el catálogo &rarr;
+          Ver todo el catálogo <ArrowRight size={16} class="arrow" aria-hidden="true" />
         </a>
       </div>
 
-      <div class="products-grid">
-        {
-          productosDestacados.map((item) => (
-            <article class="product-card">
-              <div class={`product-photo ${item.tone || 'tone-a'}`}>
-                {item.imagen && (
-                  <img
-                    src={urlForImage(item.imagen).width(400).height(300).url()}
-                    alt={item.nombre}
-                    class="pcard-img"
-                  />
-                )}
-                {item.etiqueta && (
-                  <span class={`tag ${item.tipoEtiqueta || ''}`}>{item.etiqueta}</span>
-                )}
-              </div>
-              <div class="product-body">
-                <h3 class="product-name">{item.nombre}</h3>
-                <p class="product-desc">{item.descripcion}</p>
-                <div class="product-footer">
-                  <div class="price-wrap">
-                    <span class="price">{formatCLP(item.precio)}</span>
-                    {item.unidad && <span class="unit">{item.unidad}</span>}
-                  </div>
-                  <a
-                    href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola! Quiero pedir el producto "${item.nombre}" (${formatCLP(item.precio)}). ¿Tienen disponibilidad de entrega en Puerto Montt o alrededores?`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn-mini-wa"
-                    aria-label={`Pedir ${item.nombre} por WhatsApp`}
-                  >
-                    <WhatsAppIcon size={18} />
-                  </a>
+      <!-- Categorías / Chips Dinámicos integrados bajo el título -->
+      {
+        categorias && categorias.length > 0 && (
+          <div class="categories-filter-bar">
+            <div class="chips-wrapper" role="tablist" aria-label="Categorías de productos">
+              {categorias.map((cat, index) => (
+                <a
+                  href={`/productos${cat.slug.current !== 'todas' ? `?categoria=${cat.slug.current}` : ''}`}
+                  class={`chip ${index === 0 ? 'active' : ''}`}
+                  id={`chip-${cat.slug.current}`}
+                >
+                  {cat.nombre}
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      {
+        productosDestacados && productosDestacados.length > 0 ? (
+          <div class="products-grid">
+            {productosDestacados.map((item) => (
+              <article class="product-card">
+                <div class={`product-photo ${item.tone || 'tone-a'}`}>
+                  {item.imagen && (
+                    <img
+                      src={urlForImage(item.imagen).width(400).height(300).url()}
+                      alt={item.nombre}
+                      class="pcard-img"
+                    />
+                  )}
+                  {item.etiqueta && (
+                    <span class={`tag ${item.tipoEtiqueta || ''}`}>{item.etiqueta}</span>
+                  )}
                 </div>
-              </div>
-            </article>
-          ))
-        }
-      </div>
+                <div class="product-body">
+                  <h3 class="product-name">{item.nombre}</h3>
+                  <p class="product-desc">{item.descripcion}</p>
+                  <div class="product-footer">
+                    <div class="price-wrap">
+                      <span class="price">{formatCLP(item.precio)}</span>
+                      {item.unidad && <span class="unit">{item.unidad}</span>}
+                    </div>
+                    <a
+                      href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola! Quiero pedir el producto "${item.nombre}" (${formatCLP(item.precio)}). ¿Tienen disponibilidad de entrega en Puerto Montt o alrededores?`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="btn-mini-wa"
+                      aria-label={`Pedir ${item.nombre} por WhatsApp`}
+                    >
+                      <WhatsAppIcon size={18} />
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="empty-state-box">
+            <div class="empty-icon-wrap" aria-hidden="true">
+              <Sprout size={36} class="empty-icon" />
+            </div>
+            <h3 class="empty-title">No existen productos</h3>
+            <p class="empty-desc">
+              Por el momento no hay productos destacados disponibles en el catálogo. Te invitamos a consultarnos directamente por WhatsApp para pedidos especiales o arreglos a medida.
+            </p>
+            <a
+              href={`https://wa.me/${sitioConfig.telefonoWhatsApp}?text=${encodeURIComponent('¡Hola! Quisiera consultar por disponibilidad de flores o pedidos especiales en Flores del Rosario.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-whatsapp empty-wa-btn"
+            >
+              <WhatsAppIcon size={18} />
+              Consultar por WhatsApp
+            </a>
+          </div>
+        )
+      }
     </div>
   </section>
 
@@ -185,7 +203,7 @@ const formatCLP = (amount: number) => {
           {
             paginaInicio.historiaImagen && (
               <img
-                src={urlForImage(paginaInicio.historiaImagen).width(500).height(600).url()}
+                src={urlForImage(paginaInicio.historiaImagen).width(800).height(900).url()}
                 alt={paginaInicio.historiaTitulo}
                 class="about-img"
               />
@@ -218,14 +236,14 @@ const formatCLP = (amount: number) => {
 
 <style>
   /* ==========================================================================
-     Hero Section (Foto de Fondo Difuminada + Gradiente y Degradé Inferior)
+     Hero Section (Foto de Fondo Difuminada + Gradiente Botánico Continuo)
      ========================================================================== */
   .hero-section {
     position: relative;
     overflow: hidden;
-    padding-top: calc(90px + 2.5rem);
-    padding-bottom: 6.5rem;
-    background-color: var(--forest);
+    padding-top: calc(105px + 2.8rem);
+    padding-bottom: 3.5rem;
+    background-color: var(--paper);
   }
 
   .hero-bg-wrapper {
@@ -236,8 +254,24 @@ const formatCLP = (amount: number) => {
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
-    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 75%,
+      rgba(0, 0, 0, 0.92) 83%,
+      rgba(0, 0, 0, 0.70) 90%,
+      rgba(0, 0, 0, 0.28) 96%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 75%,
+      rgba(0, 0, 0, 0.92) 83%,
+      rgba(0, 0, 0, 0.70) 90%,
+      rgba(0, 0, 0, 0.28) 96%,
+      transparent 100%
+    );
   }
 
   .hero-bg-img {
@@ -266,22 +300,13 @@ const formatCLP = (amount: number) => {
     height: 100%;
     background: linear-gradient(
       180deg,
-      rgba(14, 38, 30, 0.82) 0%,
-      rgba(27, 77, 62, 0.74) 42%,
-      rgba(27, 77, 62, 0.88) 75%,
-      var(--paper) 100%
+      rgba(14, 38, 30, 0.88) 0%,
+      rgba(27, 77, 62, 0.74) 30%,
+      rgba(27, 77, 62, 0.78) 58%,
+      rgba(36, 85, 68, 0.82) 78%,
+      rgba(60, 105, 80, 0.88) 90%,
+      rgba(79, 122, 91, 0.92) 100%
     );
-  }
-
-  .hero-bottom-degrade {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 180px;
-    background: linear-gradient(180deg, transparent 0%, rgba(255, 251, 245, 0.55) 50%, var(--paper) 100%);
-    pointer-events: none;
-    z-index: 1;
   }
 
   .hero-layout {
@@ -364,7 +389,7 @@ const formatCLP = (amount: number) => {
   @media (min-width: 768px) {
     .hero-section {
       padding-top: calc(115px + 3.5rem);
-      padding-bottom: 8.5rem;
+      padding-bottom: 6rem;
     }
 
     .hero-title {
@@ -377,52 +402,7 @@ const formatCLP = (amount: number) => {
   }
 
   /* ==========================================================================
-     Chips Bar
-     ========================================================================== */
-  .categories-strip {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .chips-wrapper {
-    display: flex;
-    gap: 0.6rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 0.3rem;
-  }
-
-  .chips-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-
-  .chip {
-    flex: none;
-    padding: 0.55rem 1.2rem;
-    border-radius: var(--radius-full);
-    font-size: 0.88rem;
-    font-weight: 600;
-    background: var(--paper);
-    border: 1.5px solid var(--line);
-    color: var(--ink-soft);
-    transition: all var(--transition-fast);
-  }
-
-  .chip:hover {
-    border-color: var(--forest);
-    color: var(--forest);
-    transform: translateY(-1px);
-  }
-
-  .chip.active {
-    background: var(--lilac);
-    color: var(--forest);
-    border-color: var(--lilac);
-  }
-
-  /* ==========================================================================
-     Products Grid
+     Products Section & Integrated Category Filters
      ========================================================================== */
   .products-section {
     padding-top: 3.5rem;
@@ -433,7 +413,7 @@ const formatCLP = (amount: number) => {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 2.2rem;
+    margin-bottom: 1.4rem;
     flex-wrap: wrap;
     gap: 1rem;
   }
@@ -457,12 +437,60 @@ const formatCLP = (amount: number) => {
     color: var(--forest);
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.45rem;
     transition: color var(--transition-fast);
+  }
+
+  .link-all-products .arrow {
+    transition: transform var(--transition-fast);
   }
 
   .link-all-products:hover {
     color: var(--leaf);
+  }
+
+  .link-all-products:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .categories-filter-bar {
+    margin-bottom: 2rem;
+  }
+
+  .chips-wrapper {
+    display: flex;
+    gap: 0.65rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0.35rem;
+  }
+
+  .chips-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex: none;
+    padding: 0.55rem 1.25rem;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 600;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    color: var(--ink-soft);
+    transition: all var(--transition-fast);
+  }
+
+  .chip:hover {
+    border-color: var(--forest);
+    color: var(--forest);
+    transform: translateY(-1px);
+  }
+
+  .chip.active {
+    background: var(--lilac);
+    color: var(--forest);
+    border-color: var(--lilac);
   }
 
   .products-grid {
@@ -576,17 +604,18 @@ const formatCLP = (amount: number) => {
   .promo-card-main {
     background-color: var(--leaf-soft);
     border-radius: var(--radius-xl);
-    padding: 2.4rem 1.8rem;
+    padding: 2.2rem 1.6rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     border: 1px solid rgba(79, 122, 91, 0.2);
   }
 
   .promo-copy h2 {
     font-size: clamp(1.4rem, 3.5vw, 1.85rem);
-    line-height: 1.2;
+    line-height: 1.25;
     margin-bottom: 0.5rem;
   }
 
@@ -598,8 +627,15 @@ const formatCLP = (amount: number) => {
   }
 
   .promo-btn {
-    padding: 0.85rem 1.6rem;
-    font-size: 0.92rem;
+    padding: 0.85rem 1.8rem;
+    font-size: 0.94rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.6rem;
+    width: 100%;
+    max-width: 320px;
   }
 
   @media (min-width: 768px) {
@@ -608,6 +644,14 @@ const formatCLP = (amount: number) => {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      text-align: left;
+    }
+
+    .promo-btn {
+      width: auto;
+      max-width: none;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
   }
 
@@ -634,8 +678,9 @@ const formatCLP = (amount: number) => {
   }
 
   .about-photo-shape {
-    width: 240px;
-    height: 260px;
+    width: 290px;
+    height: 315px;
+    max-width: 90vw;
     border-radius: 58% 42% 46% 54% / 54% 48% 52% 46%;
     box-shadow: var(--shadow-sm);
     overflow: hidden;
@@ -660,14 +705,26 @@ const formatCLP = (amount: number) => {
   @media (min-width: 768px) {
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1.3fr;
+      grid-template-columns: 1fr 1.25fr;
       align-items: center;
-      gap: 4rem;
+      gap: 3.5rem;
     }
 
     .about-photo-shape {
-      width: 320px;
-      height: 360px;
+      width: 380px;
+      height: 415px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .about-grid {
+      grid-template-columns: 1fr 1.3fr;
+      gap: 5rem;
+    }
+
+    .about-photo-shape {
+      width: 440px;
+      height: 480px;
     }
   }
 
@@ -706,5 +763,55 @@ const formatCLP = (amount: number) => {
   .whatsapp-fab:hover {
     transform: scale(1.08);
     filter: brightness(1.05);
+  }
+
+  /* Empty State Plano (sin efecto flotante) */
+  .empty-state-box {
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 3rem 1.5rem;
+    margin: 1rem auto;
+    max-width: 580px;
+    box-shadow: none;
+  }
+
+  .empty-icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background-color: var(--leaf-soft);
+    color: var(--forest);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    border: 1px solid rgba(79, 122, 91, 0.2);
+  }
+
+  .empty-title {
+    font-size: 1.45rem;
+    color: var(--forest);
+    margin-bottom: 0.6rem;
+  }
+
+  .empty-desc {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.8rem;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .empty-wa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.6rem;
+    font-size: 0.92rem;
   }
 </style>

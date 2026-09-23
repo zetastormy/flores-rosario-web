@@ -18,7 +18,6 @@ export interface SitioConfig {
 
 export interface PaginaInicio {
   bannerAviso?: string;
-  heroKicker: string;
   heroTitulo: string;
   heroBajada: string;
   heroBotonCatalogo: string;
@@ -83,175 +82,62 @@ export interface Articulo {
 
 export const fallbackSitioConfig: SitioConfig = {
   nombreNegocio: 'Flores del Rosario',
-  subtitulo: 'vivero & florería',
-  telefonoWhatsApp: '56912345678',
-  mensajeWhatsAppDefault: '¡Hola! Quisiera consultar por disponibilidad y entregas en Puerto Montt y alrededores.',
-  instagramUrl: 'https://instagram.com/floresdelrosario.calbuco',
-  facebookUrl: 'https://facebook.com/floresdelrosario.calbuco',
+  subtitulo: 'flores con propósito',
+  telefonoWhatsApp: '56966223508',
+  mensajeWhatsAppDefault: '¡Hola! Quisiera consultar por disponibilidad.',
+  instagramUrl: 'https://instagram.com/floresdelrosario_cl',
   direccion: 'Entregas a domicilio en Puerto Montt y alrededores',
   bannerAviso: '🌿 Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp',
 };
 
 export const fallbackPaginaInicio: PaginaInicio = {
   bannerAviso: 'Entregas en Puerto Montt y alrededores · Pedidos con anticipación por WhatsApp',
-  heroKicker: 'Floristería artesanal & botánica',
-  heroTitulo: 'Flores frescas con alma de barrio',
+  heroTitulo: 'Flores cultivadas con propósito',
   heroBajada:
-    'Diseños botánicos pensados con amor y dedicación. Arreglos para celebrar, acompañar y transformar cada rincón, con entregas en Puerto Montt y alrededores.',
+    'Te invitamos a conectar con la naturaleza viviendo el momento presente por medio de la contemplación del cultivo artesanal de flores.',
   heroBotonCatalogo: 'Ver catálogo',
   heroBotonWhatsapp: 'Hacer pedido',
-  heroCaption: 'Ramos preparados en el día',
+  heroImagen: {
+    _type: 'image',
+    asset: {
+      _ref: 'image-f10c97cfc56a7f9b2f0e203d6b59086acbfb9024-900x1600-jpg',
+      _type: 'reference',
+    },
+    crop: {
+      _type: 'sanity.imageCrop',
+      bottom: 0.1797752706248954,
+      left: 0,
+      right: 0,
+      top: 0.22471908828111922,
+    },
+    hotspot: {
+      _type: 'sanity.imageHotspot',
+      height: 0.5308989032131637,
+      width: 1,
+      x: 0.5,
+      y: 0.5294943803368968,
+    },
+  },
   historiaKicker: 'Nuestra Historia',
-  historiaTitulo: 'Flores elegidas una por una con dedicación',
+  historiaTitulo: 'Un cambio radical',
   historiaTexto:
-    'Nacimos en el sur de Chile con la convicción de devolverle a las flores y a la botánica su lugar en la vida diaria. Seleccionamos flores frescas cada mañana, cultivamos variedades adaptadas a nuestro clima húmedo y proveemos insumos de jardinería confiables para cuidar la tierra, con entregas en Puerto Montt y alrededores.',
+    'Nacimos en el sur de Chile exactamente en la comuna de Calbuco, llegamos hace 4 años desde la ciudad de Puerto Montt buscando un lugar que nos entregue calma en un momento complejo de salud mental que vivíamos con uno de nuestros hijos.\n\nEste lugar se transformó en nuestro refugio y comencé a cultivar en un terreno el cual supuestamente no servía para ello, sin embargo, pudimos cosechar nuestros primeros cultivos y eso nos generó una gran emoción. Este fue el impulso que me llevó a enamorarme poco a poco de los cultivos, pero especialmente de las flores que hoy quiero compartir con todos.',
+  historiaImagen: {
+    _type: 'image',
+    asset: {
+      _ref: 'image-01e0407e468460b8930c26db6802b3047d77cac5-932x678-jpg',
+      _type: 'reference',
+    },
+  },
   promoTitulo: '¿Buscas un arreglo especial o materiales para tu jardín?',
   promoTexto:
     'Realizamos ramos de ocasión, arreglos personalizados, plantas en maceta y materiales de jardinería con entregas en Puerto Montt y alrededores.',
   promoBoton: 'Consultar disponibilidad',
 };
 
-export const fallbackCategorias: Categoria[] = [
-  { _id: 'cat-todas', nombre: 'Todas', slug: { current: 'todas' }, orden: 0 },
-  { _id: 'cat-flores', nombre: 'Flores', slug: { current: 'flores' }, orden: 1 },
-  { _id: 'cat-plantas', nombre: 'Plantas', slug: { current: 'plantas' }, orden: 2 },
-  { _id: 'cat-macetas', nombre: 'Macetas y jardín', slug: { current: 'macetas-y-jardin' }, orden: 3 },
-  { _id: 'cat-herramientas', nombre: 'Herramientas', slug: { current: 'herramientas' }, orden: 4 },
-];
-
-export const fallbackProductos: Producto[] = [
-  {
-    _id: 'prod-1',
-    nombre: 'Ramo de peonías rosadas',
-    slug: { current: 'ramo-de-peonias-rosadas' },
-    precio: 14990,
-    unidad: 'por ramo',
-    etiqueta: 'Flores',
-    tipoEtiqueta: 'lilac',
-    tone: 'tone-b',
-    categoria: { nombre: 'Flores', slug: { current: 'flores' } },
-    descripcion:
-      'Arreglo delicado de peonías rosadas seleccionadas con toques de follaje verde y envoltorio artesanal en papel kraft.',
-    cuidados: 'Mantener en agua fresca, cortar los tallos 1 cm en diagonal cada dos días y ubicar lejos del sol directo.',
-    destacado: true,
-    disponible: true,
-  },
-  {
-    _id: 'prod-2',
-    nombre: 'Monstera deliciosa, maceta 20cm',
-    slug: { current: 'monstera-deliciosa-maceta-20cm' },
-    precio: 22990,
-    unidad: 'con maceta de cultivo',
-    etiqueta: 'Plantas',
-    tipoEtiqueta: 'leaf',
-    tone: 'tone-a',
-    categoria: { nombre: 'Plantas', slug: { current: 'plantas' } },
-    descripcion:
-      'Planta de interior con hojas perforadas características. Ideal para dar vida y purificar el aire en hogares y oficinas.',
-    cuidados: 'Riego moderado (cuando el sustrato superior esté seco), luz indirecta brillante y pulverizar hojas en verano.',
-    destacado: true,
-    disponible: true,
-  },
-  {
-    _id: 'prod-3',
-    nombre: 'Maceta de barro artesanal N°3',
-    slug: { current: 'maceta-de-barro-artesanal-n3' },
-    precio: 7990,
-    unidad: 'unidad 22cm diámetro',
-    etiqueta: 'Macetas',
-    tipoEtiqueta: '',
-    tone: 'tone-c',
-    categoria: { nombre: 'Macetas y jardín', slug: { current: 'macetas-y-jardin' } },
-    descripcion:
-      'Maceta clásica cocida a alta temperatura con orificio de drenaje. Porosa, favorece la oxigenación de las raíces.',
-    cuidados: 'Apta para interior y exterior bajo techo.',
-    destacado: true,
-    disponible: true,
-  },
-  {
-    _id: 'prod-4',
-    nombre: 'Set de poda de 3 piezas',
-    slug: { current: 'set-de-poda-de-3-piezas' },
-    precio: 18990,
-    unidad: 'kit de 3 herramientas',
-    etiqueta: 'Herramientas',
-    tipoEtiqueta: 'leaf',
-    tone: 'tone-d',
-    categoria: { nombre: 'Herramientas', slug: { current: 'herramientas' } },
-    descripcion:
-      'Incluye tijera de bypass en acero inoxidable, tijera de precisión para flores y funda de protección de cuero sintético.',
-    cuidados: 'Limpiar y secar las cuchillas tras cada uso para evitar oxidación.',
-    destacado: true,
-    disponible: true,
-  },
-  {
-    _id: 'prod-5',
-    nombre: 'Arreglo de girasoles',
-    slug: { current: 'arreglo-de-girasoles' },
-    precio: 13490,
-    unidad: 'por arreglo',
-    etiqueta: 'Flores',
-    tipoEtiqueta: 'lilac',
-    tone: 'tone-b',
-    categoria: { nombre: 'Flores', slug: { current: 'flores' } },
-    descripcion:
-      'Girasoles luminosos con ramas de canelo y eucalipto aromático, transmitiendo calidez y energía.',
-    cuidados: 'Colocar en lugar bien iluminado sin corrientes de aire fuertes.',
-    destacado: false,
-    disponible: true,
-  },
-  {
-    _id: 'prod-6',
-    nombre: 'Sustrato premium 5kg',
-    slug: { current: 'sustrato-premium-5kg' },
-    precio: 6490,
-    unidad: 'saco 5 kg',
-    etiqueta: 'Jardín',
-    tipoEtiqueta: '',
-    tone: 'tone-c',
-    categoria: { nombre: 'Macetas y jardín', slug: { current: 'macetas-y-jardin' } },
-    descripcion:
-      'Mezcla orgánica con turba, perlita, humus de lombriz y fibra de coco. Excelente retención de humedad y aireación.',
-    destacado: false,
-    disponible: true,
-  },
-];
-
-export const fallbackArticulos: Articulo[] = [
-  {
-    _id: 'art-1',
-    titulo: 'Qué plantar en septiembre: la guía de primavera',
-    slug: { current: 'que-plantar-en-septiembre-guia-primavera' },
-    fechaPublicacion: '12 de septiembre',
-    tiempoLectura: '4 min',
-    resumen:
-      'Consejos prácticos para preparar el suelo, sembrar semillas de estación y proteger tus brotes del clima austral.',
-    tone: 'tone-a',
-    categoria: 'Primavera',
-  },
-  {
-    _id: 'art-2',
-    titulo: 'Cuidados esenciales para tus flores frescas en agua',
-    slug: { current: 'cuidados-esenciales-flores-frescas' },
-    fechaPublicacion: '28 de agosto',
-    tiempoLectura: '3 min',
-    resumen:
-      'Aprende a prolongar la vida de tus ramos cortados cortando los tallos y cambiando el agua en el momento justo.',
-    tone: 'tone-b',
-    categoria: 'Consejos Florales',
-  },
-  {
-    _id: 'art-3',
-    titulo: 'El arte de elegir la maceta correcta para cada planta',
-    slug: { current: 'elegir-la-maceta-correcta' },
-    fechaPublicacion: '15 de agosto',
-    tiempoLectura: '5 min',
-    resumen:
-      'Drenaje, porosidad del barro vs. plástico y proporciones ideales para que las raíces se desarrollen sanas.',
-    tone: 'tone-c',
-    categoria: 'Jardinería',
-  },
-];
+export const fallbackCategorias: Categoria[] = [];
+export const fallbackProductos: Producto[] = [];
+export const fallbackArticulos: Articulo[] = [];
 
 /* ==========================================================================
    Consultas GROQ con Resiliencia de Fallbacks
@@ -284,13 +170,13 @@ export async function getPaginaInicio(): Promise<PaginaInicio> {
 export async function getCategorias(): Promise<Categoria[]> {
   try {
     const data = await sanityClient.fetch<Categoria[]>(`*[_type == "categoria"] | order(orden asc)`);
-    if (data && data.length > 0) {
+    if (Array.isArray(data)) {
       return data;
     }
   } catch (err) {
-    // Retorna fallback
+    // Retorna arreglo vacío
   }
-  return fallbackCategorias;
+  return [];
 }
 
 export async function getProductos(): Promise<Producto[]> {
@@ -312,17 +198,18 @@ export async function getProductos(): Promise<Producto[]> {
         disponible
       }`
     );
-    if (data && data.length > 0) {
+    if (Array.isArray(data)) {
       return data;
     }
   } catch (err) {
-    // Retorna fallback
+    // Retorna arreglo vacío
   }
-  return fallbackProductos;
+  return [];
 }
 
 export async function getProductosDestacados(): Promise<Producto[]> {
   const todos = await getProductos();
+  if (!todos || todos.length === 0) return [];
   const destacados = todos.filter((p) => p.destacado);
   return destacados.length > 0 ? destacados : todos.slice(0, 4);
 }
@@ -351,7 +238,7 @@ export async function getProductoBySlug(slug: string): Promise<Producto | undefi
   } catch (err) {
     // fallback
   }
-  return fallbackProductos.find((p) => p.slug.current === slug);
+  return undefined;
 }
 
 export async function getArticulos(): Promise<Articulo[]> {
@@ -368,13 +255,13 @@ export async function getArticulos(): Promise<Articulo[]> {
         categoria
       }`
     );
-    if (data && data.length > 0) {
+    if (Array.isArray(data)) {
       return data;
     }
   } catch (err) {
     // fallback
   }
-  return fallbackArticulos;
+  return [];
 }
 
 export async function getArticuloBySlug(slug: string): Promise<Articulo | undefined> {
@@ -387,5 +274,5 @@ export async function getArticuloBySlug(slug: string): Promise<Articulo | undefi
   } catch (err) {
     // fallback
   }
-  return fallbackArticulos.find((a) => a.slug.current === slug);
+  return undefined;
 }

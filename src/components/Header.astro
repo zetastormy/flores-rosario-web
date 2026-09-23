@@ -11,25 +11,27 @@ interface Props {
 }
 
 const { currentPath = '/', bannerAviso } = Astro.props;
+const isHome = currentPath === '/' || currentPath === '';
 
 const sitioConfig = await getSitioConfig();
 const categorias = await getCategorias();
 const noticeText = bannerAviso || sitioConfig.bannerAviso;
 ---
 
-<!-- Banner Superior Opcional (Personalizable en Sanity) -->
-{
-  noticeText && (
-    <aside class="top-announcement" aria-label="Aviso destacado">
-      <div class="container announcement-inner">
-        <span>{noticeText}</span>
-      </div>
-    </aside>
-  )
-}
+<!-- Envoltorio de Cabecera (Soporte para modo transparente sobre el Hero en Home) -->
+<div class={`site-header-wrapper ${isHome ? 'is-home' : ''}`} id="site-header-wrapper">
+  {
+    noticeText && (
+      <aside class="top-announcement" aria-label="Aviso destacado">
+        <div class="container announcement-inner">
+          <span>{noticeText}</span>
+        </div>
+      </aside>
+    )
+  }
 
-<!-- Cabecera Principal -->
-<header class="site-header" id="site-header">
+  <!-- Cabecera Principal -->
+  <header class={`site-header ${isHome ? 'is-home' : ''}`} id="site-header">
   <div class="container header-container">
     <!-- Brandmark (Logo Normal no monocromático en SVG) -->
     <a href="/" class="brandmark" aria-label="Ir al inicio de Flores del Rosario">
@@ -132,6 +134,7 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     </div>
   </div>
 </header>
+</div>
 
 <!-- Menú Móvil a Pantalla Completa (Overlay) -->
 <div class="mobile-nav-overlay" id="mobile-menu-overlay" aria-hidden="true">
@@ -222,8 +225,33 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
 
 <style>
   /* ==========================================================================
-     Top Announcement Bar
+     Top Announcement Bar & Header Wrapper
      ========================================================================== */
+  .site-header-wrapper {
+    width: 100%;
+  }
+
+  .site-header-wrapper.is-home {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    pointer-events: none;
+  }
+
+  .site-header-wrapper.is-home .top-announcement,
+  .site-header-wrapper.is-home .site-header {
+    pointer-events: auto;
+  }
+
+  .site-header-wrapper.is-home .top-announcement {
+    background-color: rgba(14, 38, 30, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
   .top-announcement {
     background-color: var(--forest);
     color: var(--cream-soft);
@@ -233,10 +261,11 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     padding: 0.45rem 1rem;
     letter-spacing: 0.02em;
     border-bottom: 1px solid rgba(248, 223, 200, 0.15);
+    transition: background-color var(--transition-normal);
   }
 
   /* ==========================================================================
-     Site Header (Sticky)
+     Site Header (Sticky & Scroll-aware on Home)
      ========================================================================== */
   .site-header {
     position: sticky;
@@ -244,7 +273,75 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
     z-index: 80;
     background-color: var(--paper);
     border-bottom: 1px solid var(--line);
-    transition: background-color var(--transition-fast);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Modo transparente sobre el Hero en Home */
+  .site-header.is-home {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .site-header.is-home .dlink {
+    color: var(--paper);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+  }
+
+  .site-header.is-home .dlink:hover {
+    color: var(--gold);
+  }
+
+  .site-header.is-home .dlink.active {
+    color: var(--cream);
+  }
+
+  .site-header.is-home .dlink.active::after {
+    background-color: var(--gold);
+  }
+
+  .site-header.is-home .icon-btn {
+    color: var(--paper);
+  }
+
+  .site-header.is-home .mobile-menu-toggle {
+    color: var(--paper);
+  }
+
+  /* Estado cuando el usuario hace scroll hacia abajo en Home */
+  .site-header.is-home.is-scrolled {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: rgba(255, 251, 245, 0.96); /* Retorno al color original var(--paper) */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .site-header.is-home.is-scrolled .dlink {
+    color: var(--forest); /* Retorno al color original */
+    text-shadow: none;
+  }
+
+  .site-header.is-home.is-scrolled .dlink:hover,
+  .site-header.is-home.is-scrolled .dlink.active {
+    color: var(--leaf);
+  }
+
+  .site-header.is-home.is-scrolled .dlink.active::after {
+    background-color: var(--gold);
+  }
+
+  .site-header.is-home.is-scrolled .icon-btn {
+    color: var(--forest);
+  }
+
+  .site-header.is-home.is-scrolled .mobile-menu-toggle {
+    color: var(--forest);
   }
 
   .header-container {
@@ -598,6 +695,17 @@ const noticeText = bannerAviso || sitioConfig.bannerAviso;
         closeMenu();
       }
     });
+
+    // Control de desplazamiento para navbar en Home: de transparente a su color original
+    const header = document.getElementById('site-header');
+    if (header && header.classList.contains('is-home')) {
+      const handleScroll = () => {
+        const scrolled = window.scrollY > 40;
+        header.classList.toggle('is-scrolled', scrolled);
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+    }
   }
 
   setupNavigation();

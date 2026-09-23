@@ -53,6 +53,9 @@ const formatCLP = (amount: number) => {
       <div class="hero-bg-overlay" />
     </div>
 
+    <!-- Capa inferior en degradé para fundir suavemente con el fondo de la página -->
+    <div class="hero-bottom-degrade" aria-hidden="true" />
+
     <div class="container hero-layout">
       <div class="hero-content">
         <span class="eyebrow">{paginaInicio.heroKicker}</span>
@@ -215,13 +218,13 @@ const formatCLP = (amount: number) => {
 
 <style>
   /* ==========================================================================
-     Hero Section (Foto de Fondo Difuminada + Gradiente Sobrepuesto)
+     Hero Section (Foto de Fondo Difuminada + Gradiente y Degradé Inferior)
      ========================================================================== */
   .hero-section {
     position: relative;
     overflow: hidden;
-    padding-top: 3.2rem;
-    padding-bottom: 3.6rem;
+    padding-top: calc(90px + 2.5rem);
+    padding-bottom: 6.5rem;
     background-color: var(--forest);
   }
 
@@ -233,6 +236,8 @@ const formatCLP = (amount: number) => {
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%);
   }
 
   .hero-bg-img {
@@ -260,16 +265,28 @@ const formatCLP = (amount: number) => {
     width: 100%;
     height: 100%;
     background: linear-gradient(
-      145deg,
-      rgba(14, 38, 30, 0.88) 0%,
-      rgba(27, 77, 62, 0.78) 55%,
-      rgba(20, 50, 40, 0.92) 100%
+      180deg,
+      rgba(14, 38, 30, 0.82) 0%,
+      rgba(27, 77, 62, 0.74) 42%,
+      rgba(27, 77, 62, 0.88) 75%,
+      var(--paper) 100%
     );
+  }
+
+  .hero-bottom-degrade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: linear-gradient(180deg, transparent 0%, rgba(255, 251, 245, 0.55) 50%, var(--paper) 100%);
+    pointer-events: none;
+    z-index: 1;
   }
 
   .hero-layout {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     flex-direction: column;
   }
@@ -346,8 +363,8 @@ const formatCLP = (amount: number) => {
 
   @media (min-width: 768px) {
     .hero-section {
-      padding-top: 5.5rem;
-      padding-bottom: 5.5rem;
+      padding-top: calc(115px + 3.5rem);
+      padding-bottom: 8.5rem;
     }
 
     .hero-title {
